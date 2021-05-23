@@ -7,8 +7,10 @@ generate_version_header(OUTPUT_DIR
 list(APPEND INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/include/common/version.hpp")
 
 add_library(specula ${SOURCES})
-target_link_libraries(specula)
+target_compile_features(specula PUBLIC cxx_std_20)
+target_link_libraries(specula PUBLIC fmt spdlog)
 target_include_directories(specula PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(specula PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/specula")
 
 include(Format)
 include(Analyze)

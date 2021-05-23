@@ -14,12 +14,16 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
 
 include(RequireOutOfSourceBuild)
 include(SetDefaultBuildType)
-include(UpdateGitSubmodule)
+# include(UpdateGitSubmodule)
 include(FeatureSummary)
 include(CMakeDependentOption)
 include(CheckIPOSupported)
 
 set_default_build_type("Debug")
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
+  set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+endif()
 
 check_ipo_supported(RESULT SPECULA_IPO OUTPUT output)
 if(NOT SPECULA_IPO)
@@ -53,13 +57,27 @@ FetchContent_Declare(
   GIT_REPOSITORY "https://github.com/CLIUtils/CLI11"
   GIT_TAG "v1.9.1")
 FetchContent_MakeAvailable(CLI11)
+
 FetchContent_Declare(
   fmt
   GIT_REPOSITORY "https://github.com/fmtlib/fmt"
   GIT_TAG "7.1.3")
 FetchContent_MakeAvailable(fmt)
 
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY "https://github.com/gabime/spdlog"
+  GIT_TAG "v1.8.5")
+FetchContent_MakeAvailable(spdlog)
+
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY "https://github.com/catchorg/Catch2"
+  GIT_TAG "v3.0.0-preview3")
+FetchContent_MakeAvailable(Catch2)
+
 add_subdirectory(src)
+add_subdirectory(test)
 
 if(SPECULA_MAIN_PROJECT)
   feature_summary(WHAT ALL QUIET_ON_EMPTY)
