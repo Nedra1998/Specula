@@ -18,6 +18,8 @@ include(SetDefaultBuildType)
 include(FeatureSummary)
 include(CMakeDependentOption)
 include(CheckIPOSupported)
+include(Format)
+include(Analyze)
 
 set_default_build_type("Debug")
 
@@ -75,6 +77,12 @@ FetchContent_Declare(
   GIT_REPOSITORY "https://github.com/catchorg/Catch2"
   GIT_TAG "v3.0.0-preview3")
 FetchContent_MakeAvailable(Catch2)
+
+FetchContent_Declare(
+  magic_enum
+  GIT_REPOSITORY "https://github.com/Neargye/magic_enum"
+  GIT_TAG "v0.7.2")
+FetchContent_MakeAvailable(magic_enum)
 
 add_subdirectory(src)
 add_subdirectory(test)

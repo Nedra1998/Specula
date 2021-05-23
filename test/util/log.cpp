@@ -1,12 +1,13 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
 
-#include <specula/util/log.hpp>
 #include "test_sink.hpp"
+#include <specula/util/log.hpp>
 
 using namespace specula;
 
-TEST_CASE("Logs are written", "[util]") {
+TEST_CASE("Debug sink logs messages", "[util][debug]") {
+  auto sink = get_test_sink();
   LTRACE("debug", "Test trace log");
   LDEBUG("debug", "Test debug log");
   LINFO("debug", "Test info log");
@@ -14,21 +15,25 @@ TEST_CASE("Logs are written", "[util]") {
   LERR("debug", "Test err log");
   LCRITICAL("debug", "Test critical log");
 
-  REQUIRE(logger->get_trace("test").size() == 1);
-  REQUIRE(logger->get_debug("test").size() == 1);
-  REQUIRE(logger->get_info("test").size() == 1);
-  REQUIRE(logger->get_warn("test").size() == 1);
-  REQUIRE(logger->get_err("test").size() == 1);
-  REQUIRE(logger->get_critical("test").size() == 1);
+  REQUIRE(sink->get("debug", TRACE).size() == 1);
+  REQUIRE(sink->get("debug", DEBUG).size() == 1);
+  REQUIRE(sink->get("debug", INFO).size() == 1);
+  REQUIRE(sink->get("debug", WARN).size() == 1);
+  REQUIRE(sink->get("debug", ERR).size() == 1);
+  REQUIRE(sink->get("debug", CRITICAL).size() == 1);
+  REQUIRE(sink->get("debug", ALL).size() == 6);
+  remove_test_sink(sink);
 }
 
-TEST_CASE("Test sink filters correctly", "[util]") {
-  LTRACE("a", "Test trace log");
-  LDEBUG("a", "Test trace log");
-  LTRACE("c", "Test trace log");
-  LTRACE("c", "Test trace log");
+TEST_CASE("Debug sink searches log messages", "[util][debug]") {
+  auto sink = get_test_sink();
+  LTRACE("debug", "Test trace log 1");
+  LDEBUG("debug", "Test debug log 2");
+  LTRACE("debug", "Test trace log 3");
+  LTRACE("debug", "Test trace log 4");
 
-  REQUIRE(logger->get_trace("a").size() == 1);
-  REQUIRE(logger->get_trace("b").size() == 0);
-  REQUIRE(logger->get_trace("c").size() == 2);
+  REQUIRE(sink->find("trace", "debug").size() == 3);
+  REQUIRE(sink->find("log 2", "debug").size() == 1);
+  REQUIRE(sink->find("hello world", "debug").size() == 0);
+  remove_test_sink(sink);
 }

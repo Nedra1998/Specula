@@ -14,8 +14,6 @@
 
 #include "test_sink.hpp"
 
-std::shared_ptr<test_sink_mt> logger = nullptr;
-
 namespace Catch {
 CATCH_INTERNAL_START_WARNINGS_SUPPRESSION
 CATCH_INTERNAL_SUPPRESS_GLOBALS_WARNINGS
@@ -32,11 +30,6 @@ int main(int argc, char *argv[]) {
       auto sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
       sink->set_level(spdlog::level::trace);
       specula::logging::dist_sink->add_sink(sink);
-    }
-    {
-      logger = std::make_shared<test_sink_mt>();
-      logger->set_level(spdlog::level::trace);
-      specula::logging::dist_sink->add_sink(logger);
     }
   } catch (const spdlog::spdlog_ex &ex) {
     std::cerr << "Log initialization failed: " << ex.what() << std::endl;
