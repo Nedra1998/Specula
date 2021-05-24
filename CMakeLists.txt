@@ -14,12 +14,14 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
 
 include(RequireOutOfSourceBuild)
 include(SetDefaultBuildType)
-# include(UpdateGitSubmodule)
 include(FeatureSummary)
 include(CMakeDependentOption)
 include(CheckIPOSupported)
 include(Format)
 include(Analyze)
+include(EnableExtraCompilerWarnings)
+include(EnableProfiling)
+include(EnableCodeCoverage)
 
 set_default_build_type("Debug")
 
@@ -86,6 +88,15 @@ FetchContent_MakeAvailable(magic_enum)
 
 add_subdirectory(src)
 add_subdirectory(test)
+
+file(
+  GLOB_RECURSE
+  CMAKE_SOURCES
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/*.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt"
+  "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt"
+  "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
+format_sources(cmake-fmt TEST SOURCES ${CMAKE_SOURCES})
 
 if(SPECULA_MAIN_PROJECT)
   feature_summary(WHAT ALL QUIET_ON_EMPTY)

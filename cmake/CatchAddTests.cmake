@@ -16,7 +16,8 @@ set(tests)
 
 function(add_command NAME)
   set(_args "")
-  # use ARGV* instead of ARGN, because ARGN splits arrays into multiple arguments
+  # use ARGV* instead of ARGN, because ARGN splits arrays into multiple
+  # arguments
   math(EXPR _last_arg ${ARGC}-1)
   foreach(_n RANGE 1 ${_last_arg})
     set(_arg "${ARGV${_n}}")
@@ -26,27 +27,25 @@ function(add_command NAME)
       set(_args "${_args} ${_arg}")
     endif()
   endforeach()
-  set(script "${script}${NAME}(${_args})\n" PARENT_SCOPE)
+  set(script
+      "${script}${NAME}(${_args})\n"
+      PARENT_SCOPE)
 endfunction()
 
 # Run test executable to get list of available tests
 if(NOT EXISTS "${TEST_EXECUTABLE}")
-  message(FATAL_ERROR
-    "Specified test executable '${TEST_EXECUTABLE}' does not exist"
-  )
+  message(
+    FATAL_ERROR "Specified test executable '${TEST_EXECUTABLE}' does not exist")
 endif()
 execute_process(
-  COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-tests --verbosity quiet
+  COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-tests --verbosity
+          quiet
   OUTPUT_VARIABLE output
   RESULT_VARIABLE result
-  WORKING_DIRECTORY "${TEST_WORKING_DIR}"
-)
+  WORKING_DIRECTORY "${TEST_WORKING_DIR}")
 if(NOT ${result} EQUAL 0)
-  message(FATAL_ERROR
-    "Error running test executable '${TEST_EXECUTABLE}':\n"
-    "  Result: ${result}\n"
-    "  Output: ${output}\n"
-  )
+  message(FATAL_ERROR "Error running test executable '${TEST_EXECUTABLE}':\n"
+                      "  Result: ${result}\n" "  Output: ${output}\n")
 endif()
 
 string(REPLACE "\n" ";" output "${output}")
@@ -56,20 +55,16 @@ execute_process(
   COMMAND ${TEST_EXECUTOR} "${TEST_EXECUTABLE}" ${spec} --list-reporters
   OUTPUT_VARIABLE reporters_output
   RESULT_VARIABLE reporters_result
-  WORKING_DIRECTORY "${TEST_WORKING_DIR}"
-)
+  WORKING_DIRECTORY "${TEST_WORKING_DIR}")
 if(NOT ${reporters_result} EQUAL 0)
-  message(FATAL_ERROR
-    "Error running test executable '${TEST_EXECUTABLE}':\n"
-    "  Result: ${reporters_result}\n"
-    "  Output: ${reporters_output}\n"
-  )
+  message(
+    FATAL_ERROR
+      "Error running test executable '${TEST_EXECUTABLE}':\n"
+      "  Result: ${reporters_result}\n" "  Output: ${reporters_output}\n")
 endif()
 string(FIND "${reporters_output}" "${reporter}" reporter_is_valid)
 if(reporter AND ${reporter_is_valid} EQUAL -1)
-  message(FATAL_ERROR
-    "\"${reporter}\" is not a valid reporter!\n"
-  )
+  message(FATAL_ERROR "\"${reporter}\" is not a valid reporter!\n")
 endif()
 
 # Prepare reporter
@@ -96,25 +91,23 @@ foreach(line ${output})
   # ...add output dir
   if(output_dir)
     string(REGEX REPLACE "[^A-Za-z0-9_]" "_" test_name_clean ${test_name})
-    set(output_dir_arg "--out ${output_dir}/${output_prefix}${test_name_clean}${output_suffix}")
+    set(output_dir_arg
+        "--out ${output_dir}/${output_prefix}${test_name_clean}${output_suffix}"
+    )
   endif()
-  
+
   # ...and add to script
-  add_command(add_test
+  add_command(
+    add_test
     "${prefix}${test}${suffix}"
     ${TEST_EXECUTOR}
     "${TEST_EXECUTABLE}"
     "${test_name}"
     ${extra_args}
     "${reporter_arg}"
-    "${output_dir_arg}"
-  )
-  add_command(set_tests_properties
-    "${prefix}${test}${suffix}"
-    PROPERTIES
-    WORKING_DIRECTORY "${TEST_WORKING_DIR}"
-    ${properties}
-  )
+    "${output_dir_arg}")
+  add_command(set_tests_properties "${prefix}${test}${suffix}" PROPERTIES
+              WORKING_DIRECTORY "${TEST_WORKING_DIR}" ${properties})
   list(APPEND tests "${prefix}${test}${suffix}")
 endforeach()
 

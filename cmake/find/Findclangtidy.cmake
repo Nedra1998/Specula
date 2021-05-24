@@ -23,8 +23,8 @@ execute_process(
   COMMAND "${CLANGTIDY_EXECUTABLE}" --version
   OUTPUT_VARIABLE CLANGTIDY_VERSION
   OUTPUT_STRIP_TRAILING_WHITESPACE)
-string(REGEX REPLACE ".* ([0-9]+\\.[0-9]+\\.[0-9]+).*" "\\1"
-                     CLANGTIDY_VERSION "${CLANGTIDY_VERSION}")
+string(REGEX REPLACE ".* ([0-9]+\\.[0-9]+\\.[0-9]+).*" "\\1" CLANGTIDY_VERSION
+                     "${CLANGTIDY_VERSION}")
 
 if(CLANGTIDY_EXECUTABLE)
   set(CLANGTIDY_DATABASE "-p")

@@ -10,9 +10,9 @@ add_library(specula ${SOURCES})
 target_compile_features(specula PUBLIC cxx_std_20)
 target_link_libraries(specula PUBLIC fmt spdlog)
 target_include_directories(specula PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_include_directories(specula PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/specula")
+target_include_directories(
+  specula PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/specula")
 
-include(Format)
-include(Analyze)
 format_target(specula TEST)
 analyze_target(specula TEST)
+enable_extra_compiler_warnings(specula)
