@@ -45,6 +45,22 @@ parse:
         - TEST
       kwargs:
         NAME: '?'
+    enable_code_coverage:
+      flags:
+        - TEST
+        - TEXT
+        - HTML
+        - XML 
+      kwargs:
+        REPORTER: '?'
+        NAME: '?'
+        OUTPUT: '?'
+        HTML_OUTPUT: '?'
+        XML_OUTPUT: '?'
+        LINE_COVERAGE: '?'
+        BRANCH_COVERAGE: '?'
+        EXCLUDE: '*'
+        TESTS: '*'
   override_spec: {}
   vartags: []
   proptags: []

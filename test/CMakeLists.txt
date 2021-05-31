@@ -9,9 +9,13 @@ target_include_directories(unit-tests PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 include(Catch)
 catch_discover_tests(unit-tests)
-enable_code_coverage(unit-tests TESTS "unit-tests_TESTS")
+enable_code_coverage(
+  unit-tests
+  NAME coverage
+  HTML TEST
+  LINE_COVERAGE 75
+  EXCLUDE "${PROJECT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}"
+  TESTS "unit-tests_TESTS")
 
 format_target(unit-tests TEST)
 analyze_target(unit-tests TEST)
-
-message("TESTS: ${unit-tests_TESTS}")
