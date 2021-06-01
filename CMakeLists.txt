@@ -41,13 +41,18 @@ if(CCACHE_PROGRAM)
 endif()
 
 option(BUILD_TESTS "Build unit tests" ${SPECULA_MAIN_PROJECT})
-# cmake_dependent_option( TEST_COVERAGE "Enables test coverage"
-# ${SPECULA_MAIN_PROJECT} "BUILD_TESTS AND CMAKE_BUILD_TYPE STREQUALS Debug"
-# OFF)
+if(BUILD_TESTS AND CMAKE_BUILD_TYPE MATCHES "Debug")
+  option(CODE_COVERAGE "Enable code coverage reporting" ON)
+else()
+  set(CODE_COVERAGE OFF)
+endif()
 
 option(BUILD_DOCS "Build documentation" ${SPECULA_MAIN_PROJECT})
-# cmake_dependent_option( DOC_COVERAGE "Enable documentation coverage"
-# ${SPECULA_MAIN_PROJECT} "BUILD_DOCS AND CMAKE_BUILD_TYPE STREQUALS DEBUG" OFF)
+if(BUILD_DOCS AND CMAKE_BUILD_TYPE MATCHES "Debug")
+  option(DOC_COVERAGE "Enable documentation coverage reporting" ON)
+else()
+  set(DOC_COVERAGE OFF)
+endif()
 
 option(ENABLE_CLANGFORMAT "Enables clang-format" ${SPECULA_MAIN_PROJECT})
 option(ENABLE_CLANGTIDY "Enable clang-tidy" ${SPECULA_MAIN_PROJECT})

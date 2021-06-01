@@ -3,6 +3,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
 
 add_executable(specula-cli ${SOURCES})
 target_link_libraries(specula-cli PRIVATE CLI11::CLI11 fmt specula spdlog)
+target_include_directories(specula-cli PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 format_target(specula-cli TEST)
 analyze_target(specula-cli TEST)
