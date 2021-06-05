@@ -18,8 +18,6 @@ jobs:
         config:
           - { name: 'Windows - MSVC', os: windows-latest, cc: 'cl', cxx: 'cl'}
           - { name: 'Ubuntu - GCC', os: ubuntu-latest, cc: 'gcc', cxx: 'g++' }
-          - { name: 'Ubuntu - Clang', os: ubuntu-latest, cc: 'clang', cxx: 'clang++' }
-          - { name: 'MacOS - GCC', os: macos-latest, cc: 'gcc', cxx: 'g++' }
           - { name: 'MacOS - Clang', os: macos-latest, cc: 'clang', cxx: 'clang++' }
     steps:
       - uses: actions/checkout@v2
@@ -32,6 +30,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install ninja-build cmake
+          pip install cmakelang gcovr
       - name: 'Install Dependencies MacOS'
         if: matrix.config.os == 'macos-latest'
         run: |
@@ -40,8 +39,6 @@ jobs:
         shell: bash
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
-          export CC=${{matrix.config.cc}}
-          export CXX=${{matrix.config.cxx}}
       - name: 'Configure Cmake'
         shell: bash
         working-directory: ${{runner.workspace}}/build

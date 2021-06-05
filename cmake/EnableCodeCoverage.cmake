@@ -163,6 +163,16 @@ function(enable_code_coverage TARGET)
     set(COV_BRANCH_COVERAGE 0)
   endif()
 
+  if(NOT GCOVR_FOUND
+     OR NOT GCOV_FOUND
+     OR NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|(Apple)?[Cc]lang")
+    message(
+      WARNING
+        "Coverge tools were not found or compiler does not support coverage \
+        reporting. Coverage targets will not be created.")
+    return()
+  endif()
+
   _get_gcovr_command(${COV_EXCLUDE})
 
   get_target_property(TYPE ${TARGET} TYPE)
