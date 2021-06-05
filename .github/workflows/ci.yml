@@ -24,30 +24,30 @@ jobs:
       - name: 'Install Dependencies Windows'
         if: matrix.config.os == 'windows-latest'
         run: |
-          choco install ninja cmake
+          choco install ninja
       - name: 'Install Dependencies Ubuntu'
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install ninja-build cmake
+          sudo apt-get install ninja-build cppcheck clang-tidy
           pip install cmakelang gcovr
       - name: 'Install Dependencies MacOS'
         if: matrix.config.os == 'macos-latest'
         run: |
-          brew install ninja cmake
+          brew install ninja
       - name: 'Create Build Environment'
         shell: bash
         run: |
-          cmake -E make_directory ${{runner.workspace}}/build
+          cmake -E make_directory ${{ runner.workspace }}/build
       - name: 'Configure Cmake'
         shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -G Ninja
+        working-directory: ${{ runner.workspace }}/build
+        run: cmake ${{ runner.workspace }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
       - name: 'Build'
         shell: bash
-        working-directory: ${{runner.workspace}}/build
+        working-directory: ${{ runner.workspace }}/build
         run: cmake --build . --config Debug
       - name: 'Test'
         shell: bash
-        working-directory: ${{runner.workspace}}/build
+        working-directory: ${{ runner.workspace }}/build
         run: ctest -C Debug
