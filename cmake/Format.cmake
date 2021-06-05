@@ -5,6 +5,9 @@ if(NOT CMAKEFORMAT_FOUND)
   find_package(cmakeformat)
 endif()
 
+# Constructs a format target or test given arguments and sources for the
+# possible formatter tools. Each target/test is only included if the formatter
+# tool has been found successfuly.
 function(create_format_target NAME)
   set(OPTIONS TEST)
   set(SINGLE_VALUE_ARGS COMMENT)
@@ -44,6 +47,9 @@ function(create_format_target NAME)
   endif()
 endfunction()
 
+# Constructs formatter target and/or test given a list of source files. The
+# source files are sotred into the sources to provide for each formatter, and
+# the arguments for the formatters are constructed.
 function(format_sources NAME)
   set(OPTIONS FIX TEST)
   set(SINGLE_VALUE_ARGS)
@@ -54,7 +60,6 @@ function(format_sources NAME)
   set(CLANGFORMAT_SOURCES)
   set(CMAKEFORMAT_SOURCES)
   foreach(src ${FMT_SOURCES})
-    get_source_file_property(lang ${src} LANGUAGE)
     get_source_file_property(loc ${src} LOCATION)
     if("${loc}" MATCHES ".*\\.(c|cc|cxx|c\\+\\+|cpp|h|cxx|h\\+\\+|hpp)$")
       list(APPEND CLANGFORMAT_SOURCES "${loc}")
@@ -87,6 +92,9 @@ function(format_sources NAME)
   endif()
 endfunction()
 
+# Extracts the sources from a provided target to construct a formatter target
+# for the target. The sources are extracted from the target properties and
+# passed to the `format_sources` to construct the actual targets.
 function(format_target TARGET)
   if(NOT TARGET ${TARGET})
     message(FATAL_ERROR "format_target requires a valid target to format")

@@ -102,6 +102,7 @@ file(
   "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt"
   "${CMAKE_CURRENT_SOURCE_DIR}/docs/CMakeLists.txt")
 format_sources(cmake-fmt TEST SOURCES ${CMAKE_SOURCES})
+analyze_sources(cmake-analyze TEST SOURCES ${CMAKE_SOURCES})
 
 if(SPECULA_MAIN_PROJECT)
   feature_summary(WHAT ALL QUIET_ON_EMPTY)

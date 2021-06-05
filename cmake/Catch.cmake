@@ -121,11 +121,9 @@ same as the Catch name; see also ``TEST_PREFIX`` and ``TEST_SUFFIX``.
 # ------------------------------------------------------------------------------
 function(catch_discover_tests TARGET)
   cmake_parse_arguments(
-    ""
-    ""
-    "TEST_PREFIX;TEST_SUFFIX;WORKING_DIRECTORY;TEST_LIST;REPORTER;OUTPUT_DIR;OUTPUT_PREFIX;OUTPUT_SUFFIX"
-    "TEST_SPEC;EXTRA_ARGS;PROPERTIES"
-    ${ARGN})
+    "" ""
+    "TEST_PREFIX;TEST_SUFFIX;WORKING_DIRECTORY;TEST_LIST;REPORTER;OUTPUT_DIR;\
+    OUTPUT_PREFIX;OUTPUT_SUFFIX" "TEST_SPEC;EXTRA_ARGS;PROPERTIES" ${ARGN})
 
   if(NOT _WORKING_DIRECTORY)
     set(_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
@@ -135,10 +133,9 @@ function(catch_discover_tests TARGET)
   endif()
 
   # Generate a unique name based on the extra arguments
-  string(
-    SHA1 args_hash
-         "${_TEST_SPEC} ${_EXTRA_ARGS} ${_REPORTER} ${_OUTPUT_DIR} ${_OUTPUT_PREFIX} ${_OUTPUT_SUFFIX}"
-  )
+  string(SHA1 args_hash
+              "${_TEST_SPEC} ${_EXTRA_ARGS} ${_REPORTER} ${_OUTPUT_DIR} \
+         ${_OUTPUT_PREFIX} ${_OUTPUT_SUFFIX}")
   string(SUBSTRING ${args_hash} 0 7 args_hash)
 
   # Define rule to generate test list for aforementioned test executable
@@ -172,7 +169,8 @@ function(catch_discover_tests TARGET)
     "if(EXISTS \"${ctest_tests_file}\")\n"
     "  include(\"${ctest_tests_file}\")\n"
     "else()\n"
-    "  add_test(${TARGET}_NOT_BUILT-${args_hash} ${TARGET}_NOT_BUILT-${args_hash})\n"
+    "  add_test(${TARGET}_NOT_BUILT-${args_hash} \
+    ${TARGET}_NOT_BUILT-${args_hash})\n"
     "endif()\n")
 
   if(NOT ${CMAKE_VERSION} VERSION_LESS "3.10.0")

@@ -3,6 +3,7 @@ if(__set_default_build_type)
 endif()
 set(__set_default_build_type YES)
 
+# Set the default build type if it has not already been set.
 function(set_default_build_type _type)
   if("${CMAKE_GENERATOR}" MATCHES "Makefiles"
      AND NOT CMAKE_BUILD_TYPE

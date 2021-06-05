@@ -17,6 +17,7 @@ if(__enable_profiling)
 endif()
 set(__enable_profiling YES)
 
+# Adds the profiling flags required for different compilers
 macro(_enable_profiling_flags)
   set(_flags)
   if(MSVC)
@@ -26,6 +27,7 @@ macro(_enable_profiling_flags)
   endif()
 endmacro()
 
+# Adds the necessary compiler flags to the target to enable profiling
 function(enable_profiling _target)
   _enable_profiling_flags()
   get_target_property(_origflags ${_target} COMPILE_FLAGS)
@@ -38,6 +40,8 @@ function(enable_profiling _target)
 
 endfunction()
 
+# Adds the required compiler flags to the global flags to enable profiling of
+# all targets.
 function(globally_enable_profiling)
   _enable_profiling_flags()
   set(CMAKE_C_FLAGS

@@ -12,6 +12,10 @@ parse:
         CPPCHECK_SOURCES: '*'
         CLANGTIDY_ARGS: '*'
         CLANGTIDY_SOURCES: '*'
+        SHELLCHECK_ARGS: '*'
+        SHELLCHECK_SOURCES: '*'
+        CMAKELINT_ARGS: '*'
+        CMAKELINT_SOURCES: '*'
     analyze_sources:
       flags:
         - FIX
@@ -100,7 +104,7 @@ markup:
   canonicalize_hashrulers: true
   enable_markup: true
 lint:
-  disabled_codes: []
+  disabled_codes: ['C0103', 'C0113', 'R0915', 'R0912']
   function_pattern: '[0-9a-z_]+'
   macro_pattern: '[0-9A-Z_]+'
   global_var_pattern: '[A-Z][0-9A-Z_]+'

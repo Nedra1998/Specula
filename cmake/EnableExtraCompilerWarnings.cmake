@@ -20,6 +20,7 @@ if(__enable_extra_compiler_warnings)
 endif()
 set(__enable_extra_compiler_warnings YES)
 
+# Test if a given C++ compiler flag is accepted by the compiler.
 macro(_check_warning_flag _flag _flags)
   include(CheckCXXCompilerFlag)
   string(REGEX REPLACE "[^A-Za-z0-9]" "" _flagvar "${_flag}")
@@ -29,6 +30,7 @@ macro(_check_warning_flag _flag _flags)
   endif()
 endmacro()
 
+# Check for the support of a predefined list of compiler flags by the compiler.
 macro(_enable_extra_compiler_warnings_flags)
   set(_flags)
   if(MSVC)
@@ -90,6 +92,7 @@ macro(_enable_extra_compiler_warnings_flags)
   endif()
 endmacro()
 
+# Add the supported warning flags for the compile flags of the target.
 function(enable_extra_compiler_warnings _target)
   _enable_extra_compiler_warnings_flags()
   get_target_property(_origflags ${_target} COMPILE_FLAGS)
@@ -102,6 +105,7 @@ function(enable_extra_compiler_warnings _target)
 
 endfunction()
 
+# Add the supported warning flags for the global compile flags.
 function(globally_enable_extra_compiler_warnings)
   _enable_extra_compiler_warnings_flags()
   set(CMAKE_C_FLAGS

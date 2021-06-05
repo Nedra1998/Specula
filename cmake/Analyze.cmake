@@ -7,12 +7,25 @@ endif()
 if(NOT SHELLCHECK_FOUND)
   find_package(shellcheck)
 endif()
+if(NOT CMAKELINT_FOUND)
+  find_package(cmakelint)
+endif()
 
+# Constructs a static analyzer target or test given arguments and sources for
+# the possible static analyzer tools. Each target/test is only included if the
+# static analyzer has been found successfuly.
 function(create_analyze_target NAME)
   set(OPTIONS TEST)
   set(SINGLE_VALUE_ARGS COMMENT)
-  set(MULTI_VALUE_ARGS CPPCHECK_ARGS CLANGTIDY_ARGS CPPCHECK_SOURCES
-                       CLANGTIDY_SOURCES SHELLCHECK_ARGS SHELLCHECK_SOURCES)
+  set(MULTI_VALUE_ARGS
+      CPPCHECK_ARGS
+      CPPCHECK_SOURCES
+      CLANGTIDY_ARGS
+      CLANGTIDY_SOURCES
+      SHELLCHECK_ARGS
+      SHELLCHECK_SOURCES
+      CMAKELINT_ARGS
+      CMAKELINT_SOURCES)
   cmake_parse_arguments(ANLZ "${OPTIONS}" "${SINGLE_VALUE_ARGS}"
                         "${MULTI_VALUE_ARGS}" ${ARGN})
   if(NOT ANLZ_COMMENT)
@@ -31,6 +44,10 @@ function(create_analyze_target NAME)
     set(SHELLCHECK_CMD ${SHELLCHECK_EXECUTABLE} ${ANLZ_SHELLCHECK_ARGS}
                        ${ANLZ_SHELLCHECK_SOURCES})
   endif()
+  if(CMAKELINT_FOUND AND ANLZ_CMAKELINT_SOURCES)
+    set(CMAKELINT_CMD ${CMAKELINT_EXECUTABLE} ${ANLZ_CMAKELINT_ARGS}
+                      ${ANLZ_CMAKELINT_SOURCES})
+  endif()
 
   if(NOT ANLZ_TEST)
     add_custom_target(
@@ -38,10 +55,11 @@ function(create_analyze_target NAME)
       COMMAND ${CPPCHECK_CMD};
       COMMAND ${CLANGTIDY_CMD};
       COMMAND ${SHELLCHECK_CMD};
+      COMMAND ${CMAKELINT_CMD};
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
       COMMENT "${NAME}: ${ANLZ_COMMENT}"
       DEPENDS ${ANLZ_CPPCHECK_SOURCES} ${ANLZ_CLANGTIDY_SOURCES}
-              ${ANLZ_SHELLCHECK_SOURCES})
+              ${ANLZ_SHELLCHECK_SOURCES} ${ANLZ_CMAKELINT_SOURCES})
   else()
     if(CLANGTIDY_CMD)
       add_test(NAME ${NAME}-clangtidy COMMAND ${CLANGTIDY_CMD})
@@ -52,9 +70,15 @@ function(create_analyze_target NAME)
     if(SHELLCHECK_CMD)
       add_test(NAME ${NAME}-shellcheck COMMAND ${SHELLCHECK_CMD})
     endif()
+    if(CMAKELINT_CMD)
+      add_test(NAME ${NAME}-cmakelint COMMAND ${CMAKELINT_CMD})
+    endif()
   endif()
 endfunction()
 
+# Constructs static analyzer target and/or test given a list of source files.
+# The source files are sorted into sources to provide for each analyzer, and the
+# arguments for the analyzers are constructed.
 function(analyze_sources NAME)
   set(OPTIONS FIX TEST)
   set(SINGLE_VALUE_ARGS)
@@ -65,20 +89,23 @@ function(analyze_sources NAME)
   set(CPPCHECK_SOURCES)
   set(CLANGTIDY_SOURCES)
   set(SHELLCHECK_SOURCES)
+  set(CMAKELINT_SOURCES)
   foreach(src ${ANLZ_SOURCES})
-    get_source_file_property(lang ${src} LANGUAGE)
     get_source_file_property(loc ${src} LOCATION)
-    if("${lang}" MATCHES "C|CXX")
+    if("${loc}" MATCHES ".*\\.(c|cc|cxx|c\\+\\+|cpp|h|cxx|h\\+\\+|hpp)$")
       list(APPEND CPPCHECK_SOURCES "${loc}")
       list(APPEND CLANGTIDY_SOURCES "${loc}")
     elseif("${loc}" MATCHES ".*\\.(sh|bash)")
       list(APPEND SHELLCHECK_SOURCES "${loc}")
+    elseif("${loc}" MATCHES ".*(\\.cmake|CMakeLists.txt)")
+      list(APPEND CMAKELINT_SOURCES "${loc}")
     endif()
   endforeach()
 
   set(CPPCHECK_ARGS)
   set(CLANGTIDY_ARGS)
   set(SHELLCHECK_ARGS "--check-sourced")
+  set(CMAKELINT_ARGS)
   if(CMAKE_EXPORT_COMPILE_COMMANDS)
     list(APPEND CPPCHECK_ARGS
          "${CPPCHECK_DATABASE}${PROJECT_BINARY_DIR}/compile_commands.json")
@@ -91,8 +118,11 @@ function(analyze_sources NAME)
     CPPCHECK_ARGS ${CPPCHECK_ARGS}
     CPPCHECK_SOURCES ${CPPCHECK_SOURCES}
     CLANGTIDY_ARGS ${CLANGTIDY_ARGS}
-    CLANGTIDY_SOURCES ${CLANGTIDY_SOURCES} SHELLCHECK_ARGS ${SHELLCHECK_ARGS}
-                      SHELLCHECK_SOURCES ${SHELLCHECK_SOURCES})
+    CLANGTIDY_SOURCES ${CLANGTIDY_SOURCES}
+    SHELLCHECK_ARGS ${SHELLCHECK_ARGS}
+    SHELLCHECK_SOURCES ${SHELLCHECK_SOURCES}
+    CMAKELINT_ARGS ${CMAKELINT_ARGS}
+    CMAKELINT_SOURCES ${CMAKELINT_SOURCES})
   if(ANLZ_FIX)
     create_analyze_target(
       ${NAME}-fix
@@ -105,11 +135,17 @@ function(analyze_sources NAME)
       CPPCHECK_ARGS ${CPPCHECK_ARGS}
       CPPCHECK_SOURCES ${CPPCHECK_SOURCES}
       CLANGTIDY_ARGS ${CLANGTIDY_ARGS}
-      CLANGTIDY_SOURCES ${CLANGTIDY_SOURCES} SHELLCHECK_ARGS ${SHELLCHECK_ARGS}
-                        SHELLCHECK_SOURCES ${SHELLCHECK_SOURCES})
+      CLANGTIDY_SOURCES ${CLANGTIDY_SOURCES}
+      SHELLCHECK_ARGS ${SHELLCHECK_ARGS}
+      SHELLCHECK_SOURCES ${SHELLCHECK_SOURCES}
+      CMAKELINT_ARGS ${CMAKELINT_ARGS}
+      CMAKELINT_SOURCES ${CMAKELINT_SOURCES})
   endif()
 endfunction()
 
+# Extracts the sources from a provided target to construct an anlyzer target for
+# the target. The sources are extracted from the target properties and passed to
+# the `analyze_sources` to construct the actual targets.
 function(analyze_target TARGET)
   if(NOT TARGET ${TARGET})
     message(FATAL_ERROR "analyze_target requires a valid target to analyze")

@@ -3,10 +3,12 @@ if(__gernerate_version_header)
 endif()
 set(__gernerate_version_header YES)
 
-find_package(Git)
+find_package(Git QUIET)
 set(_version_header_template
     "${CMAKE_CURRENT_LIST_DIR}/GenerateVersionHeader.hpp.in")
 
+# Generates a C++ header file containing the CMake project version information,
+# along with the current git commit, to be included in the project.
 function(generate_version_header)
   set(OPTIONS)
   set(SINGLE_VALUE_KEYWORDS OUTPUT_DIR)
@@ -34,8 +36,8 @@ function(generate_version_header)
   if(NOT EXISTS ${_version_header_template})
     message(
       FATAL_ERROR
-        "Missing template file ${_version_header_template} - should be alongside GenerateVersionHeader.cmake"
-    )
+        "Missing template file ${_version_header_template} - should be \
+        alongside GenerateVersionHeader.cmake")
   endif()
   configure_file("${_version_header_template}" "${ver_OUTPUT_DIR}/version.hpp")
 endfunction()

@@ -13,6 +13,7 @@ if(NOT GCOVR_FOUND)
   find_package(gcovr)
 endif()
 
+# Constructs the base gcovr command to collect the coverage report information.
 function(_get_gcovr_command)
   set(GCOVR_EXCLUDE_ARGS "")
   foreach(EXCLUDE ${ARGN})
@@ -40,6 +41,8 @@ function(_get_gcovr_command)
       PARENT_SCOPE)
 endfunction()
 
+# Creates a target to print the coverage report into stdout as a human readable
+# text string.
 function(add_cov_report_text TARGET NAME GCOVR_CMD OUTPUT)
   add_custom_target(
     ${NAME}
@@ -51,6 +54,8 @@ function(add_cov_report_text TARGET NAME GCOVR_CMD OUTPUT)
     COMMENT "Collecting code coverage report")
 endfunction()
 
+# Creates a target to write the coverage report into HTML files, along with
+# specific coverage details of each file.
 function(add_cov_report_html TARGET NAME GCOVR_CMD OUTPUT)
   add_custom_target(
     ${NAME}
@@ -63,6 +68,8 @@ function(add_cov_report_html TARGET NAME GCOVR_CMD OUTPUT)
     COMMENT "Collecting code coverage report")
 endfunction()
 
+# Creates a target to write the coverage report into XML files, along with
+# detailed coverage information of each file.
 function(add_cov_report_xml TARGET NAME GCOVR_CMD OUTPUT)
   add_custom_target(
     ${NAME}
@@ -75,6 +82,11 @@ function(add_cov_report_xml TARGET NAME GCOVR_CMD OUTPUT)
     COMMENT "Collecting code coverage report")
 endfunction()
 
+# Creates a CTest test for the coverage percentage. This currently will be
+# configured as a dependency of the detected Catch2 unit tests, and will be
+# executed after all of those have completed. The test collects the coverage
+# information, and validates that either the line and/or branch coverage
+# percentage is above the required level.
 function(add_cov_test TARGET GCOVR_CMD TESTS LINE BRANCH)
   string(SHA1 HASH "${TARGET}")
   string(SUBSTRING "${HASH}" 0 7 HASH)
@@ -84,21 +96,21 @@ function(add_cov_test TARGET GCOVR_CMD TESTS LINE BRANCH)
   foreach(ARG ${GCOVR_CMD})
     set(CMD "${CMD} \"${ARG}\"")
   endforeach()
-  set(CMD
-      "${CMD} \"--fail-under-line\" \"${LINE}\" \"--fail-under-branch\" \"${BRANCH}\""
-  )
+  set(CMD "${CMD} \"--fail-under-line\" \"${LINE}\" \"--fail-under-branch\" \
+      \"${BRANCH}\"")
   file(
     WRITE "${CTEST_INCLUDE_FILE}"
-    "if(${COV_TESTS})\n"
-    "  add_test(${TARGET}-coverage ${CMD})\n"
-    "  set_tests_properties(${TARGET}-coverage PROPERTIES DEPENDS \${${TESTS}} WORKING_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}\")\n"
-    "endif()\n")
+    "if(${COV_TESTS})\n" "  add_test(${TARGET}-coverage ${CMD})\n"
+    "  set_tests_properties(${TARGET}-coverage PROPERTIES DEPENDS \${${TESTS}} \
+    WORKING_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}\")\n" "endif()\n")
   set_property(
     DIRECTORY
     APPEND
     PROPERTY TEST_INCLUDE_FILES "${CTEST_INCLUDE_FILE}")
 endfunction()
 
+# Add required compiler and link options to a target that are required to enable
+# code coverage. This currently only supports GNU and Clang compilers.
 function(add_cov_flags TARGET)
   if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     target_compile_options(${TARGET} PRIVATE -fprofile-arcs -ftest-coverage)
@@ -113,6 +125,9 @@ function(add_cov_flags TARGET)
   endif()
 endfunction()
 
+# Enable code coverage for a given target, and create the reporter targets for
+# reporting the coverage percentage, and optionally add the CTest test for
+# validation.
 function(enable_code_coverage TARGET)
   if(NOT TARGET ${TARGET})
     message(FATAL_ERROR "enable_code_coverage requires a valid target")
