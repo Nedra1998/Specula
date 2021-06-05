@@ -10,15 +10,17 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.config.os }} - ${{ matrix.config.compiler }}
+    name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
         config:
-          - { os: windows-latest, compiler: 'MSVC' }
-          - { os: ubuntu-latest, compiler: 'GCC' }
-          - { os: macos-latest, compiler: 'Clang' }
+          - { name: 'Windows - MSVC', os: windows-latest, cc: 'cl', cxx: 'cl'}
+          - { name: 'Ubuntu - GCC', os: ubuntu-latest, cc: 'gcc', cxx: 'g++' }
+          - { name: 'Ubuntu - Clang', os: ubuntu-latest, cc: 'clang', cxx: 'clang++' }
+          - { name: 'MacOS - GCC', os: macos-latest, cc: 'gcc', cxx: 'g++' }
+          - { name: 'MacOS - Clang', os: macos-latest, cc: 'clang', cxx: 'clang++' }
     steps:
       - uses: actions/checkout@v2
       - name: 'Install Dependencies Windows'
@@ -31,12 +33,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install ninja-build cmake
       - name: 'Install Dependencies MacOS'
-        if: matrix.config.os == 'ubuntu-latest'
+        if: matrix.config.os == 'macos-latest'
         run: |
           brew install ninja cmake
       - name: 'Create Build Environment'
         shell: bash
-        run: cmake -E make_directory ${{runner.workspace}}/build
+        run: |
+          cmake -E make_directory ${{runner.workspace}}/build
+          export CC=${{matrix.config.cc}}
+          export CXX=${{matrix.config.cxx}}
       - name: 'Configure Cmake'
         shell: bash
         working-directory: ${{runner.workspace}}/build
@@ -44,7 +49,7 @@ jobs:
       - name: 'Build'
         shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: cmake --build .--config Debug
+        run: cmake --build . --config Debug
       - name: 'Test'
         shell: bash
         working-directory: ${{runner.workspace}}/build
