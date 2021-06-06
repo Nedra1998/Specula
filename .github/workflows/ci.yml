@@ -39,10 +39,16 @@ jobs:
         shell: bash
         run: |
           cmake -E make_directory ${{ runner.workspace }}/build
-      - name: 'Configure Cmake'
+      - name: 'Configure Cmake (Windows)'
+        if: matrix.config.os == 'windows-latest'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
-        run: cmake ${{ env.GITHUB_WORKSPACE }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
+        run: cmake $env:GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -G Ninja
+      - name: 'Configure Cmake (Linux/MacOS)'
+        if: matrix.config.os != 'windows-latest'
+        shell: bash
+        working-directory: ${{ runner.workspace }}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -G Ninja
       - name: 'Build'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
