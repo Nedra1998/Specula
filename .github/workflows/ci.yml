@@ -42,7 +42,7 @@ jobs:
       - name: 'Configure Cmake'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
-        run: cmake ${{ runner.workspace }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
+        run: cmake ${{ env.GITHUB_WORKSPACE }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
       - name: 'Build'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
