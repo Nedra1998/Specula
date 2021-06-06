@@ -21,18 +21,17 @@ jobs:
           - { name: 'MacOS - Clang', os: macos-latest, cc: 'clang', cxx: 'clang++' }
     steps:
       - uses: actions/checkout@v2
-      - name: 'Install Dependencies (Windows)'
-        if: matrix.config.os == 'windows-latest'
-        run: 
+      # - name: 'Install Dependencies (Windows)'
+      #   if: matrix.config.os == 'windows-latest'
+      #   run: 
       - name: 'Install Dependencies (Linux)'
         if: matrix.config.os == 'ubuntu-latest'
         run: |
-          sudo apt-get update
           sudo apt-get install cppcheck clang-tidy
           pip install cmakelang gcovr
-      - name: 'Install Dependencies (MacOS)'
-        if: matrix.config.os == 'macos-latest'
-        run:
+      # - name: 'Install Dependencies (MacOS)'
+      #   if: matrix.config.os == 'macos-latest'
+      #   run:
       - name: 'Create Build Environment'
         run: cmake -E make_directory ${{ github.workspace }}/build
       - name: 'Configure Cmake'
