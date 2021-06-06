@@ -21,17 +21,17 @@ jobs:
           - { name: 'MacOS - Clang', os: macos-latest, cc: 'clang', cxx: 'clang++' }
     steps:
       - uses: actions/checkout@v2
-      - name: 'Install Dependencies Windows'
+      - name: 'Install Dependencies (Windows)'
         if: matrix.config.os == 'windows-latest'
         run: |
           choco install ninja
-      - name: 'Install Dependencies Ubuntu'
+      - name: 'Install Dependencies (Linux)'
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install ninja-build cppcheck clang-tidy
           pip install cmakelang gcovr
-      - name: 'Install Dependencies MacOS'
+      - name: 'Install Dependencies (MacOS)'
         if: matrix.config.os == 'macos-latest'
         run: |
           brew install ninja
@@ -39,10 +39,16 @@ jobs:
         shell: bash
         run: |
           cmake -E make_directory ${{ runner.workspace }}/build
-      - name: 'Configure Cmake'
+      - name: 'Configure Cmake (Windows)'
+        if: matrix.config.os == 'windows-latest'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
-        run: cmake ${{ env.GITHUB_WORKSPACE }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
+        run: cmake $Env:GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -G Ninja
+      - name: 'Configure Cmake (Linux/MacOS)'
+        if: matrix.config.os == 'windows-latest'
+        shell: bash
+        working-directory: ${{ runner.workspace }}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -G Ninja
       - name: 'Build'
         shell: bash
         working-directory: ${{ runner.workspace }}/build
