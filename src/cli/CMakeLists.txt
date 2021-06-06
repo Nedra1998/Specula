@@ -5,6 +5,11 @@ add_executable(specula-cli ${SOURCES})
 target_link_libraries(specula-cli PRIVATE CLI11::CLI11 fmt specula spdlog)
 target_include_directories(specula-cli PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
-format_target(specula-cli TEST)
-analyze_target(specula-cli TEST)
 enable_extra_compiler_warnings(specula-cli)
+
+if(ENABLE_FORMATTING)
+  format_target(specula-cli TEST)
+endif()
+if(ENABLE_ANALYSIS)
+  analyze_target(specula-cli TEST)
+endif()

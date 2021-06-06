@@ -7,15 +7,24 @@ target_link_libraries(unit-tests PRIVATE fmt spdlog Catch2::Catch2 specula
                                          magic_enum)
 target_include_directories(unit-tests PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
-include(Catch)
-catch_discover_tests(unit-tests)
-enable_code_coverage(
-  unit-tests
-  NAME coverage
-  HTML TEST
-  LINE_COVERAGE 75
-  EXCLUDE "${PROJECT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}"
-  TESTS "unit-tests_TESTS")
+if(BUILD_TESTS)
+  include(Catch)
+  catch_discover_tests(unit-tests)
+endif()
 
-format_target(unit-tests TEST)
-analyze_target(unit-tests TEST)
+if(CODE_COVERAGE)
+  enable_code_coverage(
+    unit-tests
+    NAME coverage
+    HTML TEST
+    LINE_COVERAGE 75
+    EXCLUDE "${PROJECT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}"
+    TESTS "unit-tests_TESTS")
+endif()
+
+if(ENABLE_FORMATTING)
+  format_target(unit-tests TEST)
+endif()
+if(ENABLE_ANALYSIS)
+  analyze_target(unit-tests TEST)
+endif()

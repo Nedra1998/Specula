@@ -23,23 +23,21 @@ jobs:
       - uses: actions/checkout@v2
       - name: 'Install Dependencies (Windows)'
         if: matrix.config.os == 'windows-latest'
-        run: |
-          choco install ninja
+        run: 
       - name: 'Install Dependencies (Linux)'
         if: matrix.config.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install ninja-build cppcheck clang-tidy
+          sudo apt-get install cppcheck clang-tidy
           pip install cmakelang gcovr
       - name: 'Install Dependencies (MacOS)'
         if: matrix.config.os == 'macos-latest'
-        run: |
-          brew install ninja
+        run:
       - name: 'Create Build Environment'
         run: cmake -E make_directory ${{ github.workspace }}/build
       - name: 'Configure Cmake'
         working-directory: ${{ github.workspace }}/build
-        run: cmake ${{ github.workspace }} -DCMAKE_BUILD_TYPE=Debug -G Ninja
+        run: cmake ${{ github.workspace }} -DCMAKE_BUILD_TYPE=Debug
       - name: 'Build'
         working-directory: ${{ github.workspace }}/build
         run: cmake --build . --config Debug

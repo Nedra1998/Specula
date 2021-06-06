@@ -54,9 +54,8 @@ else()
   set(DOC_COVERAGE OFF)
 endif()
 
-option(ENABLE_CLANGFORMAT "Enables clang-format" ${SPECULA_MAIN_PROJECT})
-option(ENABLE_CLANGTIDY "Enable clang-tidy" ${SPECULA_MAIN_PROJECT})
-option(ENABLE_CPPCHECK "Enable cppcheck" ${SPECULA_MAIN_PROJECT})
+option(ENABLE_FORMATTING "Enables automated formatters" ${SPECULA_MAIN_PROJECT})
+option(ENABLE_ANALYSIS "Enable automated static analyzers" ${SPECULA_MAIN_PROJECT})
 
 enable_testing()
 
