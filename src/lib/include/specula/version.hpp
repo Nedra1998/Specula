@@ -70,7 +70,7 @@ namespace version {
  *
  * @sa core release build
  */
-static const std::string semver = "0.2.0-91e2192";
+static const std::string semver = "0.2.0-d75c810";
 /**
  * This is generated from the `major`, `minor`, and `patch`.
  *
@@ -100,7 +100,7 @@ static const unsigned int patch = 0;
  * This defines the first 7 characters in the git commit hash. This is usually
  * sufficent for the purposes of determining the exact version of a build.
  */
-static const std::string build = "91e2192";
+static const std::string build = "d75c810";
 } // namespace version
 } // namespace specula
 

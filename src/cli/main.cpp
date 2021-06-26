@@ -21,6 +21,7 @@
 
 #include <specula/util/log.hpp>
 #include <specula/version.hpp>
+#include <specula/specula.hpp>
 
 #include "cmd/version.hpp"
 #include "exit_code.hpp"
@@ -105,6 +106,8 @@ int main(int argc, const char **argv) {
 
   if (ret == OK && app.got_subcommand(version_cmd))
     ret = version::main();
+
+  specula::psum();
 
   return ret;
 }

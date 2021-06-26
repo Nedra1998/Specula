@@ -5,6 +5,7 @@ add_executable(specula-cli ${SOURCES})
 target_link_libraries(specula-cli PRIVATE CLI11::CLI11 fmt specula spdlog)
 target_include_directories(specula-cli PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
+add_sycl_to_target(TARGET specula-cli)
 enable_extra_compiler_warnings(specula-cli)
 
 if(ENABLE_FORMATTING)

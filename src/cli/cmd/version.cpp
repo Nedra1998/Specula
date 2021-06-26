@@ -39,10 +39,10 @@ ExitCode specula::cli::version::main() {
 #  if defined(_MSC_FULL_VER)
 #    if _MSC_VER >= 1400
   fmt::print("  Compiler:         MSVC v{}.{}.{}\n", _MSC_VER / 100,
-             _MSC_VER % 100, _MSC_FULL_VERR % 100000);
+             _MSC_VER % 100, _MSC_FULL_VER % 100000);
 #    else
   fmt::print("  Compiler:         MSVC v{}.{}.{}\n", _MSC_VER / 100,
-             _MSC_VER % 100, _MSC_FULL_VERR % 10000);
+             _MSC_VER % 100, _MSC_FULL_VER % 10000);
 #    endif
 #  else
   fmt::print("  Compiler:         MSVC v{}.{}\n", _MSC_VER / 100,

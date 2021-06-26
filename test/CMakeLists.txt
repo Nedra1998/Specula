@@ -7,6 +7,8 @@ target_link_libraries(unit-tests PRIVATE fmt spdlog Catch2::Catch2 specula
                                          magic_enum)
 target_include_directories(unit-tests PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
+add_sycl_to_target(TARGET unit-tests)
+
 if(BUILD_TESTS)
   include(Catch)
   catch_discover_tests(unit-tests)
