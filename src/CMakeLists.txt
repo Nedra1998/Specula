@@ -3,8 +3,7 @@
 CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
-  GIT_TAG b25aaecf6aae27a3ccae860fadb952b3cfb40dd1
-  OPTIONS "SPDLOG_USE_STD_FORMAT ON")
+  GIT_TAG b25aaecf6aae27a3ccae860fadb952b3cfb40dd1)
 
 # ---- Sources ----
 
