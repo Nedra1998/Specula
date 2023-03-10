@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
   stdout_sink->set_level(spdlog::level::trace);
 
   if (use_color)
-    stdout_sink->set_pattern("\033[90m[%H:%M:%S.%e]\033[0m \033[1m%^%-7l%$\033[0m  %v");
+    stdout_sink->set_pattern("\033[90m[%H:%M:%S.%e]\033[0m \033[1m%^%-8l%$\033[0m  %v");
   else
     stdout_sink->set_pattern("%H:%M:%S.%e %l %v");
 

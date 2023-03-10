@@ -39,7 +39,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(src)
 add_subdirectory(app)
-# add_subdirectory(docs) add_subdirectory(tests)
+# add_subdirectory(docs)
+add_subdirectory(tests)
 
 # ---- Global Targets ----
 
