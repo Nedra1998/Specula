@@ -22,6 +22,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(ENABLE_PROFILING "Enable profiling with Tracy" OFF)
+
 # ---- Global Dependencies ----
 
 include(CPM)
@@ -32,14 +34,6 @@ include(CheckTarget)
 # ---- Global Configuration ----
 
 set(CMAKE_CXX_STANDARD 20)
-
-# include(${cmake-scripts_SOURCE_DIR}/sanitizers.cmake)
-# include(${cmake-scripts_SOURCE_DIR}/tools.cmake)
-# include(${cmake-scripts_SOURCE_DIR}/formatting.cmake)
-# include(${cmake-scripts_SOURCE_DIR}/dependency-graph.cmake)
-
-# clang_tidy(${CLANG_TIDY_ARGS}) include_what_you_use(${IWYU_ARGS}) cppcheck(${CPPCHECK_ARGS})
-# gen_dep_graph(png TARGET_NAME dep-graph OUTPUT_DIR "${PROJECT_BINARY_DIR}")
 
 # ---- Subdirectories ----
 
@@ -65,6 +59,16 @@ add_clang_tidy(check-clang-tidy ${CXX_SOURCES})
 add_cmake_lint(check-cmake-lint ${CMAKE_SOURCES})
 
 add_custom_target(
+  format
+  DEPENDS fix-format-cpp fix-format-cmake
+  COMMENT "Running formatter fixes")
+
+add_custom_target(
+  check-format
+  DEPENDS check-format-cpp check-format-cmake
+  COMMENT "Running formatter checks")
+
+add_custom_target(
   fix
   DEPENDS fix-format-cpp fix-format-cmake
   COMMENT "Running static analyzers and formatter fixes")
@@ -72,7 +76,5 @@ add_custom_target(
   check
   DEPENDS check-format-cpp check-format-cmake check-cppcheck check-clang-tidy check-cmake-lint
   COMMENT "Running static analyzers and formatter checks")
-
-# clang_format(format-cpp ${CXX_SOURCES}) cmake_format(format-cmake ${CMAKE_SOURCES})
 
 # ---- Packaging ----

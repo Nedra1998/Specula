@@ -5,6 +5,11 @@ CPMAddPackage(
   GITHUB_REPOSITORY gabime/spdlog
   GIT_TAG b25aaecf6aae27a3ccae860fadb952b3cfb40dd1)
 
+CPMAddPackage(
+  NAME tracy
+  GITHUB_REPOSITORY wolfpld/tracy
+  GIT_TAG v0.9.1)
+
 # ---- Sources ----
 
 include(GenerateExportHeader)
@@ -29,13 +34,21 @@ target_compile_features(specula PUBLIC cxx_std_20)
 
 target_compile_options(specula PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 
-target_compile_definitions(specula PRIVATE -DSPECULA_STATIC_DEFINE)
+target_compile_definitions(
+  specula
+  PUBLIC -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
+  PRIVATE -DSPECULA_STATIC_DEFINE)
 
-target_link_libraries(specula PUBLIC spdlog::spdlog)
+target_link_libraries(specula PUBLIC spdlog::spdlog TracyClient)
 
 target_include_directories(
   specula
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include> $<INSTALL_INTERFACE:include>)
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include> $<INSTALL_INTERFACE:include>
+  PRIVATE ${PROJECT_SOURCE_DIR}/include/specula)
+
+if(ENABLE_PROFILING)
+  target_compile_definitions(specula PUBLIC -DTRACY_ENABLE)
+endif()
 
 # ---- Analysis & Linting ----
