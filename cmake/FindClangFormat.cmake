@@ -1,0 +1,35 @@
+file(TO_CMAKE_PATH "${CLANGFORMAT_ROOT_DIR}" CLANGFORMAT_ROOT_DIR)
+set(CLANGFORMAT_ROOT_DIR
+    "${CLANGFORMAT_ROOT_DIR}"
+    CACHE PATH "Path to search for clang-format")
+
+if(CLANGFORMAT_ROOT_DIR)
+  find_program(
+    CLANGFORMAT_EXECUTABLE
+    NAMES clang-format
+    PATHS "${CLANGFORMAT_ROOT_DIR}"
+    NO_DEFAULT_PATH)
+endif()
+
+find_program(CLANGFORMAT_EXECUTABLE NAMES clang-format)
+
+if(CLANGFORMAT_EXECUTABLE)
+  execute_process(
+    COMMAND "${CLANGFORMAT_EXECUTABLE}" --version
+    OUTPUT_VARIABLE CLANGFORMAT_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  string(REGEX REPLACE ".* ([0-9]+\\.([0-9]+\\.[0-9]+)?).*" "\\1" CLANGFORMAT_VERSION
+                       "${CLANGFORMAT_VERSION}")
+endif()
+
+find_package(PackageHandleStandardArgs REQUIRED)
+find_package_handle_standard_args(
+  ClangFormat
+  REQUIRED_VARS CLANGFORMAT_EXECUTABLE
+  VERSION_VAR CLANGFORMAT_VERSION)
+
+if(CLANGFORMAT_FOUND OR CLANGFORMAT_MARK_AS_ADVANCED)
+  mark_as_advanced(CLANGFORMAT_ROOT_DIR)
+endif()
+
+mark_as_advanced(CLANGFORMAT_EXECUTABLE)
