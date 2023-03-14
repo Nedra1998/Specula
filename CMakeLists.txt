@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.25)
 project(
   Specula
   VERSION 0.1.0
+  DESCRIPTION "A C++20 Physically Based Renderer"
   LANGUAGES CXX)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
@@ -39,7 +40,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(src)
 add_subdirectory(app)
-# add_subdirectory(docs)
+add_subdirectory(docs)
 add_subdirectory(tests)
 
 # ---- Global Targets ----

@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Nedra1998/tankobon">
+  <a href="https://github.com/Nedra1998/Specula">
     <img src="docs/assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 

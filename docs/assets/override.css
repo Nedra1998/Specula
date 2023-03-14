@@ -1,0 +1,45 @@
+html {
+    --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    --font-family-monospace: ui-monospace, Iosevka, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+.github-corner svg {
+    fill: var(--primary-light-color);
+    color: var(--page-background-color);
+    width: 72px;
+    height: 72px;
+}
+
+@media screen and (max-width: 767px) {
+    .github-corner svg {
+        width: 55px;
+        height: 55px;
+    }
+
+    #projectnumber {
+        margin-right: 22px;
+    }
+}
+
+.directory .levels span {
+    color: var(--primary-color);
+}
+
+.arrow {
+    font-size: 80%;
+    font-family: Iosevka;
+}
+
+.memberdecls td,
+.fieldtable tr {
+    -webkit-transition-property: none;
+    -webkit-transition-duration: none;
+    -moz-transition-property: none;
+    -moz-transition-duration: none;
+    -ms-transition-property: none;
+    -ms-transition-duration: none;
+    -o-transition-property: none;
+    -o-transition-duration: none;
+    transition-property: none;
+    transition-duration: none;
+}
