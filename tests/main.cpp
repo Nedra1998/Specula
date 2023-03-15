@@ -1,8 +1,10 @@
+#include <algorithm>
 #include <iostream>
 #include <memory>
 
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <spdlog/sinks/ostream_sink.h>
 #include <spdlog/sinks/ringbuffer_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/stdout_sinks.h>
@@ -46,6 +48,15 @@ int main(int argc, char *argv[]) {
     break;
   }
 
+  for (auto &reporter : session.configData().reporterSpecifications) {
+    std::string name = reporter.name();
+    std::transform(name.begin(), name.end(), name.begin(), [](char c) { return std::tolower(c); });
+    if (name == "xml" || name == "sonarqube" || name == "junit") {
+      use_color = false;
+      break;
+    }
+  }
+
   log_ringbuffer = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(256);
   log_ringbuffer->set_level(spdlog::level::trace);
   log_ringbuffer->set_pattern("%l %v");
@@ -54,7 +65,7 @@ int main(int argc, char *argv[]) {
   if (use_color)
     stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
   else
-    stdout_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
+    stdout_sink = std::make_shared<spdlog::sinks::ostream_sink_mt>(std::cout);
 
   switch (session.config().verbosity()) {
   case Catch::Verbosity::Quiet:

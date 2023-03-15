@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 
 # ---- Project ----
 
@@ -23,6 +23,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(BUILD_DOCUMENTATION "Build the generated documentation targets" OFF)
+option(BUILD_TESTING "Build the test targets" OFF)
 option(ENABLE_PROFILING "Enable profiling with Tracy" OFF)
 
 # ---- Global Dependencies ----
@@ -40,8 +42,15 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(src)
 add_subdirectory(app)
-add_subdirectory(docs)
-add_subdirectory(tests)
+
+if(BUILD_DOCUMENTATION)
+  add_subdirectory(docs)
+endif()
+
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 # ---- Global Targets ----
 

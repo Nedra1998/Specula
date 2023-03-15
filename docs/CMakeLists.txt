@@ -38,6 +38,7 @@ set(DOXYGEN_HTML_EXTRA_STYLESHEET
 set(DOXYGEN_HTML_EXTRA_FILES
     "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-darkmode-toggle.js"
     "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-fragment-copy-button.js"
+    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-interactive-toc.js"
     "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-paragraph-link.js"
     "${CMAKE_CURRENT_SOURCE_DIR}/assets/logo.png")
 

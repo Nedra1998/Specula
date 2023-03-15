@@ -5,6 +5,9 @@ CPMAddPackage(
   GITHUB_REPOSITORY catchorg/Catch2
   GIT_TAG v3.3.2)
 
+list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+include(Catch)
+
 # ---- Sources ----
 
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
@@ -24,7 +27,9 @@ target_link_libraries(unit-tests PUBLIC specula::specula Catch2::Catch2)
 target_include_directories(unit-tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(ENABLE_PROFILING)
-  target_compile_definitions(specula PUBLIC -DTRACY_ENABLE)
+  target_compile_definitions(unit-tests PUBLIC -DTRACY_ENABLE)
 endif()
 
-# ---- Analysis & Linting ----
+# ---- Test Registration ----
+
+catch_discover_tests(unit-tests)
