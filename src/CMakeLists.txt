@@ -8,7 +8,8 @@ CPMAddPackage(
 CPMAddPackage(
   NAME tracy
   GITHUB_REPOSITORY wolfpld/tracy
-  GIT_TAG v0.9.1)
+  GIT_TAG v0.9.1
+  OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}")
 
 # ---- Sources ----
 
@@ -46,9 +47,5 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include> $<INSTALL_INTERFACE:include>
   PRIVATE ${PROJECT_SOURCE_DIR}/include/specula)
-
-if(ENABLE_PROFILING)
-  target_compile_definitions(specula PUBLIC -DTRACY_ENABLE)
-endif()
 
 # ---- Analysis & Linting ----
