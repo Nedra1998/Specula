@@ -1,6 +1,7 @@
 ### Custom
 # Build Directories
 build/
+.cache/
 
 ### C++
 # Prerequisites

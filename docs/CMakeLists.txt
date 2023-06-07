@@ -60,6 +60,7 @@ doxygen_add_docs(docs ${HEADERS} ${SOURCES} ${DOCS})
 
 add_custom_command(
   TARGET docs
+  COMMENT "Copying assets for html documentation"
   POST_BUILD
   COMMAND "${CMAKE_COMMAND}" -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/html/docs/assets"
   COMMAND "${CMAKE_COMMAND}" -E copy "${CMAKE_CURRENT_SOURCE_DIR}/assets/logo.png"
