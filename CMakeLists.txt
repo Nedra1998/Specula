@@ -31,7 +31,7 @@ option(ENABLE_PROFILING "Enable profiling with Tracy" OFF)
 
 include(CPM)
 
-CPMAddPackage("gh:TheLartians/Ccache.cmake@1.2.4")
+CPMAddPackage("gh:TheLartians/Ccache.cmake@1.2.5")
 
 # ---- Global Configuration ----
 

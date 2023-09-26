@@ -1,9 +1,15 @@
-# ---- Dependencies ----
+
 
 CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
-  GIT_TAG b25aaecf6aae27a3ccae860fadb952b3cfb40dd1)
+  GIT_TAG v1.12.0
+  OPTIONS "SPDLOG_FMT_EXTERNAL ON")
+
+CPMAddPackage(
+  NAME fmt
+  GITHUB_REPOSITORY fmtlib/fmt
+  GIT_TAG 10.1.1)
 
 CPMAddPackage(
   NAME tracy
@@ -40,7 +46,7 @@ target_compile_definitions(
   PUBLIC -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
   PRIVATE -DSPECULA_STATIC_DEFINE)
 
-target_link_libraries(specula PUBLIC spdlog::spdlog TracyClient)
+target_link_libraries(specula PUBLIC spdlog::spdlog fmt::fmt TracyClient)
 
 target_include_directories(
   specula
