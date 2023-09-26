@@ -4,10 +4,11 @@
  * @date 2023-03-13
  * @copyright Copyright (c) 2023
  *
- * This file file provides a small wrapper around the logging utilities that are
- * provided by [spdlog](https://github.com/gabime/spdlog). It primarily consists of some macros
- * which map directly to spdlog logging macros, and provides an initialization function for clients
- * to seutp the logging interface.
+ * This file provides a small wrapper around the logging utilities that are
+ * provided by [spdlog](https://github.com/gabime/spdlog). It primarily
+ * consists of some macros which map directly to spdlog logging macros, and
+ * provides an initialization function for clients to seutp the logging
+ * interface.
  */
 #ifndef SPECULA_UTIL_LOG_HPP
 #define SPECULA_UTIL_LOG_HPP
@@ -33,25 +34,29 @@
 /**
  * @brief Specula logging utilities
  *
- * This namespace contains all of the utility methods that are involved with logging within the
- * renderer. All of the actualy logging logic is provided by
- * [spdlog](https://github.com/gabime/spdlog). This namespace just provides some additional tooling
- * arround initializing and using spdlog within the renderer.
+ * This namespace contains all of the utility methods that are involved with
+ * logging within the renderer. All of the actualy logging logic is provided by
+ * [spdlog](https://github.com/gabime/spdlog). This namespace just provides
+ * some additional tooling arround initializing and using spdlog within the
+ * renderer.
  */
 namespace specula::logging {
   /**
    * @brief Create the default logger used by the renderer
    *
-   * This method creates the default `specula` logger, and configures it using a distribute log
-   * sink, distributing the log to the provided `sinks`. So it should be called before any other
-   * operations in the renderer so that the logging is available.
+   * This method creates the default `specula` logger, and configures it using
+   * a distribute log sink, distributing the log to the provided `sinks`. So it
+   * should be called before any other operations in the renderer so that the
+   * logging is available.
    *
-   * If the renderer has been compiled with `ENABLE_PROFILING` then this also instantiates a tracy
-   * log sink, which will automatically send log messages to tracy. The tracy log sink is configured
-   * to send log messages up to and including debug logs, but will not send trace log messages.
+   * If the renderer has been compiled with `ENABLE_PROFILING` then this also
+   * instantiates a tracy log sink, which will automatically send log messages
+   * to tracy. The tracy log sink is configured to send log messages up to and
+   * including debug logs, but will not send trace log messages.
    *
    * @param sinks An optional list of additional sinks to add to the logger
-   * @return true if the logging sinks and logger were initializaed successfully
+   * @return true if the logging sinks and logger were initializaed
+   * successfully
    * @return false if there was an error initializaing logging
    */
   bool initialize(std::vector<spdlog::sink_ptr> sinks = {});
