@@ -1,6 +1,9 @@
 # ---- Dependencies ----
 
-CPMAddPackage("gh:jarro2783/cxxopts@3.1.1")
+CPMAddPackage(
+  NAME cxxopts
+  GITHUB_REPOSITORY jarro2783/cxxopts
+  GIT_TAG v3.1.1)
 
 # ---- Sources ----
 

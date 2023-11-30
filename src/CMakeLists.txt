@@ -1,4 +1,8 @@
 
+CPMAddPackage(
+  NAME fmt
+  GITHUB_REPOSITORY fmtlib/fmt
+  GIT_TAG 10.1.1)
 
 CPMAddPackage(
   NAME spdlog
@@ -7,14 +11,9 @@ CPMAddPackage(
   OPTIONS "SPDLOG_FMT_EXTERNAL ON")
 
 CPMAddPackage(
-  NAME fmt
-  GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 10.1.1)
-
-CPMAddPackage(
   NAME tracy
   GITHUB_REPOSITORY wolfpld/tracy
-  GIT_TAG v0.9.1
+  GIT_TAG v0.10
   OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}")
 
 # ---- Sources ----

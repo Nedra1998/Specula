@@ -3,7 +3,7 @@
 CPMAddPackage(
   NAME Catch2
   GITHUB_REPOSITORY catchorg/Catch2
-  GIT_TAG v3.3.2)
+  GIT_TAG v3.4.0)
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 include(Catch)
