@@ -5,7 +5,7 @@ find_package(Doxygen REQUIRED dot)
 CPMAddPackage(
   NAME doxygen-awesome-css
   GITHUB_REPOSITORY jothepro/doxygen-awesome-css
-  GIT_TAG v2.2.1)
+  GIT_TAG v2.3.1)
 
 # ---- Sources ----
 

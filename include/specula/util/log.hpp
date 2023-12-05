@@ -17,18 +17,40 @@
 
 #include <spdlog/spdlog.h>
 
+/// @brief Log a trace message using the default logger
 #define LOG_TRACE(...) SPDLOG_TRACE(__VA_ARGS__)
+
+/// @brief Log a debug message using the default logger
 #define LOG_DEBUG(...) SPDLOG_DEBUG(__VA_ARGS__)
+
+/// @brief Log an info message using the default logger
 #define LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
+
+/// @brief Log a warning message using the default logger
 #define LOG_WARN(...) SPDLOG_WARN(__VA_ARGS__)
+
+/// @brief Log an error message using the default logger
 #define LOG_ERROR(...) SPDLOG_ERROR(__VA_ARGS__)
+
+/// @brief Log a critical error message using the default logger
 #define LOG_CRITICAL(...) SPDLOG_CRITICAL(__VA_ARGS__)
 
+/// @brief Log a trace message using the provided logger
 #define LOGGER_TRACE(...) SPDLOG_LOGGER_TRACE(__VA_ARGS__)
+
+/// @brief Log a debug message using the provided logger
 #define LOGGER_DEBUG(...) SPDLOG_LOGGER_DEBUG(__VA_ARGS__)
+
+/// @brief Log an info message using the provided logger
 #define LOGGER_INFO(...) SPDLOG_LOGGER_INFO(__VA_ARGS__)
+
+/// @brief Log a warning message using the provided logger
 #define LOGGER_WARN(...) SPDLOG_LOGGER_WARN(__VA_ARGS__)
+
+/// @brief Log an error message using the provided logger
 #define LOGGER_ERROR(...) SPDLOG_LOGGER_ERROR(__VA_ARGS__)
+
+/// @brief Log a critical error message using the provided logger
 #define LOGGER_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(__VA_ARGS__)
 
 /**

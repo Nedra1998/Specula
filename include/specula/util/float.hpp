@@ -1,3 +1,15 @@
+/**
+ * @file float.hpp
+ * @brief Floating-point utilities
+ * @date 2023-12-02
+ * @copyright Copyright (c) 2023
+ *
+ * This file provides a set of utilities for working with floating-point numbers, including standard
+ * library function that are not available on all platforms, and some additional functions for
+ * working with floating-point numbers. It also defines some commonly used constants for
+ * floating-point numbers.
+ */
+
 #ifndef SPECULA_UTIL_FLOAT_HPP
 #define SPECULA_UTIL_FLOAT_HPP
 
@@ -27,10 +39,14 @@ namespace specula {
 
 #else
 
+  /// @brief The largest representable floating-point value.
   static constexpr Float Infinity = std::numeric_limits<Float>::infinity();
+  /// @brief The machine epsilon for floating-point numbers.
   static constexpr Float MachineEpsilon = std::numeric_limits<Float>::epsilon() * 0.5;
 
+  /// @brief The largest representable floating-point value.
   static constexpr double DoubleOneMinusEpsilon = 0x1.fffffffffffffp-1;
+  /// @brief The largest representable floating-point value.
   static constexpr float FloatOneMinusEpsilon = 0x1.fffffep-1;
 
 #  ifdef SPECULA_FLOAT_AS_DOUBLE
@@ -49,6 +65,13 @@ namespace specula {
   static const int HalfNegativeInfinity = 0b1111110000000000;
   static const int HalfPositiveInfinity = 0b0111110000000000;
 
+  /**
+   * @brief Returns whether the given floating-point value is NaN.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is NaN.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool> isnan(T v) {
 #ifdef SPECULA_IS_GPU_CODE
@@ -58,11 +81,25 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Returns whether the given integral value is NaN.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is NaN.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isnan(T v) {
     return false;
   }
 
+  /**
+   * @brief Returns whether the given floating-point value is infinite.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is infinite.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool> isinf(T v) {
 #ifdef SPECULA_IS_GPU_CODE
@@ -72,11 +109,25 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Returns whether the given integral value is infinite.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is infinite.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isinf(T v) {
     return false;
   }
 
+  /**
+   * @brief Returns whether the given floating-point value is finite.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is finite.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool>
   isfinite(T v) {
@@ -87,6 +138,13 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Returns whether the given integral value is finite.
+   *
+   * @tparam T The type of the value to check.
+   * @param v The value to check.
+   * @return Whether the given value is finite.
+   */
   template <typename T>
   inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isfinite(T v) {
     return true;

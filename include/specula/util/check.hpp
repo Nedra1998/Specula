@@ -1,3 +1,14 @@
+/**
+ * @file check.hpp
+ * @brief Debug and release assertions
+ * @date 2023-12-02
+ * @copyright Copyright (c) 2023
+ *
+ * This file provides a set of macros for implementing assertions for debug and release mode. The
+ * debug assertions are implemented using the standard `assert` macro, while the release assertions
+ * are implemented using the `LOG_CRITICAL` macro from the logging utilities.
+ */
+
 #ifndef SPECULA_UTIL_CHECK_HPP
 #define SPECULA_UTIL_CHECK_HPP
 
