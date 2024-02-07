@@ -19,6 +19,7 @@
 #include <fmt/format.h>
 
 #include "specula/specula.hpp"
+#include "specula/util/log.hpp"
 #include "specula/util/pstd.hpp"
 
 namespace specula {
@@ -73,7 +74,9 @@ namespace specula {
    * @return Whether the given value is NaN.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool> isnan(T v) {
+    requires std::is_floating_point_v<T>
+  inline SPECULA_CPU_GPU bool isnan(T v) {
+    LOG_ERROR("isnan not supported for given type");
 #ifdef SPECULA_IS_GPU_CODE
     return isnan(v);
 #else
@@ -89,7 +92,9 @@ namespace specula {
    * @return Whether the given value is NaN.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isnan(T v) {
+    requires std::is_integral_v<T>
+  inline SPECULA_CPU_GPU bool isnan(T v) {
+    LOG_ERROR("isnan not supported for given integral type");
     return false;
   }
 
@@ -101,7 +106,8 @@ namespace specula {
    * @return Whether the given value is infinite.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool> isinf(T v) {
+    requires std::is_floating_point_v<T>
+  inline SPECULA_CPU_GPU bool isinf(T v) {
 #ifdef SPECULA_IS_GPU_CODE
     return isinf(v);
 #else
@@ -117,7 +123,8 @@ namespace specula {
    * @return Whether the given value is infinite.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isinf(T v) {
+    requires std::is_integral_v<T>
+  inline SPECULA_CPU_GPU bool isinf(T v) {
     return false;
   }
 
@@ -129,8 +136,8 @@ namespace specula {
    * @return Whether the given value is finite.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_floating_point_v<T>, bool>
-  isfinite(T v) {
+    requires std::is_floating_point_v<T>
+  inline SPECULA_CPU_GPU bool isfinite(T v) {
 #ifdef SPECULA_IS_GPU_CODE
     return isfinite(v);
 #else
@@ -146,14 +153,53 @@ namespace specula {
    * @return Whether the given value is finite.
    */
   template <typename T>
-  inline SPECULA_CPU_GPU typename std::enable_if_t<std::is_integral_v<T>, bool> isfinite(T v) {
+    requires std::is_integral_v<T>
+  inline SPECULA_CPU_GPU bool isfinite(T v) {
     return true;
   }
 
+  /**
+   * @brief Returns the result of the fused multiply-add operation.
+   *
+   * \f[a \cdot b + c\f]
+   *
+   * @param a The first value to multiply.
+   * @param b The second value to multiply.
+   * @param c The value to add to the product of a and b.
+   * @return The result of the fused multiply-add operation.
+   */
   SPECULA_CPU_GPU inline float fma(float a, float b, float c) { return std::fma(a, b, c); }
+
+  /**
+   * @brief Returns the result of the fused multiply-add operation.
+   *
+   * \f[a \cdot b + c\f]
+   *
+   * @param a The first value to multiply.
+   * @param b The second value to multiply.
+   * @param c The value to add to the product of a and b.
+   * @return The result of the fused multiply-add operation.
+   */
   SPECULA_CPU_GPU inline double fma(double a, double b, double c) { return std::fma(a, b, c); }
+
+  /**
+   * @brief Returns the result of the fused multiply-add operation.
+   *
+   * \f[a \cdot b + c\f]
+   *
+   * @param a The first value to multiply.
+   * @param b The second value to multiply.
+   * @param c The value to add to the product of a and b.
+   * @return The result of the fused multiply-add operation.
+   */
   inline long double fma(long double a, long double b, long double c) { return std::fma(a, b, c); }
 
+  /**
+   * @brief Convert a floating-point value to its bit representation.
+   *
+   * @param f The floating-point value to convert.
+   * @return The bit representation of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline uint32_t float_to_bits(float f) {
 #ifdef SPECULA_IS_GPU_CODE
     return __float_as_uint(f);
@@ -162,6 +208,12 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Convert a floating-point value to its bit representation.
+   *
+   * @param f The floating-point value to convert.
+   * @return The bit representation of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline uint64_t float_to_bits(double f) {
 #ifdef SPECULA_IS_GPU_CODE
     return __double_as_longlong(f);
@@ -170,6 +222,12 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Convert a bit representation to a floating-point value.
+   *
+   * @param ui The bit representation to convert.
+   * @return The floating-point value of the given bit representation.
+   */
   SPECULA_CPU_GPU inline float bits_to_float(uint32_t ui) {
 #ifdef SPECULA_IS_GPU_CODE
     return __uint_as_float(ui);
@@ -178,6 +236,12 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Convert a bit representation to a floating-point value.
+   *
+   * @param ui The bit representation to convert.
+   * @return The floating-point value of the given bit representation.
+   */
   SPECULA_CPU_GPU inline double bits_to_float(uint64_t ui) {
 #ifdef SPECULA_IS_GPU_CODE
     return _longlong_as_double(ui);
@@ -186,13 +250,54 @@ namespace specula {
 #endif // SPECULA_IS_GPU_CODE
   }
 
+  /**
+   * @brief Returns the exponent of the given floating-point value.
+   *
+   * @param v The floating-point value to get the exponent of.
+   * @return The exponent of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline int exponent(float v) { return (float_to_bits(v) >> 23) - 127; }
+
+  /**
+   * @brief Returns the exponent of the given floating-point value.
+   *
+   * @param v The floating-point value to get the exponent of.
+   * @return The exponent of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline int exponent(double v) { return (float_to_bits(v) >> 52) - 1023; }
+
+  /**
+   * @brief Returns the significand of the given floating-point value.
+   *
+   * @param v The floating-point value to get the significand of.
+   * @return The significand of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline int significand(float v) { return float_to_bits(v) & ((1 << 23) - 1); }
+
+  /**
+   * @brief Returns the significand of the given floating-point value.
+   *
+   * @param v The floating-point value to get the significand of.
+   * @return The significand of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline uint64_t significand(double v) {
     return float_to_bits(v) & ((1ull << 52) - 1);
   }
+
+  /**
+   * @brief Returns the sign bit of the given floating-point value.
+   *
+   * @param v The floating-point value to get the sign bit of.
+   * @return The sign bit of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline uint32_t sign_bit(float v) { return float_to_bits(v) & 0x80000000; }
+
+  /**
+   * @brief Returns the sign bit of the given floating-point value.
+   *
+   * @param v The floating-point value to get the sign bit of.
+   * @return The sign bit of the given floating-point value.
+   */
   SPECULA_CPU_GPU inline uint64_t sign_bit(double v) {
     return float_to_bits(v) & 0x8000000000000000;
   }

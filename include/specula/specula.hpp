@@ -45,10 +45,14 @@
 namespace specula {
 
 #ifdef SPECULA_FLOAT_AS_DOUBLE
+  /// @brief Type alias for floating point numbers
   using Float = double;
+  /// @brief Type alias for the bit representation of floating point numbers
   using FloatBits = uint64_t;
 #else
+  /// @brief Type alias for floating point numbers
   using Float = float;
+  /// @brief Type alias for the bit representation of floating point numbers
   using FloatBits = uint32_t;
 #endif
 

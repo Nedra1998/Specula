@@ -12,8 +12,6 @@
 #ifndef SPECULA_UTIL_CHECK_HPP
 #define SPECULA_UTIL_CHECK_HPP
 
-#include "specula/util/stats.hpp"
-
 namespace specula {
 #ifdef SPECULA_IS_GPU_CODE
 
@@ -22,34 +20,35 @@ namespace specula {
 
 #else
 
-/** @brief Assertion macro for issuing fatal errors
- *
- * This macro should be used to replace the standard `assert()` as it will also log additional
- * information about the failure.
- *
- * @note When compiled for GPU, this macro becmes a standard `assert()`, and will not log any error
- * message.
- *
- * @param x Expression to check
- */
+  /** @brief Assertion macro for issuing fatal errors
+   *
+   * This macro should be used to replace the standard `assert()` as it will also log additional
+   * information about the failure.
+   *
+   * @note When compiled for GPU, this macro becmes a standard `assert()`, and will not log any
+   * error message.
+   *
+   * @param x Expression to check
+   */
 #  define CHECK(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true)))
 
-/**
- * @brief Implementation for value comparison assertions
- *
- * This macro is the implementation for the value comparison assertions `CHECK_*`. It takes care to
- * only evaluated the provided expressions once, to avoid potential side effects (e.g. `var++`). And
- * when the check fails, it will log a message included the source code form of the check, and the
- * values that caused the failure. And it is implemented as a single iteration `do/while` loop, that
- * way it is all contained as a single statement, and can be used in places like `if` statements.
- *
- * @note When compiled for GPU, this macro becmes a standard `assert()`, and will not log any error
- * messages.
- *
- * @param a First expression to compare
- * @param b Second expression to compare
- * @param op Operator to use for comparison
- */
+  /**
+   * @brief Implementation for value comparison assertions
+   *
+   * This macro is the implementation for the value comparison assertions `CHECK_*`. It takes care
+   * to only evaluated the provided expressions once, to avoid potential side effects (e.g.
+   * `var++`). And when the check fails, it will log a message included the source code form of the
+   * check, and the values that caused the failure. And it is implemented as a single iteration
+   * `do/while` loop, that way it is all contained as a single statement, and can be used in places
+   * like `if` statements.
+   *
+   * @note When compiled for GPU, this macro becmes a standard `assert()`, and will not log any
+   * error messages.
+   *
+   * @param a First expression to compare
+   * @param b Second expression to compare
+   * @param op Operator to use for comparison
+   */
 #  define CHECK_IMPL(a, b, op)                                                                     \
     do {                                                                                           \
       auto va = a;                                                                                 \
@@ -79,27 +78,27 @@ namespace specula {
 
 #else
 
-/**
- * @brief Empty macro for release builds
- *
- * This macro is used to replace the debug assertions in release builds, and is defined as an empty
- * statement. That way, all the debug assertions are removed from the code, and the compiler can
- * optimize the code as if they were never there.
- */
+  /**
+   * @brief Empty macro for release builds
+   *
+   * This macro is used to replace the debug assertions in release builds, and is defined as an
+   * empty statement. That way, all the debug assertions are removed from the code, and the compiler
+   * can optimize the code as if they were never there.
+   */
 #  define EMPTY_CHECK                                                                              \
     do {                                                                                           \
     } while (false)
 
-/**
- * @brief Check macro which is only available in debug builds
- *
- * In debug builds this will be the same as the `CHECK` macro, which evaluates the expression
- * and will log a critical error if it is false, but in release builds it will be be a no-op.
- *
- * @param x Expression to check
- *
- * @see EMPTY_CHECK, CHECK
- */
+  /**
+   * @brief Check macro which is only available in debug builds
+   *
+   * In debug builds this will be the same as the `CHECK` macro, which evaluates the expression
+   * and will log a critical error if it is false, but in release builds it will be be a no-op.
+   *
+   * @param x Expression to check
+   *
+   * @see EMPTY_CHECK, CHECK
+   */
 #  define DCHECK(x) EMPTY_CHECK
 
 #  define DCHECK_EQ(a, b) EMPTY_CHECK
@@ -121,18 +120,18 @@ namespace specula {
 
 #else
 
-/**
- * @brief Check macro for conditions that allowed to happen rarely
- *
- * This macro is used to check conditions that are allowed to happen rarely, but where their
- * frequent occurrence would be a bug. The frequency of occurrences will be tracked, and reported at
- * the end of the renderer, along with the other statistics.
- *
- * @param freq The maximum permissible frequency at which the condition should be checked
- * @param condition The condition to check
- *
- * @see stats.hpp
- */
+  /**
+   * @brief Check macro for conditions that allowed to happen rarely
+   *
+   * This macro is used to check conditions that are allowed to happen rarely, but where their
+   * frequent occurrence would be a bug. The frequency of occurrences will be tracked, and reported
+   * at the end of the renderer, along with the other statistics.
+   *
+   * @param freq The maximum permissible frequency at which the condition should be checked
+   * @param condition The condition to check
+   *
+   * @see stats.hpp
+   */
 #  define CHECK_RARE(freq, condition)                                                              \
     static_assert(std::is_floating_point<decltype(freq)>::value,                                   \
                   "Expected floating-point frequency as first argoument to CHECK_RARE");           \
