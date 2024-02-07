@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@font-face {
+  font-family: 'Iosevka';
+  src: url('/Iosevka-Regular.woff2') format('woff2');
+}
+
 html {
     --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     --font-family-monospace: ui-monospace, Iosevka, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
@@ -20,27 +27,3 @@ html {
         margin-right: 22px;
     }
 }
-
-.directory .levels span {
-    color: var(--primary-color);
-}
-
-.arrow {
-    font-size: 80%;
-    font-family: Iosevka;
-}
-
-.memberdecls td,
-.fieldtable tr {
-    -webkit-transition-property: none;
-    -webkit-transition-duration: none;
-    -moz-transition-property: none;
-    -moz-transition-duration: none;
-    -ms-transition-property: none;
-    -ms-transition-duration: none;
-    -o-transition-property: none;
-    -o-transition-duration: none;
-    transition-property: none;
-    transition-duration: none;
-}
-
