@@ -22,7 +22,7 @@ jobs:
           sudo apt-get install -y cmake ninja-build
 
       - name: Configure
-        run: cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TESTING=ON
+        run: cmake -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DSPECULA_BUILD_TESTS=ON -DSPECULA_BUILD_DOCS=OFF -DSPECULA_BUILD_APP=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
