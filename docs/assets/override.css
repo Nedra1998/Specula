@@ -1,13 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 @font-face {
-  font-family: 'Iosevka';
-  src: url('/Iosevka-Regular.woff2') format('woff2');
+  font-family: "Iosevka";
+  src: url("/Iosevka-Regular.woff2") format("woff2");
 }
 
 html {
-    --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    --font-family-monospace: ui-monospace, Iosevka, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-family-monospace: ui-monospace, Iosevka, SFMono-Regular, SF Mono, Menlo,
+    Consolas, Liberation Mono, monospace;
+}
+
+html {
+  --primary-color: hsl(220, 91%, 54%); /* Blue */
+  --primary-dark-color: hsl(220, 91%, 44%); /* Blue - 10% */
+  --primary-light-color: hsl(220, 91%, 64%); /* Blue + 10% */
+
+  --page-background-color: #eff1f5; /* Base */
+  --page-foreground-color: #4c4f69; /* Text */
+  --page-secondary-foreground-color: #6c6f85; /* Subtext0 */
+
+  --side-nav-background: #e6e9ef; /* Mantle */
+
+  --fragment-background: #e6e9ef; /* Mantle */
+  --fragment-foreground: #4c4f69; /* Text */
+
+  --tablehead-background: #ccd0da; /* Surface0 */
+  --code-background: #e6e9ef; /* Mantle */
+}
+
+html.dark-mode {
+  --primary-color: hsl(217, 92%, 76%); /* Blue */
+  --primary-dark-color: hsl(217, 92%, 86%); /* Blue + 10% */
+  --primary-light-color: hsl(217, 92%, 66%); /* Blue - 10% */
+
+  --page-background-color: #1e1e2e; /* Base */
+  --page-foreground-color: #cdd6f4; /* Text */
+  --page-secondary-foreground-color: #a6adc8; /* Subtext0 */
+
+  --side-nav-background: #181825; /* Mantle */
+
+  --fragment-background: #181825; /* Mantle */
+  --fragment-foreground: #cdd6f4; /* Text */
+
+  --tablehead-background: #313244; /* Surface0 */
+  --code-background: #181825; /* Mantle */
 }
 
 .github-corner svg {

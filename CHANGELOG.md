@@ -15,7 +15,10 @@ All notable changes to this project will be documented in this file.
 - Created readme ([1d38eaf](https://github.com/Nedra1998/Specula/commit/1d38eaf1bede1e2c168e05a1ed89d978e92267b1))
 - Added license file ([8e13902](https://github.com/Nedra1998/Specula/commit/8e139027fdc1bd71d96cfde39040ec7fd64fb89c))
 - Added changelog with git-cliff ([0d88635](https://github.com/Nedra1998/Specula/commit/0d886359401050494be98670f54dad206453003c))
-- Added doc strings to some existing methods ([2e0791a](https://github.com/Nedra1998/Specula/commit/2e0791a8c1db29ab4ed7616a911b54bed6868181))
+- Added doc strings to some existing methods ([fdc5cb5](https://github.com/Nedra1998/Specula/commit/fdc5cb56a0988b731ae955e9879d27c95f1f64a2))
+- Updated doxgyen configuration ([3b4db73](https://github.com/Nedra1998/Specula/commit/3b4db73b30f23cc90c2433e08a77708d7c162f2e))
+- Added docstrings to float methods ([e6f8923](https://github.com/Nedra1998/Specula/commit/e6f8923ccfe95d77c8bf0c1a4d83c7f89ef1d130))
+- Renamed license to markdown ([0a6d7be](https://github.com/Nedra1998/Specula/commit/0a6d7bea042dee4052d1ca4b584d700317127478))
 
 ### Features
 
@@ -25,6 +28,9 @@ All notable changes to this project will be documented in this file.
 - Added github actions CI ([df03ece](https://github.com/Nedra1998/Specula/commit/df03ecef80c9711b041004c0eb2867dc475727a2))
 - Floating point utility methods ([84a3150](https://github.com/Nedra1998/Specula/commit/84a3150b32096c1b2650bcd8b7f18789053fbc05))
 - Added debug assertion helper ([68af863](https://github.com/Nedra1998/Specula/commit/68af863f9ffdec73170ee7f844b3de27366f57ea))
+- Initial statistics aggregation system ([715886c](https://github.com/Nedra1998/Specula/commit/715886c6c6545cc8f31bf0ed38d86122be0eb5a2))
+- Implemented RARE_CHECK assertion ([0ae9b9d](https://github.com/Nedra1998/Specula/commit/0ae9b9df39dfd05d584fd4411b30f0ae01841ba1))
+- Rich help text formatter ([79ea813](https://github.com/Nedra1998/Specula/commit/79ea8138ef4dab95365cda24f96cb249f8953a82))
 
 ### Miscellaneous Tasks
 
@@ -38,6 +44,7 @@ All notable changes to this project will be documented in this file.
 
 - Implemented main cmake build system ([5b9369a](https://github.com/Nedra1998/Specula/commit/5b9369a7e4fb32789c191be66ab87c45e06c601c))
 - Removed auto linters in build ([4505434](https://github.com/Nedra1998/Specula/commit/4505434bcd21edee9e7c921b92ba409b19acb933))
+- Refactored cmake configuration ([8d732c9](https://github.com/Nedra1998/Specula/commit/8d732c9c23b5c1beb184aa069a7f12e61ea2d962))
 
 ### Ci
 
