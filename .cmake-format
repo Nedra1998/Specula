@@ -78,7 +78,7 @@ format:
   require_valid_layout: false
   layout_passes: {}
 markup:
-  bullet_char: "*"
+  bullet_char: "-"
   enum_char: .
   first_comment_is_literal: false
   literal_comment_pattern: null
