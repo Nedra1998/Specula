@@ -17,6 +17,11 @@ CPMAddPackage(
   GIT_TAG v0.11.0
   OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}" EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
+CPMAddPackage(
+  NAME cpptrace
+  GITHUB_REPOSITORY jeremy-rifkin/cpptrace
+  GIT_TAG v0.7.1 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
+
 # ===== Sources =====
 
 include(GenerateExportHeader)
@@ -44,13 +49,25 @@ target_compile_definitions(
   PUBLIC -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
   PRIVATE -DSPECULA_STATIC_DEFINE)
 
-target_link_libraries(specula PUBLIC sanitizers spdlog::spdlog fmt::fmt TracyClient)
+target_link_libraries(
+  specula
+  PUBLIC sanitizers spdlog::spdlog fmt::fmt TracyClient
+  PRIVATE cpptrace::cpptrace)
 
 target_include_directories(
   specula
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include> $<INSTALL_INTERFACE:include>
   PRIVATE ${PROJECT_SOURCE_DIR}/include/specula)
+
+if(WIN32)
+  add_custom_command(
+    TARGET specula
+    COMMENT "Copying cpptrace DLL"
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:cpptrace::cpptrace>
+            $<TARGET_FILE_DIR:specula>)
+endif()
 
 # ===== Linting =====
 

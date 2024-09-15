@@ -9,14 +9,20 @@
  * are implemented using the `LOG_CRITICAL` macro from the logging utilities.
  */
 
-#ifndef SPECULA_UTIL_CHECK_HPP
-#define SPECULA_UTIL_CHECK_HPP
+#ifndef SPECULA_UTIL_ASSERT_HPP
+#define SPECULA_UTIL_ASSERT_HPP
+
+#include <functional>
+#include <string>
+#include <vector>
+
+#include "specula/util/log.hpp"
 
 namespace specula {
 #ifdef SPECULA_IS_GPU_CODE
 
-#  define CHECK(x) assert(x)
-#  define CHECK_IMPL(a, b, op) assert((a)op(b))
+#  define ASSERT(x) assert(x)
+#  define ASSERT_IMPL(a, b, op) assert((a)op(b))
 
 #else
 
@@ -30,12 +36,12 @@ namespace specula {
    *
    * @param x Expression to check
    */
-#  define CHECK(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true)))
+#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true)))
 
   /**
    * @brief Implementation for value comparison assertions
    *
-   * This macro is the implementation for the value comparison assertions `CHECK_*`. It takes care
+   * This macro is the implementation for the value comparison assertions `ASSERT_*`. It takes care
    * to only evaluated the provided expressions once, to avoid potential side effects (e.g.
    * `var++`). And when the check fails, it will log a message included the source code form of the
    * check, and the values that caused the failure. And it is implemented as a single iteration
@@ -49,32 +55,34 @@ namespace specula {
    * @param b Second expression to compare
    * @param op Operator to use for comparison
    */
-#  define CHECK_IMPL(a, b, op)                                                                     \
+#  define ASSERT_IMPL(a, b, op)                                                                    \
     do {                                                                                           \
       auto va = a;                                                                                 \
       auto vb = b;                                                                                 \
-      if (!(va op vb))                                                                             \
+      if (!(va op vb)) {                                                                           \
         LOG_CRITICAL("Check failed: {} " #op " {} with {} = {}, {} = {}", #a, #b, #a, va, #b, vb); \
+        CheckCallbackScope::fail();                                                                \
+      }                                                                                            \
     } while (false)
 
 #endif // SPECULA_IS_GPU_CODE
 
-#define CHECK_EQ(a, b) CHECK_IMPL(a, b, ==)
-#define CHECK_NE(a, b) CHECK_IMPL(a, b, !=)
-#define CHECK_GT(a, b) CHECK_IMPL(a, b, >)
-#define CHECK_GE(a, b) CHECK_IMPL(a, b, >=)
-#define CHECK_LT(a, b) CHECK_IMPL(a, b, <)
-#define CHECK_LE(a, b) CHECK_IMPL(a, b, <=)
+#define ASSERT_EQ(a, b) ASSERT_IMPL(a, b, ==)
+#define ASSERT_NE(a, b) ASSERT_IMPL(a, b, !=)
+#define ASSERT_GT(a, b) ASSERT_IMPL(a, b, >)
+#define ASSERT_GE(a, b) ASSERT_IMPL(a, b, >=)
+#define ASSERT_LT(a, b) ASSERT_IMPL(a, b, <)
+#define ASSERT_LE(a, b) ASSERT_IMPL(a, b, <=)
 
 #ifdef SPECULA_DEBUG_BUILD
 
-#  define DCHECK(x) (CHECK(x))
-#  define DCHECK_EQ(a, b) CHECK_EQ(a, b)
-#  define DCHECK_NE(a, b) CHECK_NE(a, b)
-#  define DCHECK_GT(a, b) CHECK_GT(a, b)
-#  define DCHECK_GE(a, b) CHECK_GE(a, b)
-#  define DCHECK_LT(a, b) CHECK_LT(a, b)
-#  define DCHECK_LE(a, b) CHECK_LE(a, b)
+#  define DASSERT(x) (ASSERT(x))
+#  define DASSERT_EQ(a, b) ASSERT_EQ(a, b)
+#  define DASSERT_NE(a, b) ASSERT_NE(a, b)
+#  define DASSERT_GT(a, b) ASSERT_GT(a, b)
+#  define DASSERT_GE(a, b) ASSERT_GE(a, b)
+#  define DASSERT_LT(a, b) ASSERT_LT(a, b)
+#  define DASSERT_LE(a, b) ASSERT_LE(a, b)
 
 #else
 
@@ -85,38 +93,38 @@ namespace specula {
    * empty statement. That way, all the debug assertions are removed from the code, and the compiler
    * can optimize the code as if they were never there.
    */
-#  define EMPTY_CHECK                                                                              \
+#  define EMPTY_ASSERT                                                                             \
     do {                                                                                           \
     } while (false)
 
   /**
    * @brief Check macro which is only available in debug builds
    *
-   * In debug builds this will be the same as the `CHECK` macro, which evaluates the expression
+   * In debug builds this will be the same as the `ASSERT` macro, which evaluates the expression
    * and will log a critical error if it is false, but in release builds it will be be a no-op.
    *
    * @param x Expression to check
    *
-   * @see EMPTY_CHECK, CHECK
+   * @see EMPTY_ASSERT, ASSERT
    */
-#  define DCHECK(x) EMPTY_CHECK
+#  define DASSERT(x) EMPTY_ASSERT
 
-#  define DCHECK_EQ(a, b) EMPTY_CHECK
-#  define DCHECK_NE(a, b) EMPTY_CHECK
-#  define DCHECK_GT(a, b) EMPTY_CHECK
-#  define DCHECK_GE(a, b) EMPTY_CHECK
-#  define DCHECK_LT(a, b) EMPTY_CHECK
-#  define DCHECK_LE(a, b) EMPTY_CHECK
+#  define DASSERT_EQ(a, b) EMPTY_ASSERT
+#  define DASSERT_NE(a, b) EMPTY_ASSERT
+#  define DASSERT_GT(a, b) EMPTY_ASSERT
+#  define DASSERT_GE(a, b) EMPTY_ASSERT
+#  define DASSERT_LT(a, b) EMPTY_ASSERT
+#  define DASSERT_LE(a, b) EMPTY_ASSERT
 
 #endif // SPECULA_DEBUG_BUILD
 
-#define CHECK_RARE_TO_STRING(x) #x
-#define CHECK_RARE_EXPAND_AND_TO_STRING(x) CHECK_RARE_TO_STRING(x)
+#define ASSERT_RARE_TO_STRING(x) #x
+#define ASSERT_RARE_EXPAND_AND_TO_STRING(x) ASSERT_RARE_TO_STRING(x)
 
 #ifdef SPECULA_IS_GPU_CODE
 
-#  define CHECK_RARE(freq, condition)
-#  define DCHECK_RARE(freq, condition)
+#  define ASSERT_RARE(freq, condition)
+#  define DASSERT_RARE(freq, condition)
 
 #else
 
@@ -132,16 +140,16 @@ namespace specula {
    *
    * @see stats.hpp
    */
-#  define CHECK_RARE(freq, condition)                                                              \
+#  define ASSERT_RARE(freq, condition)                                                             \
     static_assert(std::is_floating_point<decltype(freq)>::value,                                   \
-                  "Expected floating-point frequency as first argoument to CHECK_RARE");           \
+                  "Expected floating-point frequency as first argoument to ASSERT_RARE");          \
     static_assert(std::is_integral<decltype(condition)>::value,                                    \
-                  "Expected Boolean condition as second argument to CHECK_RARE");                  \
+                  "Expected Boolean condition as second argument to ASSERT_RARE");                 \
     do {                                                                                           \
       static thread_local int64_t num_true, total;                                                 \
       static StatRegisterer reg([](StatsAccumulator &accum) {                                      \
-        accum.report_rare_check(__FILE__ " " CHECK_RARE_EXPAND_AND_TO_STRING(                      \
-                                    __LINE__) ": CHECK_RARE failed: " #condition,                  \
+        accum.report_rare_check(__FILE__ " " ASSERT_RARE_EXPAND_AND_TO_STRING(                     \
+                                    __LINE__) ": ASSERT_RARE failed: " #condition,                 \
                                 freq, num_true, total);                                            \
         num_true = total = 0;                                                                      \
       });                                                                                          \
@@ -151,13 +159,61 @@ namespace specula {
     } while (false)
 
 #  ifdef SPECULA_DEBUG_BUILD
-#    define DCHECK_RARE(freq, condition) CHECK_RARE(freq, condition)
+#    define DASSERT_RARE(freq, condition) ASSERT_RARE(freq, condition)
 #  else
-#    define DCHECK_RARE(freq, condition)
+#    define DASSERT_RARE(freq, condition)
 #  endif // SPECULA_DEBUG_BUILD
 
 #endif // SPECULA_IS_GPU_CODE
 
+  /**
+   * @class CheckCallbackScope
+   * @brief Scoped callback for custom check failure handling
+   *
+   * This class provides a scoped callback for custom check failure handling. It can be used to
+   * register a callback function that will be called when a check fails, and the scope will ensure
+   * that the callback is unregistered when it goes out of scope.
+   */
+  class CheckCallbackScope {
+  public:
+    /**
+     * @brief Construct a new Check Callback Scope object
+     *
+     * @param callback The callback function to register.
+     */
+    CheckCallbackScope(std::function<std::string(void)> callback);
+    /**
+     * @brief Deregister the check callback function
+     */
+    ~CheckCallbackScope();
+
+    CheckCallbackScope(const CheckCallbackScope &) = delete;
+    CheckCallbackScope &operator=(const CheckCallbackScope &) = delete;
+
+    /**
+     * @brief Handle a check failure
+     *
+     * This function will be called when a check fails, and will print a stack trace and call all
+     * the registered callbacks.
+     */
+    static void fail();
+
+  private:
+    static std::vector<std::function<std::string(void)>> callbacks;
+  };
+
+  /**
+   * @brief Log the current stack trace as an error message
+   *
+   * This function checks the `SPECULA_BACKTRACE` environment variable, and if it is unset or set to
+   * `0` it does nothing. If it is set to `1` it will print the stack trace, and if it is set to `2`
+   * or `full` it will print the stack trace with code snippets.
+   *
+   * @param force If true, the stack trace will be printed even if the `SPECULA_BACKTRACE`
+   * environment variable is not set.
+   */
+  void print_stack_trace(bool force = false);
+
 } // namespace specula
 
-#endif // !SPECULA_UTIL_CHECK_HPP
+#endif // !SPECULA_UTIL_ASSERT_HPP

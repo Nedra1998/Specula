@@ -77,7 +77,16 @@ namespace specula::logging {
    * successfully
    * @return false if there was an error initializaing logging
    */
-  bool initialize(std::vector<spdlog::sink_ptr> sinks = {});
+  bool initialize(std::vector<spdlog::sink_ptr> sinks = {}, bool color = false);
+
+  /**
+   * @brief Check if the default logger should be colored
+   *
+   * This method checks if the default logger should be colored or not. The default logger is
+   * colored if the renderer is running in a terminal, and the terminal supports color output. This
+   * method is used to determine if additional formatting can include colors.
+   */
+  bool colored();
 } // namespace specula::logging
 
 #endif // SPECULA_UTIL_LOG_HPP

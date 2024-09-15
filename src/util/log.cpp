@@ -75,7 +75,10 @@ namespace specula::logging {
 using tracy_sink_mt = specula::logging::TracySink<std::mutex>;
 using tracy_sink_st = specula::logging::TracySink<spdlog::details::null_mutex>;
 
-bool specula::logging::initialize(std::vector<spdlog::sink_ptr> sinks) {
+static bool colored_ = false;
+
+bool specula::logging::initialize(std::vector<spdlog::sink_ptr> sinks, bool color) {
+  colored_ = color;
   try {
     auto sink = std::make_shared<spdlog::sinks::dist_sink_mt>(sinks);
     sink->set_level(spdlog::level::trace);
@@ -96,3 +99,5 @@ bool specula::logging::initialize(std::vector<spdlog::sink_ptr> sinks) {
     return false;
   }
 }
+
+bool specula::logging::colored() { return colored_; }
