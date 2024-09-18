@@ -1,6 +1,7 @@
 #include "util/check.hpp"
 
 #include <cstdlib>
+#include <sstream>
 
 #include <cpptrace/cpptrace.hpp>
 

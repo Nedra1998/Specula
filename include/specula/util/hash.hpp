@@ -1,3 +1,21 @@
+/**
+ * @file hash.hpp
+ * @brief Hashing utilities utilizaing the MurmurHash64A algorithm
+ *
+ * This file provides a number of utilities for working with hashes. All of the hashing is
+ * implemented using the MurmurHash64A algorithm. And it provides a modified version of the
+ * `mix_bits` function, which can be used as a finalizer for the hash.
+ *
+ * The `MurmurHash64A` function is a fast, non-cryptographic hash function designed for hashing
+ * large amounts of data efficiently. It operates by processing data in 8-byte chunks, mixing each
+ * chunk into the hash state through bitwise operations, shifts, and multiplications with large
+ * constants. These operations ensure that even small changes in the input result in vastly
+ * different hash outputs, providing a good distribution of hash values. Despite its speed and
+ * simplicity, `MurmurHash64A` is not suitable for cryptographic purposes, but it excels in
+ * scenarios like hash tables and checksumming where speed and uniform distribution are essential.
+ * The algorithm is designed for 64-bit architectures and provides a 64-bit hash value.
+ */
+
 #ifndef INCLUDE_UTIL_HASH_HPP_
 #define INCLUDE_UTIL_HASH_HPP_
 
