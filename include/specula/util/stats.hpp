@@ -1,8 +1,6 @@
 /**
  * @file stats.hpp
  * @brief Statistics collection and reporting
- * @date 2023-12-04
- * @copyright Copyright (c) 2023
  *
  * This file includes the interface used fo rcollecting statistics about the runtime behavior of the
  * system. It has been designed around being easy to add new measurements to track the system's

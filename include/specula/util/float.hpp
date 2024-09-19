@@ -1,8 +1,6 @@
 /**
  * @file float.hpp
  * @brief Floating-point utilities
- * @date 2023-12-02
- * @copyright Copyright (c) 2023
  *
  * This file provides a set of utilities for working with floating-point numbers, including standard
  * library function that are not available on all platforms, and some additional functions for

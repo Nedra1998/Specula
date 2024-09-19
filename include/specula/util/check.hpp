@@ -1,8 +1,6 @@
 /**
  * @file check.hpp
  * @brief Debug and release assertions
- * @date 2023-12-02
- * @copyright Copyright (c) 2023
  *
  * This file provides a set of macros for implementing assertions for debug and release mode. The
  * debug assertions are implemented using the standard `assert` macro, while the release assertions
@@ -208,6 +206,11 @@ namespace specula {
    * This function checks the `SPECULA_BACKTRACE` environment variable, and if it is unset or set to
    * `0` it does nothing. If it is set to `1` it will print the stack trace, and if it is set to `2`
    * or `full` it will print the stack trace with code snippets.
+   *
+   * @todo This is currently implemented using the
+   * [cpptrace](https://github.com/jeremy-rifkin/cpptrace) library, reimplement this function using
+   * [`std::stacktrace`](https://en.cppreference.com/w/cpp/header/stacktrace) when it is more widly
+   * supported, to reduce the number of dependencies and improve portability.
    *
    * @param force If true, the stack trace will be printed even if the `SPECULA_BACKTRACE`
    * environment variable is not set.

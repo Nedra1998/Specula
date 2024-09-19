@@ -1,8 +1,6 @@
 /**
  * @file log.hpp
  * @brief Common logging utilities used by the renderer
- * @date 2023-03-13
- * @copyright Copyright (c) 2023
  *
  * This file provides a small wrapper around the logging utilities that are provided by
  * [spdlog](https://github.com/gabime/spdlog). It primarily consists of some macros which map

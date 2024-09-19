@@ -28,6 +28,18 @@ html {
 
   --tablehead-background: #ccd0da; /* Surface0 */
   --code-background: #e6e9ef; /* Mantle */
+
+  --todo-color: rgba(136, 57, 239, 0.2); /* Mauve */
+  --todo-color-dark: #8839ef; /* Mauve */
+  --todo-color-darker: var(--page-forward-color);
+
+  --note-color: rgba(4, 165, 229, 0.2); /* Sky */
+  --note-color-dark: #04a5e5; /* Sky */
+  --note-color-darker: var(--page-forward-color);
+
+  --warning-color: rgba(223, 142, 29, 0.2); /* Yellow */
+  --warning-color-dark: #df8e1d; /* Yellow */
+  --warning-color-darker: var(--page-forward-color);
 }
 
 html.dark-mode {
@@ -46,6 +58,18 @@ html.dark-mode {
 
   --tablehead-background: #313244; /* Surface0 */
   --code-background: #181825; /* Mantle */
+
+  --todo-color: rgba(203, 166, 247, 0.2); /* Mauve */
+  --todo-color-dark: #cba6f7; /* Mauve */
+  --todo-color-darker: var(--page-forward-color);
+
+  --note-color: rgba(137, 220, 235, 0.2); /* Sky */
+  --note-color-dark: #89dceb; /* Sky */
+  --note-color-darker: var(--page-forward-color);
+
+  --warning-color: rgba(249, 226, 175, 0.2); /* Yellow */
+  --warning-color-dark: #f9e2af; /* Yellow */
+  --warning-color-darker: var(--page-forward-color);
 }
 
 .github-corner svg {

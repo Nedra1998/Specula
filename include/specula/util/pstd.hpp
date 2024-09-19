@@ -1,8 +1,6 @@
 /**
  * @file pstd.hpp
  * @brief Utilities for portable standard library
- * @date 2023-12-02
- * @copyright Copyright (c) 2023
  *
  * This file provides a set of utilities for working with the portable standard, which is a subset
  * of the standard library that is available on both the host and device, to allow the code to be

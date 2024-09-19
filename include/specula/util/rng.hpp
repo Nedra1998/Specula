@@ -1,3 +1,15 @@
+/**
+ * @file rng.hpp
+ * @brief High-performance, pseudo-random number generator (PRNG) based on PCG32
+ *
+ * This file provides an implementation of the PCG32 pseudo-random number generator (PRNG), which is
+ * a high-performance, statistically robust PRNG designed to be simple and efficient. PCG32 uses a
+ * Linear Congruential Generator (LCG) as its core, combined with a permutation step that scrambles
+ * the bits of the output to improve the quality of randomness. The generator is capable of
+ * producing 32-bit random numbers and offers features like multiple independent streams of random
+ * numbers and a variety of output functions, ensuring versatility across different use cases.
+ */
+
 #ifndef SPECULA_UTIL_RNG_HPP_
 #define SPECULA_UTIL_RNG_HPP_
 

@@ -1,8 +1,6 @@
 /**
  * @file specula.hpp
  * @brief Main entrypoint for the renderer
- * @date 2023-03-13
- * @copyright Copyright (c) 2023
  *
  * This file provides the main entrypoint for the renderer library, and includes some global
  * initialization and teardown logic that should be called first and last thing respectivly.
