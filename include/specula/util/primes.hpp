@@ -3,8 +3,8 @@
  * @brief A table of 1000 precomputed prime numbers.
  */
 
-#ifndef INCLUDE_UTIL_PRIMES_HPP_
-#define INCLUDE_UTIL_PRIMES_HPP_
+#ifndef SPECULA_UTIL_PRIMES_HPP_
+#define SPECULA_UTIL_PRIMES_HPP_
 
 #include <cstddef>
 
@@ -25,4 +25,4 @@ namespace specula {
   extern SPECULA_CONST int PRIMES[PRIME_TABLE_SIZE];
 } // namespace specula
 
-#endif // INCLUDE_UTIL_PRIMES_HPP_
+#endif // SPECULA_UTIL_PRIMES_HPP_

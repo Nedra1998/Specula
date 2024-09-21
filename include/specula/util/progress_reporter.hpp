@@ -16,7 +16,7 @@
 
 #include <fmt/format.h>
 
-#include "specula/util/pstd.hpp"
+#include "specula/util/pstd/optional.hpp"
 
 namespace specula {
   /**
