@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
   else
     stdout_sink->set_pattern("[%H:%M:%S.%e] %-8l (%s:%#) %v");
 
-  if (!specula::logging::initialize({stdout_sink, log_ringbuffer}, true))
+  if (!specula::logging::initialize({stdout_sink, log_ringbuffer}, false))
     return -1;
 
   return session.run();
