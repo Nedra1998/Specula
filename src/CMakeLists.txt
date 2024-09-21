@@ -22,6 +22,114 @@ CPMAddPackage(
   GITHUB_REPOSITORY jeremy-rifkin/cpptrace
   GIT_TAG v0.7.1 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
+# ===== Compiler Features =====
+
+set(SPECULA_DEFINITIONS "")
+include(CheckCXXSourceCompiles)
+include(CheckIncludeFiles)
+
+check_cxx_source_compiles(
+  "
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+int main() {
+   int fd = open(\"foo\", O_RDONLY);
+   struct stat s;
+   fstat(fd, &s);
+   size_t len = s.st_size;
+   void *ptr = mmap(0, len, PROT_READ, MAP_FILE | MAP_SHARED, fd, 0);
+   munmap(ptr, len);
+}
+"
+  HAVE_MMAP)
+
+if(HAVE_MMAP)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_HAVE_MMAP")
+endif()
+
+include(CheckIncludeFiles)
+
+check_cxx_source_compiles(
+  "
+#include <intrin.h>
+int main() {
+    unsigned long lz = 0, v = 1234;
+    if (_BitScanReverse(&lz, v)) return lz;
+    return 0;
+} "
+  HAS_INTRIN_H)
+
+if(HAS_INTRIN_H)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_HAS_INTRIN_H")
+endif()
+
+check_cxx_source_compiles("__declspec(noinline) void foo() { }
+int main() { }" HAVE_DECLSPEC_NOINLINE)
+
+check_cxx_source_compiles("__attribute__((noinline)) void foo() { }
+int main() { }" HAVE_ATTRIBUTE_NOINLINE)
+
+if(HAVE_ATTRIBUTE_NOINLINE)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_NOINLINE=__attribute__((noinline))")
+elseif(HAVE_DECLSPEC_NOINLINE)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_NOINLINE=__declspec(noinline)")
+else()
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_NOINLINE")
+endif()
+
+check_cxx_source_compiles("int * __restrict__ ptr;
+int main() { }" HAVE_PRE_POST_BAR_RESTRICT)
+
+check_cxx_source_compiles("int * __restrict ptr;
+int main() { }" HAVE_PRE_BAR_RESTRICT)
+
+if(HAVE_PRE_POST_BAR_RESTRICT)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_RESTRICT=__restrict__")
+elseif(HAVE_PRE_BAR_RESTRICT)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_RESTRICT=__restrict")
+else()
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_RESTRICT")
+endif()
+
+check_cxx_source_compiles(
+  "
+#include <malloc.h>
+int main() { void * ptr = _aligned_malloc(1024, 32); }
+"
+  HAVE__ALIGNED_MALLOC)
+
+check_cxx_source_compiles(
+  "
+#include <stdlib.h>
+int main() {
+  void *ptr;
+  posix_memalign(&ptr, 32, 1024);
+} "
+  HAVE_POSIX_MEMALIGN)
+
+if(HAVE__ALIGNED_MALLOC)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_HAVE__ALIGNED_MALLOC")
+elseif(HAVE_POSIX_MEMALIGN)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_HAVE_POSIX_MEMALIGN")
+else()
+  message(SEND_ERROR "Unable to find a way to allocate aligned memory")
+endif()
+
+check_cxx_source_compiles(
+  "
+#include <cstdint>
+#include <type_traits>
+static_assert(!std::is_same<long, int64_t>::value && !std::is_same<long long, int64_t>::value);
+int main() { }
+"
+  INT64_IS_OWN_TYPE)
+
+if(INT64_IS_OWN_TYPE)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_INT64_IS_OWN_TYPE")
+endif()
+
 # ===== Sources =====
 
 include(GenerateExportHeader)
@@ -47,7 +155,7 @@ target_compile_features(specula PUBLIC cxx_std_20)
 target_compile_definitions(
   specula
   PUBLIC -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
-  PRIVATE -DSPECULA_STATIC_DEFINE)
+  PRIVATE -DSPECULA_STATIC_DEFINE ${SPECULA_DEFINITIONS})
 
 target_link_libraries(
   specula
