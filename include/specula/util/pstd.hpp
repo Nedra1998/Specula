@@ -10,9 +10,13 @@
 #ifndef SPECULA_UTIL_PSTD_HPP
 #define SPECULA_UTIL_PSTD_HPP
 
+#include <cmath>
+#include <initializer_list>
 #include <type_traits>
 
 #include "specula/specula.hpp"
+#include "specula/util/pstd/array.hpp"
+#include "specula/util/pstd/optional.hpp"
 
 /**
  * @brief Standard library functions available on both the host and device
@@ -45,6 +49,38 @@ namespace specula::pstd {
     To dst;
     std::memcpy(&dst, &src, sizeof(To));
     return dst;
+  }
+
+  SPECULA_CPU_GPU inline float floor(float arg) {
+#ifdef SPECULA_IS_GPU_CODE
+    return ::floorf(arg);
+#else
+    return std::floor(arg);
+#endif
+  }
+
+  SPECULA_CPU_GPU inline double floor(double arg) {
+#ifdef SPECULA_IS_GPU_CODE
+    return ::floor(arg);
+#else
+    return std::floor(arg);
+#endif
+  }
+
+  SPECULA_CPU_GPU inline float ceil(float arg) {
+#ifdef SPECULA_IS_GPU_CODE
+    return ::ceilf(arg);
+#else
+    return std::ceil(arg);
+#endif
+  }
+
+  SPECULA_CPU_GPU inline double ceil(double arg) {
+#ifdef SPECULA_IS_GPU_CODE
+    return ::ceil(arg);
+#else
+    return std::ceil(arg);
+#endif
   }
 
 } // namespace specula::pstd
