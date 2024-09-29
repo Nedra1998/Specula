@@ -41,6 +41,9 @@
  * contained within this namespace, to avoid any naming conflicts with external packages.
  */
 namespace specula {
+  namespace pstd::pmr {
+    template <typename T> class polymorphic_allocator;
+  }
 
 #ifdef SPECULA_FLOAT_AS_DOUBLE
   /// @brief Type alias for floating point numbers
@@ -55,6 +58,8 @@ namespace specula {
 #endif
 
   static_assert(sizeof(Float) == sizeof(FloatBits), "Float and FloatBits must have the same size");
+
+  using Allocator = specula::pstd::pmr::polymorphic_allocator<std::byte>;
 
   /**
    * @brief Initializes the specula renderer
