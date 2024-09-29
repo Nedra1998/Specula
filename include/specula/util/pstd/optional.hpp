@@ -1,6 +1,8 @@
 /**
  * @file optional.hpp
  * @brief Portable optional value class
+ *
+ * This file provides a portable optional value class that is compatible with both the CPU and GPU.
  */
 
 #ifndef SPECULA_UTIL_PSTD_OPTIONAL_HPP_

@@ -1,3 +1,13 @@
+/**
+ * @file pmr.hpp
+ * @brief Polymoric Memory Resource (PMR) classes
+ *
+ * This file provides a portable implementation of the C++17 Polymorphic Memory Resource classes,
+ * which are used to provide a common interface for memory allocation and deallocation. The classes
+ * in this file are designed to replace the standard library classes, and are usable both on the CPU
+ * and GPU platforms.
+ */
+
 #ifndef SPECULA_UTIL_PSTD_PMR_HPP_
 #define SPECULA_UTIL_PSTD_PMR_HPP_
 
