@@ -180,8 +180,8 @@ namespace specula {
   Vector2<T>::Vector2(const Point2<U> &p) : Tuple2<Vector2, T>(T(p.x), T(p.y)) {}
 
   template <template <class> class Child, typename T, typename U>
-  SPECULA_CPU_GPU inline auto
-  operator*(U s, const Tuple2<Child, T> &t) -> Tuple2<Child, decltype(U{} * T{})> {
+  SPECULA_CPU_GPU inline auto operator*(U s, const Tuple2<Child, T> &t)
+      -> Tuple2<Child, decltype(U{} * T{})> {
     DASSERT(!t.has_nan());
     return t * s;
   }

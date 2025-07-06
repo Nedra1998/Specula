@@ -7,8 +7,10 @@
 #include <specula/util/check.hpp>
 #include <specula/util/pstd.hpp>
 
+// IWYU pragma: begin_exports
 #include "specula/util/vecmath/tuple2.hpp"
 #include "specula/util/vecmath/tuple3.hpp"
+// IWYU pragma: end_exports
 
 namespace specula {
   namespace {
