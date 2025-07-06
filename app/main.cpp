@@ -5,6 +5,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/spdlog.h>
 #include <specula/specula.hpp>
+#include <specula/util/check.hpp>
 #include <specula/version.hpp>
 
 #include "help.hpp"
@@ -22,12 +23,12 @@ int main(int argc, char const *argv[]) {
     cxxopts::Options options("specula", formatter.description());
 
     // clang-format off
-  options.add_options()
-    ("h,help", "Print this help message and exit")
-    ("V,version", "Print the version information and exit")
-  ;
+    options.add_options()
+      ("h,help", "Print this help message and exit")
+      ("V,version", "Print the version information and exit")
+    ;
 
-  options.parse_positional(formatter.positionals());
+    options.parse_positional(formatter.positionals());
     // clang-format on
 
     auto result = options.parse(argc, argv);
@@ -60,7 +61,7 @@ int main(int argc, char const *argv[]) {
     else
       stdout_sink->set_pattern("%H:%M:%S.%e %l %v");
 
-    if (!specula::initialize({stdout_sink}))
+    if (!specula::initialize({stdout_sink}, use_color))
       return 1;
 
   } catch (const cxxopts::exceptions::specification &e) {

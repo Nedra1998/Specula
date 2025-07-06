@@ -69,7 +69,7 @@ namespace specula {
    * @return false if there were any errors during initialization
    * @see logging::initialize
    */
-  bool initialize(std::vector<spdlog::sink_ptr> log_sinks = {});
+  bool initialize(std::vector<spdlog::sink_ptr> log_sinks = {}, bool use_color = false);
 } // namespace specula
 
 #endif // SPECULA_HPP
