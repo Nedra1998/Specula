@@ -3,27 +3,24 @@
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 11.0.2 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
+  GIT_TAG 11.2.0 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
 CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
-  GIT_TAG v1.14.1
+  GIT_TAG v1.15.3
   OPTIONS "SPDLOG_FMT_EXTERNAL ON" EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
 CPMAddPackage(
   NAME tracy
   GITHUB_REPOSITORY wolfpld/tracy
-  GIT_TAG v0.11.0
+  GIT_TAG v0.12.2
   OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}" EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
-# TODO: Change this back to a release tag once
-# [54a3e6f](https://github.com/jeremy-rifkin/cpptrace/commit/54a3e6fdf7837c44d20436c77d3469f4524bf6a1)
-# is released
 CPMAddPackage(
   NAME cpptrace
   GITHUB_REPOSITORY jeremy-rifkin/cpptrace
-  GIT_TAG main EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
+  GIT_TAG v1.0.2 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
 # ===== Compiler Features =====
 

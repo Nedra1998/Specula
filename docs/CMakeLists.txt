@@ -5,7 +5,7 @@ find_package(Doxygen REQUIRED dot)
 CPMAddPackage(
   NAME doxygen-awesome-css
   GITHUB_REPOSITORY jothepro/doxygen-awesome-css
-  GIT_TAG v2.3.3)
+  GIT_TAG v2.3.4)
 
 # ===== Sources =====
 
@@ -31,6 +31,8 @@ set(DOXYGEN_DISABLE_INDEX NO)
 set(DOXYGEN_FULL_SIDEBAR NO)
 
 set(DOXYGEN_CALL_GRAPH YES)
+set(DOXYGEN_SHOW_ENUM_VALUES YES)
+set(DOXYGEN_HTML_COPY_CLIPBOARD NO)
 
 set(DOXYGEN_MACRO_EXPANSION YES)
 set(DOXYGEN_EXPAND_ONLY_PREDEF YES)
