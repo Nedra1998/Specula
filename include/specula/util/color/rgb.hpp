@@ -11,6 +11,8 @@ namespace specula {
     Rgb() = default;
     SPECULA_CPU_GPU Rgb(Float r, Float g, Float b) : r(r), g(g), b(b) {}
 
+    SPECULA_CPU_GPU Float average() const { return (r + g + b) / 3.0f; }
+
     SPECULA_CPU_GPU Rgb &operator+=(Rgb s) {
       r += s.r;
       g += s.g;
@@ -87,8 +89,6 @@ namespace specula {
 
     SPECULA_CPU_GPU Rgb operator-() const { return {-r, -g, -b}; }
 
-    SPECULA_CPU_GPU Float average() const { return (r + g + b) / 3.0f; }
-
     SPECULA_CPU_GPU bool operator==(Rgb s) const { return r == s.r && g == s.g && b == s.b; }
     SPECULA_CPU_GPU bool operator!=(Rgb s) const { return r != s.r || g != s.g || b != s.b; }
 
@@ -128,13 +128,13 @@ namespace specula {
   template <typename U, typename V> SPECULA_CPU_GPU inline Rgb clamp_zero(Rgb rgb) {
     return Rgb(std::max<Float>(0, rgb.r), std::max<Float>(0, rgb.g), std::max<Float>(0, rgb.b));
   }
-
-  inline auto format_as(Rgb c) { return std::array<Float, 3>{c.r, c.g, c.b}; }
-
-  inline std::ostream &operator<<(std::ostream &os, const Rgb &c) {
-    return os << fmt::format("{}", c);
-  }
-
 } // namespace specula
+
+template <> struct fmt::formatter<specula::Rgb> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext> auto format(const specula::Rgb &v, FormatContext &ctx) {
+    return format_to(ctx.out(), "[ {} {} {} ]", v.r, v.g, v.b);
+  }
+};
 
 #endif // INCLUDE_COLOR_RGB_HPP_
