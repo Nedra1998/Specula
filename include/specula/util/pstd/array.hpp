@@ -105,14 +105,14 @@ namespace specula::pstd {
         values[i] = v;
     }
 
-    SPECULA_CPU_GPU bool operator==(const array<T, 0> &a) const {
+    SPECULA_CPU_GPU bool operator==(const array<T, N> &a) const {
       for (size_t i = 0; i < N; ++i)
         if (values[i] != a.values[i])
           return false;
       return true;
     }
 
-    SPECULA_CPU_GPU bool operator!=(const array<T, 0> &a) const { return !(*this == a); }
+    SPECULA_CPU_GPU bool operator!=(const array<T, N> &a) const { return !(*this == a); }
 
     /// @brief Returns an iterator to the beginning
     SPECULA_CPU_GPU iterator begin() { return values; }
