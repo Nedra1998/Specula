@@ -222,7 +222,7 @@ namespace specula::pstd::pmr {
     }
 
     template <class U> U *allocate_object(size_t n = 1) {
-      return static_cast<T *>(allocate_bytes(n * sizeof(U), alignof(U)));
+      return static_cast<U *>(allocate_bytes(n * sizeof(U), alignof(U)));
     }
 
     template <class U> void deallocate_object(U *p, size_t n = 1) {
@@ -238,7 +238,7 @@ namespace specula::pstd::pmr {
       dallocate_object(p);
     }
     template <class U, class... Args> void construct(U *p, Args &&...args) {
-      ::new ((void *)p) T(std::forward<Args>(args)...);
+      ::new ((void *)p) U(std::forward<Args>(args)...);
     }
     template <class U> void destroy(U *p) { p->~U(); }
 

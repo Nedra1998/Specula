@@ -267,6 +267,8 @@ namespace specula {
     return std::array<T, 2>{t.x, t.y};
   }
 
+  template <typename T> auto format_as(Vector2<T> t) { return std::array<T, 2>{t.x, t.y}; }
+
   template <template <typename> class Child, typename T>
   std::ostream &operator<<(std::ostream &os, const Tuple2<Child, T> &t) {
     return os << fmt::format("{}", t);

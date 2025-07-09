@@ -361,6 +361,19 @@ namespace specula {
     return logistic(x, s) / (logistic_cdf(b, s) - logistic_cdf(a, s));
   }
 
+  template <typename Predicate>
+  SPECULA_CPU_GPU inline size_t find_interval(size_t sz, const Predicate &pred) {
+    using ssize_t = std::make_signed_t<size_t>;
+    ssize_t size = (ssize_t)sz - 2, first = 1;
+    while (size > 0) {
+      size_t half = (size_t)size >> 1, middle = first + half;
+      bool pred_result = pred(middle);
+      first = pred_result ? middle + 1 : first;
+      size = pred_result ? size - (half + 1) : half;
+    }
+    return (size_t)clamp((ssize_t)first - 1, 0, sz - 2);
+  }
+
 } // namespace specula
 
 #endif // !SPECULA_UTIL_MATH_HPP
