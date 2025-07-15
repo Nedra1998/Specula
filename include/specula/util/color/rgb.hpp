@@ -132,7 +132,8 @@ namespace specula {
 
 template <> struct fmt::formatter<specula::Rgb> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
-  template <typename FormatContext> auto format(const specula::Rgb &v, FormatContext &ctx) {
+  template <typename FormatContext>
+  inline auto format(const specula::Rgb &v, FormatContext &ctx) const {
     return format_to(ctx.out(), "[ {} {} {} ]", v.r, v.g, v.b);
   }
 };

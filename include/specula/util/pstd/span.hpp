@@ -5,6 +5,7 @@
 #include <type_traits>
 
 #include "specula/specula.hpp"
+#include "specula/util/check.hpp"
 
 namespace specula::pstd {
   namespace internal {
@@ -116,8 +117,8 @@ namespace specula::pstd {
   }
 
   template <int &...ExplicitArgumentBarrier, typename C>
-  SPECULA_CPU_GPU inline constexpr auto
-  make_span(C &c) noexcept -> decltype(make_span(internal::get_data(c), c.size())) {
+  SPECULA_CPU_GPU inline constexpr auto make_span(C &c) noexcept
+      -> decltype(make_span(internal::get_data(c), c.size())) {
     return make_span(internal::get_data(c), c.size());
   }
 
@@ -142,8 +143,8 @@ namespace specula::pstd {
   }
 
   template <int &...ExplicitArgumentBarrier, typename C>
-  SPECULA_CPU_GPU inline constexpr auto
-  make_const_span(const C &c) noexcept -> decltype(make_span(c)) {
+  SPECULA_CPU_GPU inline constexpr auto make_const_span(const C &c) noexcept
+      -> decltype(make_span(c)) {
     return make_span(c);
   }
 

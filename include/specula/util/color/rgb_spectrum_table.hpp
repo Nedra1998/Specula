@@ -38,7 +38,7 @@ template <> struct fmt::formatter<specula::RgbToSpectrumTable> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
 
   template <typename FormatContext>
-  auto format(const specula::RgbToSpectrumTable &v, FormatContext &ctx) {
+  inline auto format(const specula::RgbToSpectrumTable &v, FormatContext &ctx) const {
     std::string id;
     if (&v == specula::RgbToSpectrumTable::sRGB) {
       id = "(sRGB) ";

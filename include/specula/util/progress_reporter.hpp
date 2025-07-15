@@ -175,7 +175,8 @@ namespace specula {
 
 template <> struct fmt::formatter<specula::Timer> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
-  template <typename FormatContext> auto format(const specula::Timer &t, FormatContext &ctx) {
+  template <typename FormatContext>
+  inline auto format(const specula::Timer &t, FormatContext &ctx) const {
     return format_to(ctx.out(), "{}s", t.elapsed());
   }
 };

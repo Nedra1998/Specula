@@ -43,7 +43,7 @@ namespace specula {
 template <typename T> struct fmt::formatter<specula::CompensatedSum<T>> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
   template <typename FormatContext>
-  auto format(const specula::CompensatedSum<T> &v, FormatContext &ctx) {
+  inline auto format(const specula::CompensatedSum<T> &v, FormatContext &ctx) const {
     return format_to(ctx.out(), "[ CompensatedSum sum={} c={} ]", v.sum, v.c);
   }
 };
@@ -51,7 +51,7 @@ template <typename T> struct fmt::formatter<specula::CompensatedSum<T>> {
 template <> struct fmt::formatter<specula::CompensatedFloat> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
   template <typename FormatContext>
-  auto format(const specula::CompensatedFloat &v, FormatContext &ctx) {
+  inline auto format(const specula::CompensatedFloat &v, FormatContext &ctx) const {
     return format_to(ctx.out(), "[ CompensatedFloat v={} err={} ]", v.v, v.err);
   }
 };

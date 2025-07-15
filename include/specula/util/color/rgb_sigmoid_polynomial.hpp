@@ -43,7 +43,7 @@ template <> struct fmt::formatter<specula::RgbSigmoidPolynomial> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
 
   template <typename FormatContext>
-  auto format(const specula::RgbSigmoidPolynomial &v, FormatContext &ctx) {
+  inline auto format(const specula::RgbSigmoidPolynomial &v, FormatContext &ctx) const {
     return format_to(ctx.out(), "[ RgbSigmoidPolynomial c0={} c1={} c2={} ]", v.c0, v.c1, v.c2);
   }
 };
