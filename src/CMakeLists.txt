@@ -180,17 +180,18 @@ endif()
 # ===== Linting =====
 
 if(ENABLE_IWYU)
-  set_target_properties(specula PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${IWYU_FLAGS}")
+  set_target_properties(specula PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${IWYU_FLAGS}")
 endif()
 
 if(ENABLE_LWYU)
-  set_target_properties(specula PROPERTIES CXX_LINK_WHAT_YOU_USE "${LWYU_FLAGS}")
+  set_target_properties(specula PROPERTIES CXX_LINK_WHAT_YOU_USE "TRUE")
 endif()
 
 if(ENABLE_CLANG_TIDY)
-  set_target_properties(specula PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_FLAGS}")
+  set_target_properties(specula PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};${CLANG_TIDY_FLAGS}")
 endif()
 
 if(ENABLE_CPPCHECK)
-  set_target_properties(specula PROPERTIES CXX_CPPCHECK "${CPPCHECK_FLAGS}")
+  message("Enabling cppcheck for specula: ${CPPCHECK_FLAGS}")
+  set_target_properties(specula PROPERTIES CXX_CPPCHECK "${CPPCHECK_EXECUTABLE};${CPPCHECK_FLAGS}")
 endif()
