@@ -12,6 +12,7 @@
 
 #include "specula/specula.hpp"
 #include "specula/util/check.hpp"
+#include "specula/util/math/functions.hpp"
 #include "specula/util/vecmath/tuple2.hpp"
 
 namespace specula {

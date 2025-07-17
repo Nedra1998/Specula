@@ -124,7 +124,7 @@ namespace specula {
     Vector3() = default;
     SPECULA_CPU_GPU Vector3(T x, T y, T z) : Tuple3<Vector3, T>(x, y, z) {}
     template <typename U>
-    SPECULA_CPU_GPU explicit Vector3(Vector3<U> v) : Tuple3<Vector3, T>(T{v.x}, T{v.y}, T{v.z}) {}
+    SPECULA_CPU_GPU explicit Vector3(Vector3<U> v) : Tuple3<Vector3, T>(T(v.x), T(v.y), T(v.z)) {}
 
     template <typename U> SPECULA_CPU_GPU explicit Vector3(Point3<U> p);
     template <typename U> SPECULA_CPU_GPU explicit Vector3(Normal3<U> n);
@@ -145,9 +145,9 @@ namespace specula {
     SPECULA_CPU_GPU Point3(T x, T y, T z) : Tuple3<Point3, T>(x, y, z) {}
 
     template <typename U>
-    SPECULA_CPU_GPU explicit Point3(Point3<U> p) : Tuple3<Point3, T>(T{p.x}, T{p.y}, T{p.z}) {}
+    SPECULA_CPU_GPU explicit Point3(Point3<U> p) : Tuple3<Point3, T>(T(p.x), T(p.y), T(p.z)) {}
     template <typename U>
-    SPECULA_CPU_GPU explicit Point3(Vector3<U> v) : Tuple3<Point3, T>(T{v.x}, T{v.y}, T{v.z}) {}
+    SPECULA_CPU_GPU explicit Point3(Vector3<U> v) : Tuple3<Point3, T>(T(v.x), T(v.y), T(v.z)) {}
 
     SPECULA_CPU_GPU Point3<T> operator-() const { return {-x, -y, -z}; }
 
@@ -166,7 +166,7 @@ namespace specula {
     }
 
     template <typename U>
-    SPECULA_CPU_GPU auto operator-(Vector3<U> v) const -> Vector3<decltype(T{} - U{})> {
+    SPECULA_CPU_GPU auto operator-(Vector3<U> v) const -> Point3<decltype(T{} - U{})> {
       DASSERT(!v.has_nan());
       return {x - v.x, y - v.y, z - v.z};
     }
@@ -211,6 +211,14 @@ namespace specula {
   typedef Point3<int> Point3i;
 
   typedef Normal3<Float> Normal3f;
+
+  template <typename T>
+  template <typename U>
+  SPECULA_CPU_GPU Vector3<T>::Vector3(Point3<U> p) : Tuple3<Vector3, T>(T(p.x), T(p.y), T(p.z)) {}
+
+  template <typename T>
+  template <typename U>
+  SPECULA_CPU_GPU Vector3<T>::Vector3(Normal3<U> n) : Tuple3<Vector3, T>(T(n.x), T(n.y), T(n.z)) {}
 
   template <template <typename> class Child, typename T, typename U>
   SPECULA_CPU_GPU inline auto operator*(U s, Tuple3<Child, T> t) -> Child<decltype(T{} * U{})> {
@@ -299,10 +307,10 @@ namespace specula {
     return std::array<T, 3>{t.x, t.y, t.z};
   }
 
-  template <template <typename> class Child, typename T>
-  std::ostream &operator<<(std::ostream &os, const Tuple3<Child, T> &t) {
-    return os << fmt::format("{}", t);
-  }
+  // template <template <typename> class Child, typename T>
+  // std::ostream &operator<<(std::ostream &os, const Tuple3<Child, T> &t) {
+  //   return os << fmt::format("{}", t);
+  // }
 } // namespace specula
 
 #endif // INCLUDE_VECMATH_TUPLE3_HPP_

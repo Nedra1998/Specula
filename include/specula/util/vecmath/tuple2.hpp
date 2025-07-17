@@ -39,6 +39,16 @@ namespace specula {
       return {x + c.x, y + c.y};
     }
 
+    // TODO: PBRTv4 doesn't define this operator, it only defies the
+    // operator+(Child<U>) but that failes for compile for me. Need to
+    // investigate why this is the case.
+    // https://github.com/mmp/pbrt-v4/blob/f140d7cba5dc7b941f9346d6b7d1476a05c28c37/src/pbrt/util/vecmath.h#L99
+    template <typename U>
+    SPECULA_CPU_GPU auto operator+(Tuple2<Child, U> c) const -> Child<decltype(T{} + U{})> {
+      DASSERT(!c.has_nan());
+      return {x + c.x, y + c.y};
+    }
+
     template <typename U>
     SPECULA_CPU_GPU auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})> {
       DASSERT(!c.has_nan());
@@ -106,6 +116,7 @@ namespace specula {
   public:
     using Tuple2<Vector2, T>::x;
     using Tuple2<Vector2, T>::y;
+    using Tuple2<Vector2, T>::operator+;
 
     Vector2() = default;
     SPECULA_CPU_GPU Vector2(T x, T y) : Tuple2<Vector2, T>(x, y) {}
@@ -129,10 +140,10 @@ namespace specula {
     Point2() = default;
     SPECULA_CPU_GPU Point2(T x, T y) : Tuple2<Point2, T>(x, y) {}
     template <typename U>
-    SPECULA_CPU_GPU explicit Point2(Point2<U> p) : Tuple2<Point2, T>(T{p.x}, T{p.y}) {}
+    SPECULA_CPU_GPU explicit Point2(Point2<U> p) : Tuple2<Point2, T>(T(p.x), T(p.y)) {}
 
     template <typename U>
-    SPECULA_CPU_GPU explicit Point2(Vector2<U> v) : Tuple2<Point2, T>(T{v.x}, T{v.y}) {}
+    SPECULA_CPU_GPU explicit Point2(Vector2<U> v) : Tuple2<Point2, T>(T(v.x), T(v.y)) {}
 
     template <typename U>
     SPECULA_CPU_GPU auto operator+(Vector2<U> v) const -> Point2<decltype(T{} + U{})> {
@@ -204,7 +215,7 @@ namespace specula {
     return {floor(t.x), floor(t.y)};
   }
 
-  template <template <typename> class Child, typename T>
+  template <template <class> class Child, typename T>
   SPECULA_CPU_GPU inline auto lerp(Float t, Tuple2<Child, T> t0, Tuple2<Child, T> t1) {
     return (1 - t) * t0 + t * t1;
   }
@@ -267,13 +278,8 @@ namespace specula {
     return std::array<T, 2>{t.x, t.y};
   }
 
-  template <typename T> auto format_as(Vector2<T> t) { return std::array<T, 2>{t.x, t.y}; }
-
-  template <template <typename> class Child, typename T>
-  std::ostream &operator<<(std::ostream &os, const Tuple2<Child, T> &t) {
-    return os << fmt::format("{}", t);
-  }
-
+  // TODO: Implement proper formatter for Tuple2 types
+  template <typename T> inline auto format_as(Vector2<T> t) { return std::array<T, 2>{t.x, t.y}; }
 } // namespace specula
 
 #endif // INCLUDE_VECMATH_TUPLE2_HPP_
