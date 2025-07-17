@@ -89,3 +89,72 @@ html.dark-mode {
         margin-right: 22px;
     }
 }
+
+/* Custom fixes for support with Doxygen 1.14.0 */
+#nav-tree {
+    border-right: none;
+}
+#page-nav {
+    border-left: 1px solid var(--separator-color);
+}
+
+.search-icon::before {
+    background: transparent;
+}
+
+tr[class^="memdesc"] {
+    box-shadow: none;
+}
+
+tr.heading + tr[class^="memitem"] td.memItemLeft, tr.groupHeader + tr[class^="memitem"] td.memItemLeft, tr.inherit_header + tr[class^="memitem"] td.memItemLeft {
+    border-top: 1px solid var(--separator-color);
+}
+
+tr.heading + tr[class^="memitem"] td.memItemRight, tr.groupHeader + tr[class^="memitem"] td.memItemRight, tr.inherit_header + tr[class^="memitem"] td.memItemRight {
+    border-top: 1px solid var(--separator-color);
+}
+
+tr[class^="memitem"] + tr[class^="memitem"] td.memItemLeft, tr[class^="memitem"] + tr[class^="memitem"] td.memItemRight, tr[class^="memitem"] + tr[class^="memitem"] td.memTeplParams{
+    border-top: none;
+}
+
+tr[class^="memdesc"] + tr[class^="memitem"] td.memItemLeft, tr[class^="memdesc"] + tr[class^="memitem"] td.memItemRight {
+    border-top: none;
+}
+
+.mdescLeft {
+    border-left: 1px solid var(--separator-color);
+    border-bottom: 1px solid var(--separator-color);
+}
+.mdescRight {
+    border-right: 1px solid var(--separator-color);
+    border-bottom: 1px solid var(--separator-color);
+}
+
+table.memberdecls .memItemLeft {
+    border-radius: 0;
+}
+
+table.memberdecls .memItemRight {
+    border-radius: 0;
+}
+table.memberdecls .memTemplParams {
+    border-radius: 0;
+}
+
+td h2.groupheader {
+    box-shadow: none;
+    border-bottom: 1px solid var(--separator-color);
+}
+
+/* #nav-path li.navelem::after { */
+/*     background: var(--page-background-color); */
+/* } */
+
+#page-nav {
+    background: var(--side-nav-background);
+}
+
+ul.page-outline li.vis {
+    background-color: var(--page-background-color);
+}
