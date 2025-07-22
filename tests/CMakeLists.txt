@@ -24,6 +24,17 @@ target_link_libraries(unit-tests PUBLIC specula::specula Catch2::Catch2)
 
 target_include_directories(unit-tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+if(ENABLE_COVERAGE)
+  enable_coverage(
+    unit-tests
+    EXCLUDE
+    "${PROJECT_BINARY_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    ARGS
+    --html-theme
+    github.green)
+endif()
+
 # ===== Testing =====
 
 catch_discover_tests(unit-tests)

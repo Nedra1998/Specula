@@ -97,6 +97,10 @@ if(ENABLE_CPPCHECK)
   endif()
 endif()
 
+if(ENABLE_COVERAGE)
+  include(EnableCodeCoverage)
+endif()
+
 # ===== Targets =====
 
 set(ENABLED_SANITIZERS "")
