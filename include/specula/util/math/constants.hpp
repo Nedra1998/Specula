@@ -1,7 +1,7 @@
 #ifndef INCLUDE_MATH_CONSTANTS_HPP_
 #define INCLUDE_MATH_CONSTANTS_HPP_
 
-#include "specula.hpp"
+#include "specula/specula.hpp"
 
 namespace specula {
 

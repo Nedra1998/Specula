@@ -198,7 +198,7 @@ namespace specula {
    * @param xyz The XYZ color to clamp.
    * @return A new XYZ color with each component clamped to a minimum of zero.
    */
-  template <typename U, typename V> SPECULA_CPU_GPU inline Xyz clamp_zero(Xyz xyz) {
+  SPECULA_CPU_GPU inline Xyz clamp_zero(Xyz xyz) {
     return Xyz(std::max<Float>(0, xyz.x), std::max<Float>(0, xyz.y), std::max<Float>(0, xyz.z));
   }
 

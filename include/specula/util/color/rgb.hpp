@@ -12,6 +12,7 @@
 
 #include "specula/specula.hpp"
 #include "specula/util/check.hpp"
+#include "specula/util/math/functions.hpp"
 
 namespace specula {
 
