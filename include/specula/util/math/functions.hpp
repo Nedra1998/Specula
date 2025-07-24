@@ -1,12 +1,16 @@
 #ifndef INCLUDE_MATH_FUNCTIONS_HPP_
 #define INCLUDE_MATH_FUNCTIONS_HPP_
 
+#include <type_traits>
+
 #include "specula/specula.hpp"
 #include "specula/util/check.hpp"
 #include "specula/util/float.hpp"
+#include "specula/util/math/compensated.hpp"
 #include "specula/util/math/constants.hpp"
 
 namespace specula {
+
   inline SPECULA_CPU_GPU Float lerp(Float x, Float a, Float b) { return (1 - x) * a + x * b; }
 
   template <typename T>
@@ -247,12 +251,44 @@ namespace specula {
     return (size_t)clamp((ssize_t)first - 1, 0, sz - 2);
   }
 
+  SPECULA_CPU_GPU inline CompensatedFloat two_prod(Float a, Float b) {
+    Float ab = a * b;
+    return {ab, fma(a, b, -ab)};
+  }
+
+  SPECULA_CPU_GPU inline CompensatedFloat two_sum(Float a, Float b) {
+    Float s = a + b, delta = s - a;
+    return {s, (a - (s - delta)) + (b - delta)};
+  }
+
   template <typename Ta, typename Tb, typename Tc, typename Td>
   SPECULA_CPU_GPU inline auto difference_of_products(Ta a, Tb b, Tc c, Td d) {
     auto cd = c * d;
     auto difference_of_products = fma(a, b, -cd);
     auto error = fma(-c, d, cd);
     return difference_of_products + error;
+  }
+
+  namespace detail {
+    template <typename Float>
+    SPECULA_CPU_GPU inline CompensatedFloat inner_product(Float a, Float b) {
+      return two_prod(a, b);
+    }
+
+    template <typename Float, typename... Args>
+    SPECULA_CPU_GPU inline CompensatedFloat inner_product(Float a, Float b, Args... terms) {
+      CompensatedFloat ab = two_prod(a, b);
+      CompensatedFloat tp = inner_product(terms...);
+      CompensatedFloat sum = two_sum(ab.v, tp.v);
+      return {sum.v, ab.err + (tp.err + sum.err)};
+    }
+  } // namespace detail
+
+  template <typename... Args>
+  SPECULA_CPU_GPU inline std::enable_if_t<std::conjunction_v<std::is_arithmetic<Args>...>, Float>
+  inner_product(Args... terms) {
+    CompensatedFloat ip = detail::inner_product(terms...);
+    return Float(ip);
   }
 
 } // namespace specula

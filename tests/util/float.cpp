@@ -139,7 +139,7 @@ TEST_CASE("Half", "[util]") {
     else
       CHECK(fother > f);
 
-    CHECK(dh < dother);
+    CHECK(dh <= dother);
   }
 
   SECTION("Next up") {

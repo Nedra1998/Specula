@@ -302,6 +302,22 @@ namespace specula {
     return Interval(low, high);
   }
 
+  SPECULA_CPU_GPU inline Interval cos(Interval i) {
+    ASSERT_GE(i.lower_bound(), -1e-16);
+    ASSERT_LE(i.upper_bound(), 2.0001 * Pi);
+    Float low = std::cos(std::max<Float>(0, i.lower_bound()));
+    Float high = std::cos(i.upper_bound());
+    if (low > high) {
+      pstd::swap(low, high);
+    }
+    low = std::max<Float>(-1, next_float_down(low));
+    high = std::min<Float>(1, next_float_up(high));
+    if (in_range(Pi, i)) {
+      low = -1;
+    }
+    return Interval(low, high);
+  }
+
   SPECULA_CPU_GPU inline bool quadratic(Interval a, Interval b, Interval c, Interval *t0,
                                         Interval *t1) {
     Interval discrim = difference_of_products(b, b, mul_pow2(4, a), c);
