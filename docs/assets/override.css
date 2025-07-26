@@ -147,10 +147,6 @@ td h2.groupheader {
     border-bottom: 1px solid var(--separator-color);
 }
 
-/* #nav-path li.navelem::after { */
-/*     background: var(--page-background-color); */
-/* } */
-
 #page-nav {
     background: var(--side-nav-background);
 }
