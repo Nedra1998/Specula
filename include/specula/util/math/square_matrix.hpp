@@ -5,10 +5,10 @@
 
 #include "specula/specula.hpp"
 #include "specula/util/check.hpp"
+#include "specula/util/math/functions.hpp"
+#include "specula/util/math/interval.hpp"
+#include "specula/util/pstd/optional.hpp"
 #include "specula/util/pstd/span.hpp"
-#include "util/math/functions.hpp"
-#include "util/math/interval.hpp"
-#include "util/pstd/optional.hpp"
 
 namespace specula {
   namespace {

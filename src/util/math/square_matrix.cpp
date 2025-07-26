@@ -60,7 +60,7 @@ specula::inverse(const SquareMatrix<N> &m) {
     Float pivinv = 1.0 / minv[icol][icol];
     minv[icol][icol] = 1.0;
     for (std::size_t j = 0; j < N; ++j) {
-      minv[icol][j] = pivinv;
+      minv[icol][j] *= pivinv;
     }
 
     for (std::size_t j = 0; j < N; ++j) {
