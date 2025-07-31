@@ -5,6 +5,9 @@
 #include <specula/util/check.hpp>
 #include <specula/util/pstd.hpp>
 
+#include "specula/util/math/functions.hpp"
+#include "specula/util/vecmath/tuple_length.hpp"
+
 namespace specula {
   template <typename T> class Point2;
   template <typename T> class Vector2;
@@ -272,6 +275,46 @@ namespace specula {
   template <template <typename> class Child, typename T>
   SPECULA_CPU_GPU inline T hprod(Tuple2<Child, T> t) {
     return t.x * t.y;
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto dot(Vector2<T> v1, Vector2<T> v2) -> typename TupleLength<T>::type {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return sum_of_products(v1.x, v2.x, v1.y, v2.y);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto abs_dot(Vector2<T> v1, Vector2<T> v2) ->
+      typename TupleLength<T>::type {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return std::abs(dot(v1, v2));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length_squared(Vector2<T> v) -> typename TupleLength<T>::type {
+    return sqr(v.x) + sqr(v.y);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length(Vector2<T> v) -> typename TupleLength<T>::type {
+    using std::sqrt;
+    return sqrt(length_squared(v));
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto normalize(Vector2<T> v) {
+    return v / length(v);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto distance(Point2<T> p1, Point2<T> p2) ->
+      typename TupleLength<T>::type {
+    return length(p1 - p2);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto distance_squared(Point2<T> p1, Point2<T> p2) ->
+      typename TupleLength<T>::type {
+    return length_squared(p1 - p2);
   }
 
   template <template <typename> class Child, typename T> auto format_as(Tuple2<Child, T> t) {

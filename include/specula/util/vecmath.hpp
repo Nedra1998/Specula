@@ -8,26 +8,9 @@
 #include <specula/util/pstd.hpp>
 
 // IWYU pragma: begin_exports
+#include "specula/util/vecmath/quaternion.hpp"
 #include "specula/util/vecmath/tuple2.hpp"
 #include "specula/util/vecmath/tuple3.hpp"
 // IWYU pragma: end_exports
-
-namespace specula {
-  namespace {
-    template <typename T> struct TupleLength {
-      using type = Float;
-    };
-
-    template <> struct TupleLength<double> {
-      using type = double;
-    };
-
-    template <> struct TupleLength<long double> {
-      using type = long double;
-    };
-
-  } // namespace
-
-} // namespace specula
 
 #endif // SPECULA_UTIL_VECMATH_HPP

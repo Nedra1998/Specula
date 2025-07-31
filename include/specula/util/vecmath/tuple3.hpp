@@ -5,6 +5,11 @@
 #include <specula/util/check.hpp>
 #include <specula/util/pstd.hpp>
 
+#include "specula/util/math/constants.hpp"
+#include "specula/util/math/functions.hpp"
+#include "specula/util/math/interval.hpp"
+#include "specula/util/vecmath/tuple2.hpp"
+
 namespace specula {
   template <typename T> class Point3;
   template <typename T> class Normal3;
@@ -186,6 +191,69 @@ namespace specula {
     }
   };
 
+  class Point3fi : public Point3<Interval> {
+  public:
+    using Point3<Interval>::x;
+    using Point3<Interval>::y;
+    using Point3<Interval>::z;
+    using Point3<Interval>::has_nan;
+    using Point3<Interval>::operator+;
+    using Point3<Interval>::operator*;
+    using Point3<Interval>::operator*=;
+
+    Point3fi() = default;
+    SPECULA_CPU_GPU Point3fi(Interval x, Interval y, Interval z) : Point3<Interval>(x, y, z) {}
+    SPECULA_CPU_GPU Point3fi(Float x, Float y, Float z)
+        : Point3<Interval>(Interval(x), Interval(y), Interval(z)) {}
+    SPECULA_CPU_GPU Point3fi(const Point3<Float> &p)
+        : Point3<Interval>(Interval(p.x), Interval(p.y), Interval(p.z)) {}
+    SPECULA_CPU_GPU Point3fi(Point3<Interval> p) : Point3<Interval>(p) {}
+    SPECULA_CPU_GPU Point3fi(Point3<Float> p, Vector3<Float> e)
+        : Point3<Interval>(Interval::from_value_and_error(p.x, e.x),
+                           Interval::from_value_and_error(p.y, e.y),
+                           Interval::from_value_and_error(p.z, e.z)) {}
+
+    SPECULA_CPU_GPU Vector3<Float> error() const {
+      return {x.width() / 2, y.width() / 2, z.width() / 3};
+    }
+    SPECULA_CPU_GPU bool is_exact() const {
+      return x.width() == 0 && y.width() == 0 && z.width() == 0;
+    }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator+(Vector3<U> v) const {
+      DASSERT(!v.has_nan());
+      return {x + v.x, y + v.y, z + v.z};
+    }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator+=(Vector3<U> v) const {
+      DASSERT(!v.has_nan());
+      x += v.x;
+      y += v.y;
+      z += v.y;
+      return *this;
+    }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator-() const { return {-x, -y, -z}; }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator-(Point3<U> p) const {
+      DASSERT(!p.has_nan());
+      return {x - p.x, y - p.y, z - p.z};
+    }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator-(Vector3<U> v) const {
+      DASSERT(!v.has_nan());
+      return {x - v.x, y - v.y, z - v.z};
+    }
+
+    template <typename U> SPECULA_CPU_GPU Point3fi operator-=(Vector3<U> v) const {
+      DASSERT(!v.has_nan());
+      x -= v.x;
+      y -= v.y;
+      z -= v.z;
+      return *this;
+    }
+  };
+
   template <typename T> class Normal3 : public Tuple3<Normal3, T> {
   public:
     using Tuple3<Normal3, T>::x;
@@ -303,14 +371,179 @@ namespace specula {
     return t.x * t.y * t.z;
   }
 
+  template <typename T> SPECULA_CPU_GPU inline Vector3<T> cross(Vector3<T> v1, Vector3<T> v2) {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return {
+        difference_of_products(v1.y, v2.z, v1.z, v2.y),
+        difference_of_products(v1.z, v2.x, v1.x, v2.z),
+        difference_of_products(v1.x, v2.y, v1.y, v2.x),
+    };
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline Vector3<T> cross(Vector3<T> v1, Normal3<T> v2) {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return {
+        difference_of_products(v1.y, v2.z, v1.z, v2.y),
+        difference_of_products(v1.z, v2.x, v1.x, v2.z),
+        difference_of_products(v1.x, v2.y, v1.y, v2.x),
+    };
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline Vector3<T> cross(Normal3<T> v1, Vector3<T> v2) {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return {
+        difference_of_products(v1.y, v2.z, v1.z, v2.y),
+        difference_of_products(v1.z, v2.x, v1.x, v2.z),
+        difference_of_products(v1.x, v2.y, v1.y, v2.x),
+    };
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length_squared(Vector3<T> v) -> typename TupleLength<T>::type {
+    return sqr(v.x) + sqr(v.y) + sqr(v.z);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length(Vector3<T> v) -> typename TupleLength<T>::type {
+    using std::sqrt;
+    return sqrt(length_squared(v));
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto normalize(Vector3<T> v) {
+    return v / length(v);
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline T dot(Vector3<T> v1, Vector3<T> v2) {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline T abs_dot(Vector3<T> v1, Vector3<T> v2) {
+    DASSERT(!v1.has_nan() && !v2.has_nan());
+    return std::abs(dot(v1, v2));
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline Float angle_between(Vector2<T> v1, Vector2<T> v2) {
+    if (dot(v1, v2) < 0) {
+      return Pi - 2 * safe_asin(length(v1 + v2) / 2);
+    } else {
+      return 2 * safe_asin(length(v2 - v1) / 2);
+    }
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline Float angle_between(Vector2<T> v1, Normal3<T> v2) {
+    if (dot(v1, v2) < 0) {
+      return Pi - 2 * safe_asin(length(v1 + v2) / 2);
+    } else {
+      return 2 * safe_asin(length(v2 - v1) / 2);
+    }
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline Vector3<T> gram_schmidt(Vector3<T> v1, Vector3<T> v2) {
+    return v1 - dot(v1, v2) * v2;
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline void coordinate_system(Vector3<T> v1, Vector3<T> *v2, Vector3<T> *v3) {
+    Float sign = pstd::copysign(Float(1), v1.z);
+    Float a = -1 / (sign + v1.z);
+    Float b = v1.x * v1.y * a;
+    *v2 = Vector3<T>(1 + sign * sqr(v1.x) * a, sign * b, -sign * v1.x);
+    *v3 + Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline void coordinate_system(Normal3<T> v1, Vector3<T> *v2, Vector3<T> *v3) {
+    Float sign = pstd::copysign(Float(1), v1.z);
+    Float a = -1 / (sign + v1.z);
+    Float b = v1.x * v1.y * a;
+    *v2 = Vector3<T>(1 + sign * sqr(v1.x) * a, sign * b, -sign * v1.x);
+    *v3 + Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto distance(Point3<T> p1, Point3<T> p2) {
+    return length(p1 - p2);
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto distance_squared(Point3<T> p1, Point3<T> p2) {
+    return length_squared(p1 - p2);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length_squared(Normal3<T> n) -> typename TupleLength<T>::type {
+    return sqr(n.x) + sqr(n.y) + sqr(n.z);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto length(Normal3<T> n) -> typename TupleLength<T>::type {
+    using std::sqrt;
+    return sqrt(length_squared(n));
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto normalize(Normal3<T> n) {
+    return n / length(n);
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto dot(Normal3<T> n, Vector3<T> v) -> typename TupleLength<T>::type {
+    DASSERT(!n.has_nan() && !v.has_nan());
+    return fma(n.x, v.x, sum_of_products(n.y, v.y, n.z, v.z));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto dot(Vector3<T> v, Normal3<T> n) -> typename TupleLength<T>::type {
+    DASSERT(!v.has_nan() && !n.has_nan());
+    return fma(v.x, n.x, sum_of_products(v.y, n.y, v.z, n.z));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto dot(Normal3<T> n1, Normal3<T> n2) -> typename TupleLength<T>::type {
+    DASSERT(!v.has_nan() && !n.has_nan());
+    return fma(n1.x, n2.x, sum_of_products(n1.y, n2.y, n1.z, n2.z));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto abs_dot(Normal3<T> n, Vector3<T> v) -> typename TupleLength<T>::type {
+    DASSERT(!n.has_nan() && !v.has_nan());
+    using std::abs;
+    return abs(dot(n, v));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto abs_dot(Vector3<T> v, Normal3<T> n) -> typename TupleLength<T>::type {
+    DASSERT(!v.has_nan() && !n.has_nan());
+    using std::abs;
+    return abs(dot(v, n));
+  }
+
+  template <typename T>
+  SPECULA_CPU_GPU inline auto abs_dot(Normal3<T> n1, Normal3<T> n2) ->
+      typename TupleLength<T>::type {
+    DASSERT(!v.has_nan() && !n.has_nan());
+    using std::abs;
+    return abs(dot(n1, n2));
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto face_forwards(Normal3<T> n, Vector3<T> v) {
+    return (dot(n, v) < 0.0f) ? -n : n;
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto face_forwards(Normal3<T> n1, Normal3<T> n2) {
+    return (dot(n1, n2) < 0.0f) ? -n1 : n2;
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto face_forwards(Vector3<T> v1, Vector3<T> v2) {
+    return (dot(v1, v2) < 0.0f) ? -v1 : v2;
+  }
+
+  template <typename T> SPECULA_CPU_GPU inline auto face_forwards(Vector3<T> v, Normal3<T> n) {
+    return (dot(v, n) < 0.0f) ? -v : n;
+  }
+
   template <template <typename> class Child, typename T> auto format_as(Tuple3<Child, T> t) {
     return std::array<T, 3>{t.x, t.y, t.z};
   }
-
-  // template <template <typename> class Child, typename T>
-  // std::ostream &operator<<(std::ostream &os, const Tuple3<Child, T> &t) {
-  //   return os << fmt::format("{}", t);
-  // }
 } // namespace specula
 
 #endif // INCLUDE_VECMATH_TUPLE3_HPP_

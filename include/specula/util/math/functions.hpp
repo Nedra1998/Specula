@@ -105,21 +105,21 @@ namespace specula {
     return fma(t, evaluate_polynomial(t, args...), c);
   }
 
-  inline SPECULA_CPU_GPU float save_asin(float x) {
+  inline SPECULA_CPU_GPU float safe_asin(float x) {
     DASSERT(x >= -1.0001 && x <= 1.0001);
     return std::asin(clamp(x, -1, 1));
   }
-  inline SPECULA_CPU_GPU double save_asin(double x) {
+  inline SPECULA_CPU_GPU double safe_asin(double x) {
     DASSERT(x >= -1.0001 && x <= 1.0001);
     return std::asin(clamp(x, -1, 1));
   }
 
-  inline SPECULA_CPU_GPU float save_acos(float x) {
+  inline SPECULA_CPU_GPU float safe_acos(float x) {
     DASSERT(x >= -1.0001 && x <= 1.0001);
     return std::acos(clamp(x, -1, 1));
   }
 
-  inline SPECULA_CPU_GPU double save_acos(double x) {
+  inline SPECULA_CPU_GPU double safe_acos(double x) {
     DASSERT(x >= -1.0001 && x <= 1.0001);
     return std::acos(clamp(x, -1, 1));
   }
