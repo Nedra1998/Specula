@@ -20,7 +20,7 @@ CPMAddPackage(
 CPMAddPackage(
   NAME cpptrace
   GITHUB_REPOSITORY jeremy-rifkin/cpptrace
-  GIT_TAG v1.0.2 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
+  GIT_TAG v1.0.4 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
 # ===== Compiler Features =====
 
