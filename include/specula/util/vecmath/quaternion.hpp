@@ -4,6 +4,7 @@
 #include "specula/util/check.hpp"
 #include "specula/util/math/functions.hpp"
 #include "specula/util/vecmath/tuple3.hpp"
+
 namespace specula {
   class Quaternion {
   public:
