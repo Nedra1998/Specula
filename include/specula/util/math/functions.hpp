@@ -79,7 +79,7 @@ namespace specula {
     if constexpr (N < 0)
       return 1 / pow<-N>(v);
     float n2 = pow<N / 2>(v);
-    return n2 * n2 * Pow<N & 1>(v);
+    return n2 * n2 * pow<N & 1>(v);
   }
 
   template <> inline SPECULA_CPU_GPU constexpr float pow<1>(float v) { return v; }
@@ -89,7 +89,7 @@ namespace specula {
     if constexpr (N < 0)
       return 1 / pow<-N>(v);
     double n2 = pow<N / 2>(v);
-    return n2 * n2 * Pow<N & 1>(v);
+    return n2 * n2 * pow<N & 1>(v);
   }
 
   template <> inline SPECULA_CPU_GPU constexpr double pow<1>(double v) { return v; }
