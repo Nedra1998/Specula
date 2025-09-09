@@ -9,6 +9,7 @@
 #include "specula/util/spectrum/constants.hpp"
 #include "util/color/rgb.hpp"
 #include "util/color/xyz.hpp"
+#include "util/math/functions.hpp"
 
 namespace specula {
   class RgbColorSpace;
@@ -186,6 +187,89 @@ namespace specula {
 
     friend struct fmt::formatter<SampledSpectrum>;
   };
+
+  SPECULA_CPU_GPU inline SampledSpectrum safe_div(SampledSpectrum a, SampledSpectrum b) {
+    SampledSpectrum r;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      r[i] = (b[i] != 0) ? a[i] / b[i] : 0.0;
+    }
+    return r;
+  }
+
+  template <typename U, typename V>
+  SPECULA_CPU_GPU inline SampledSpectrum clamp(const SampledSpectrum &s, U low, V high) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = specula::clamp(s[i], low, high);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum clamp_zero(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = std::max<Float>(0, s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum sqrt(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = std::sqrt(s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum safe_sqrt(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = safe_sqrt(s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum pow(const SampledSpectrum &s, Float e) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = std::pow(s[i], e);
+    }
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum exp(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = std::exp(s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum fast_exp(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < NSpectrumSamples; ++i) {
+      ret[i] = fast_exp(s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum bilerp(pstd::array<Float, 2> p,
+                                                pstd::span<const SampledSpectrum> v) {
+    return ((1 - p[0]) * (1 - p[1]) * v[0] + p[0] * (1 - p[1]) * v[1] + (1 - p[0]) * p[1] * v[2] +
+            p[0] * p[1] * v[3]);
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum lerp(Float t, const SampledSpectrum &s1,
+                                              const SampledSpectrum &s2) {
+    return (1 - t) * s1 + t * s2;
+  }
+
 } // namespace specula
 
 template <> struct fmt::formatter<specula::SampledSpectrum> {

@@ -4,40 +4,48 @@
 #include "specula.hpp"
 #include "util/spectrum/densly_sampled_spectrum.hpp"
 
-namespace specula::spectra {
-  void init(Allocator alloc);
+namespace specula {
+  class Spectrum;
 
-  DenslySampledSpectrum D(Float temperature, Allocator alloc);
+  namespace spectra {
+    void init(Allocator alloc);
 
-  SPECULA_CPU_GPU inline const DenslySampledSpectrum &X() {
+    DenslySampledSpectrum D(Float temperature, Allocator alloc);
+
+    SPECULA_CPU_GPU inline const DenslySampledSpectrum &X() {
 #ifdef SPECULA_IS_GPU_CODE
-    extern SPECULA_GPU DenslySampledSpectrum *xGPU;
-    return *xGPU;
+      extern SPECULA_GPU DenslySampledSpectrum *xGPU;
+      return *xGPU;
 #else
-    extern DenslySampledSpectrum *x;
-    return *x;
+      extern DenslySampledSpectrum *x;
+      return *x;
 #endif
-  }
+    }
 
-  SPECULA_CPU_GPU inline const DenslySampledSpectrum &Y() {
+    SPECULA_CPU_GPU inline const DenslySampledSpectrum &Y() {
 #ifdef SPECULA_IS_GPU_CODE
-    extern SPECULA_GPU DenslySampledSpectrum *yGPU;
-    return *yGPU;
+      extern SPECULA_GPU DenslySampledSpectrum *yGPU;
+      return *yGPU;
 #else
-    extern DenslySampledSpectrum *y;
-    return *y;
+      extern DenslySampledSpectrum *y;
+      return *y;
 #endif
-  }
+    }
 
-  SPECULA_CPU_GPU inline const DenslySampledSpectrum &Z() {
+    SPECULA_CPU_GPU inline const DenslySampledSpectrum &Z() {
 #ifdef SPECULA_IS_GPU_CODE
-    extern SPECULA_GPU DenslySampledSpectrum *zGPU;
-    return *zGPU;
+      extern SPECULA_GPU DenslySampledSpectrum *zGPU;
+      return *zGPU;
 #else
-    extern DenslySampledSpectrum *z;
-    return *z;
+      extern DenslySampledSpectrum *z;
+      return *z;
 #endif
-  }
-} // namespace specula::spectra
+    }
+  } // namespace spectra
+
+  // TODO: If possible change the spectrum names into an enum
+  Spectrum get_named_spectrum(std::string name);
+  std::string find_matching_named_spectrum(Spectrum s);
+} // namespace specula
 
 #endif // INCLUDE_SPECTRUM_SPECTRA_HPP_

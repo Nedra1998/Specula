@@ -1,15 +1,21 @@
 #include "util/spectrum/spectra.hpp"
 
+#include <map>
+#include <string>
+
 #include "specula.hpp"
 #include "util/math/functions.hpp"
 #include "util/pstd/vector.hpp"
 #include "util/spectrum/blackbody_spectrum.hpp"
 #include "util/spectrum/densly_sampled_spectrum.hpp"
 #include "util/spectrum/piecewise_linear_spectrum.hpp"
+#include "util/spectrum/spectrum.hpp"
 
 namespace {
   constexpr int N_CIE_SAMPELS = 471;
   extern const specula::Float CIE_LAMBDA[N_CIE_SAMPELS];
+
+  std::map<std::string, specula::Spectrum> NAMED_SPECTRA;
 
   const specula::Float CIE_X[N_CIE_SAMPELS] = {
       // CIE X function values
@@ -457,4 +463,32 @@ specula::DenslySampledSpectrum specula::spectra::D(Float temperature, Allocator 
 
   PiecewiseLinearSpectrum dpls(CIE_S_LAMBDA, values);
   return DenslySampledSpectrum(&dpls, alloc);
+}
+
+specula::Spectrum specula::get_named_spectrum(std::string name) {
+  auto iter = NAMED_SPECTRA.find(name);
+  if (iter != NAMED_SPECTRA.end()) {
+    return iter->second;
+  }
+  return nullptr;
+}
+
+std::string specula::find_matching_named_spectrum(Spectrum s) {
+  auto sampled_lambdas_match = [](Spectrum a, Spectrum b) {
+    const Float wls[] = {306, 360.932007, 380, 402, 455, 503, 579,
+                         610, 660,        692, 702, 760, 800, 860};
+    for (Float lambda : wls) {
+      if (a(lambda) != b(lambda)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  for (const auto &spd : NAMED_SPECTRA) {
+    if (sampled_lambdas_match(s, spd.second)) {
+      return spd.first;
+    }
+  }
+  return "";
 }

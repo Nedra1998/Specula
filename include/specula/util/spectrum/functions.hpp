@@ -2,9 +2,13 @@
 #define INCLUDE_SPECTRUM_FUNCTIONS_HPP_
 
 #include "specula.hpp"
+#include "util/color/xyz.hpp"
 #include "util/float.hpp"
 #include "util/math/functions.hpp"
+
 namespace specula {
+  class Spectrum;
+
   SPECULA_CPU_GPU inline Float blackbody(Float lambda, Float t) {
     if (t <= 0) {
       return 0;
@@ -18,6 +22,9 @@ namespace specula {
     ASSERT(!isnan(le));
     return le;
   }
+
+  Float spectrum_to_photometric(Spectrum s);
+  Xyz spectrum_to_xyz(Spectrum s);
 } // namespace specula
 
 #endif // INCLUDE_SPECTRUM_FUNCTIONS_HPP_
