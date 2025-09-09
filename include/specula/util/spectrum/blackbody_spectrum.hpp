@@ -32,7 +32,17 @@ namespace specula {
   private:
     Float t;
     Float normalization_factor;
+
+    friend struct fmt::formatter<BlackbodySpectrum>;
   };
 } // namespace specula
+
+template <> struct fmt::formatter<specula::BlackbodySpectrum> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  inline auto format(const specula::BlackbodySpectrum &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "[ BlackbodySpectrum T={} ]", v.t);
+  }
+};
 
 #endif // INCLUDE_SPECTRUM_BLACKBODY_SPECTRUM_HPP_

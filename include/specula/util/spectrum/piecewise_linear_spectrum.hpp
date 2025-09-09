@@ -2,13 +2,14 @@
 #define INCLUDE_SPECTRUM_PIECEWISE_LINEAR_SPECTRUM_HPP_
 
 #include "specula.hpp"
-#include "util/pstd/vector.hpp"
-#include "util/spectrum/constants.hpp"
-#include "util/spectrum/sampled_spectrum.hpp"
-#include "util/spectrum/sampled_wavelengths.hpp"
-#include "util/spectrum/spectrum.hpp"
+#include "specula/util/pstd/vector.hpp"
+#include "specula/util/spectrum/constants.hpp"
+#include "specula/util/spectrum/sampled_spectrum.hpp"
+#include "specula/util/spectrum/sampled_wavelengths.hpp"
+#include "util/spectrum/spectra.hpp"
 
 namespace specula {
+  class Spectrum;
 
   class PiecewiseLinearSpectrum {
   public:
@@ -40,7 +41,25 @@ namespace specula {
 
   private:
     pstd::vector<Float> lambdas, values;
+
+    friend struct fmt::formatter<PiecewiseLinearSpectrum>;
   };
 } // namespace specula
+
+template <> struct fmt::formatter<specula::PiecewiseLinearSpectrum> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  inline auto format(const specula::PiecewiseLinearSpectrum &v, FormatContext &ctx) const {
+    std::string name = specula::find_matching_named_spectrum(&v);
+    if (!name.empty()) {
+      return format_to(ctx.out(), "{}", name);
+    }
+    format_to(ctx.out(), "[ PiecewiseLinearSpectrum ");
+    for (size_t i = 0; i < v.lambdas.size(); ++i) {
+      format_to(ctx.out(), "{}={} ", v.lambdas[i], v.values[i]);
+    }
+    return format_to(ctx.out(), "]");
+  }
+};
 
 #endif // INCLUDE_SPECTRUM_PIECEWISE_LINEAR_SPECTRUM_HPP_

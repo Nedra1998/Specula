@@ -4,6 +4,9 @@
 #include "util/spectrum/constant_spectrum.hpp"
 #include "util/spectrum/densly_sampled_spectrum.hpp"
 #include "util/spectrum/piecewise_linear_spectrum.hpp"
+#include "util/spectrum/rgb_albedo_spectrum.hpp"
+#include "util/spectrum/rgb_illuminant_spectrum.hpp"
+#include "util/spectrum/rgb_unbounded_spectrum.hpp"
 #include "util/spectrum/sampled_spectrum.hpp"
 
 SPECULA_CPU_GPU specula::Float specula::Spectrum::operator()(Float lambda) const {
@@ -20,4 +23,13 @@ SPECULA_CPU_GPU specula::SampledSpectrum
 specula::Spectrum::sample(const SampledWavelengths &lambda) const {
   auto op = [&](auto ptr) { return ptr->sample(lambda); };
   return dispatch(op);
+}
+
+std::string specula::Spectrum::format_to() const {
+  if (!ptr()) {
+    return "(nullptr)";
+  }
+
+  auto format = [&](auto ptr) { return fmt::format("{}", *ptr); };
+  return dispatch_cpu(format);
 }

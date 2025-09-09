@@ -1,7 +1,10 @@
 #ifndef INCLUDE_SPECTRUM_DENSLY_SAMPLED_SPECTRUM_HPP_
 #define INCLUDE_SPECTRUM_DENSLY_SAMPLED_SPECTRUM_HPP_
 
+#include <fmt/ranges.h>
+
 #include "specula.hpp"
+#include "util/hash.hpp"
 #include "util/pstd/vector.hpp"
 #include "util/spectrum/constants.hpp"
 #include "util/spectrum/sampled_spectrum.hpp"
@@ -103,12 +106,19 @@ namespace specula {
   };
 } // namespace specula
 
+template <> struct std::hash<specula::DenslySampledSpectrum> {
+  SPECULA_CPU_GPU size_t operator()(const specula::DenslySampledSpectrum &s) const {
+    return specula::hash_buffer(s.values.data(), s.values.size());
+  }
+};
+
 template <> struct fmt::formatter<specula::DenslySampledSpectrum> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
   template <typename FormatContext>
   inline auto format(const specula::DenslySampledSpectrum &v, FormatContext &ctx) const {
-    // TODO: Implement proper formatting
-    return format_to(ctx.out(), "[ {} ]", v.values);
+    return format_to(ctx.out(),
+                     "[ DenslySampledSpectrum lambda_min={:d} lambda_max={:d} values={} ]",
+                     v.lambda_min, v.lambda_max, v.values);
   }
 };
 

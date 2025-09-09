@@ -19,7 +19,17 @@ namespace specula {
 
   private:
     Float c;
+
+    friend struct fmt::formatter<ConstantSpectrum>;
   };
 } // namespace specula
+
+template <> struct fmt::formatter<specula::ConstantSpectrum> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  inline auto format(const specula::ConstantSpectrum &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "[ ConstantSpectrum c={:f} ]", v.c);
+  }
+};
 
 #endif // INCLUDE_SPECTRUM_CONSTANT_SPECTRUM_HPP_
