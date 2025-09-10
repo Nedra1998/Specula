@@ -1,11 +1,11 @@
 #ifndef INCLUDE_COLOR_COLOR_ENCODING_HPP_
 #define INCLUDE_COLOR_COLOR_ENCODING_HPP_
 
-#include "specula.hpp"
+#include "specula/specula.hpp"
+#include "specula/util/math.hpp"
 #include "specula/util/pstd/array.hpp"
 #include "specula/util/pstd/span.hpp"
 #include "specula/util/tagged_pointer.hpp"
-#include "util/math.hpp"
 
 namespace specula {
   class LinearColorEncoding;

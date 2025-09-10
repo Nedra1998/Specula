@@ -19,3 +19,21 @@ std::vector<std::string> specula::split_strings_from_whitespace(std::string_view
 
   return ret;
 }
+
+bool specula::atof(std::string_view str, float *ptr) {
+  try {
+    *ptr = std::stof(std::string(str.begin(), str.end()));
+  } catch (...) {
+    return false;
+  }
+  return true;
+}
+
+bool specula::atof(std::string_view str, double *ptr) {
+  try {
+    *ptr = std::stod(std::string(str.begin(), str.end()));
+  } catch (...) {
+    return false;
+  }
+  return true;
+}

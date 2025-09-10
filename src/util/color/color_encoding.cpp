@@ -74,7 +74,7 @@ const specula::ColorEncoding specula::ColorEncoding::get(const std::string &name
       // TODO: Better exit handling for OSX
       std::quick_exit(1);
     }
-    Float gamma = atof(params[1].c_str());
+    Float gamma = ::atof(params[1].c_str());
     if (gamma == 0) {
       LOG_CRITICAL("{}: unable to parse gamma value", params[1]);
       // TODO: Better exit handling for OSX
@@ -94,8 +94,8 @@ const specula::ColorEncoding specula::ColorEncoding::get(const std::string &name
   }
 }
 
-SPECULA_CPU_GPU inline void specula::sRgbColorEncoding::to_linear(pstd::span<const uint8_t> vin,
-                                                                  pstd::span<Float> vout) const {
+SPECULA_CPU_GPU void specula::sRgbColorEncoding::to_linear(pstd::span<const uint8_t> vin,
+                                                           pstd::span<Float> vout) const {
 
   DASSERT_EQ(vin.size(), vout.size());
   for (size_t i = 0; i < vin.size(); ++i) {
@@ -111,7 +111,7 @@ SPECULA_CPU_GPU void specula::sRgbColorEncoding::from_linear(pstd::span<const Fl
   }
 }
 
-SPECULA_CPU_GPU inline specula::Float specula::sRgbColorEncoding::to_float_linear(Float v) const {
+SPECULA_CPU_GPU specula::Float specula::sRgbColorEncoding::to_float_linear(Float v) const {
   return srgb_to_linear(v);
 }
 
@@ -127,8 +127,8 @@ SPECULA_CPU_GPU specula::GammaColorEncoding::GammaColorEncoding(Float gamma) : g
   }
 }
 
-SPECULA_CPU_GPU inline void specula::GammaColorEncoding::to_linear(pstd::span<const uint8_t> vin,
-                                                                   pstd::span<Float> vout) const {
+SPECULA_CPU_GPU void specula::GammaColorEncoding::to_linear(pstd::span<const uint8_t> vin,
+                                                            pstd::span<Float> vout) const {
 
   DASSERT_EQ(vin.size(), vout.size());
   for (size_t i = 0; i < vin.size(); ++i) {
@@ -144,6 +144,6 @@ SPECULA_CPU_GPU void specula::GammaColorEncoding::from_linear(pstd::span<const F
   }
 }
 
-SPECULA_CPU_GPU inline specula::Float specula::GammaColorEncoding::to_float_linear(Float v) const {
+SPECULA_CPU_GPU specula::Float specula::GammaColorEncoding::to_float_linear(Float v) const {
   return std::pow(v, gamma);
 }
