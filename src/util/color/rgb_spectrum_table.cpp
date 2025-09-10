@@ -9,7 +9,7 @@ namespace specula {
   extern const float sRGBToSpectrumTable_Scale[64];
   extern const RgbToSpectrumTable::CoefficientArray sRGBToSpectrumTable_Data;
 
-  const RgbToSpectrumTable *RgbToSpectrumTable::sRGB;
+  const RgbToSpectrumTable *RgbToSpectrumTable::SRGB;
 
   extern const int DCI_P3ToSpectrumTable_Res;
   extern const float DCI_P3ToSpectrumTable_Scale[64];
@@ -21,7 +21,7 @@ namespace specula {
   extern const float REC2020ToSpectrumTable_Scale[64];
   extern const RgbToSpectrumTable::CoefficientArray REC2020ToSpectrumTable_Data;
 
-  const RgbToSpectrumTable *RgbToSpectrumTable::Rec2020;
+  const RgbToSpectrumTable *RgbToSpectrumTable::REC_2020;
 
   extern const int ACES2065_1ToSpectrumTable_Res;
   extern const float ACES2065_1ToSpectrumTable_Scale[64];

@@ -21,9 +21,9 @@ namespace specula {
 
     static void init(Allocator &alloc);
 
-    static const RgbToSpectrumTable *sRGB;
+    static const RgbToSpectrumTable *SRGB;
     static const RgbToSpectrumTable *DCI_P3;
-    static const RgbToSpectrumTable *Rec2020;
+    static const RgbToSpectrumTable *REC_2020;
     static const RgbToSpectrumTable *ACES2065_1;
 
   private:
@@ -40,11 +40,11 @@ template <> struct fmt::formatter<specula::RgbToSpectrumTable> {
   template <typename FormatContext>
   inline auto format(const specula::RgbToSpectrumTable &v, FormatContext &ctx) const {
     std::string id;
-    if (&v == specula::RgbToSpectrumTable::sRGB) {
+    if (&v == specula::RgbToSpectrumTable::SRGB) {
       id = "(sRGB) ";
     } else if (&v == specula::RgbToSpectrumTable::DCI_P3) {
       id = "(DCI_P3) ";
-    } else if (&v == specula::RgbToSpectrumTable::Rec2020) {
+    } else if (&v == specula::RgbToSpectrumTable::REC_2020) {
       id = "(Rec2020) ";
     } else if (&v == specula::RgbToSpectrumTable::ACES2065_1) {
       id = "(ACES2065_1) ";
