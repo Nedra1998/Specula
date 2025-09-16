@@ -26,7 +26,7 @@ namespace specula {
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     InlinedVector(const Allocator &alloc = {}) : alloc(alloc) {}
-    InlinedVector(size_t count, const T *value, const Allocator &alloc = {}) : alloc(alloc) {
+    InlinedVector(size_t count, const T &value, const Allocator &alloc = {}) : alloc(alloc) {
       reserve(count);
       for (size_t i = 0; i < count; ++i) {
         this->alloc.template construct<T>(begin() + i, value);
@@ -93,7 +93,7 @@ namespace specula {
 
     ~InlinedVector() {
       clear();
-      alloc.dealloc_object(ptr, n_alloc);
+      alloc.deallocate_object(ptr, n_alloc);
     }
 
     void reserve(size_t n) {
