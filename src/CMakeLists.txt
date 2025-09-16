@@ -6,6 +6,11 @@ CPMAddPackage(
   GIT_TAG 11.2.0 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
 
 CPMAddPackage(
+  NAME magic_enum
+  GITHUB_REPOSITORY Neargye/magic_enum
+  GIT_TAG v0.9.7 EXCLUDE_FROM_ALL TRUE SYSTEM TRUE)
+
+CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
   GIT_TAG v1.15.3
@@ -159,7 +164,7 @@ target_compile_definitions(
 
 target_link_libraries(
   specula
-  PUBLIC sanitizers spdlog::spdlog fmt::fmt TracyClient
+  PUBLIC sanitizers spdlog::spdlog fmt::fmt TracyClient magic_enum::magic_enum
   PRIVATE cpptrace::cpptrace)
 
 target_include_directories(
