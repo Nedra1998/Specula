@@ -50,7 +50,8 @@ namespace specula {
 
 specula::StatRegisterer::StatRegisterer(StatRegisterer::AccumFunc func) {
   static TracyLockable(std::mutex, mutex);
-  std::lock_guard<std::mutex> lock(mutex);
+  std::lock_guard<LockableBase(std::mutex)> lock(mutex);
+  LockMark(mutex);
 
   if (!stat_funcs)
     stat_funcs = new std::vector<AccumFunc>;
