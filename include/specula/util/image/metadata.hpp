@@ -11,6 +11,13 @@
 
 namespace specula {
   struct ImageMetadata {
+    const RgbColorSpace *get_color_space() const {
+      if (color_space && *color_space) {
+        return *color_space;
+      }
+      return RgbColorSpace::SRGB;
+    }
+
     pstd::optional<float> render_time_seconds;
     pstd::optional<SquareMatrix<4>> camera_from_world, ndc_from_world;
     pstd::optional<Bounds2i> pixel_bounds;

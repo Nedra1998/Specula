@@ -59,6 +59,7 @@ namespace specula {
 
   static_assert(sizeof(Float) == sizeof(FloatBits), "Float and FloatBits must have the same size");
 
+  /// @brief Type alias for the default allocator used by the renderer
   using Allocator = specula::pstd::pmr::polymorphic_allocator<std::byte>;
 
   /**
