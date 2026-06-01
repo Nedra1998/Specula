@@ -1,156 +1,42 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
-@font-face {
-  font-family: "Iosevka";
-  src: url("/Iosevka-Regular.woff2") format("woff2");
+tr.heading + tr[class^="memitem"] td.memItemLeft,
+tr.groupHeader + tr[class^="memitem"] td.memItemLeft,
+tr.inherit_header + tr[class^="memitem"] td.memItemLeft {
+  border-top: 1px solid var(--separator-color);
 }
 
-html {
-  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --font-family-monospace: ui-monospace, Iosevka, SFMono-Regular, SF Mono, Menlo,
-    Consolas, Liberation Mono, monospace;
+tr.heading + tr[class^="memitem"] td.memItemRight,
+tr.groupHeader + tr[class^="memitem"] td.memItemRight,
+tr.inherit_header + tr[class^="memitem"] td.memItemRight {
+  border-top: 1px solid var(--separator-color);
 }
 
-html {
-  --primary-color: hsl(220, 91%, 54%); /* Blue */
-  --primary-dark-color: hsl(220, 91%, 44%); /* Blue - 10% */
-  --primary-light-color: hsl(220, 91%, 64%); /* Blue + 10% */
-
-  --page-background-color: #eff1f5; /* Base */
-  --page-foreground-color: #4c4f69; /* Text */
-  --page-secondary-foreground-color: #6c6f85; /* Subtext0 */
-
-  --side-nav-background: #e6e9ef; /* Mantle */
-
-  --fragment-background: #e6e9ef; /* Mantle */
-  --fragment-foreground: #4c4f69; /* Text */
-
-  --tablehead-background: #ccd0da; /* Surface0 */
-  --code-background: #e6e9ef; /* Mantle */
-
-  --todo-color: rgba(136, 57, 239, 0.2); /* Mauve */
-  --todo-color-dark: #8839ef; /* Mauve */
-  --todo-color-darker: var(--page-forward-color);
-
-  --note-color: rgba(4, 165, 229, 0.2); /* Sky */
-  --note-color-dark: #04a5e5; /* Sky */
-  --note-color-darker: var(--page-forward-color);
-
-  --warning-color: rgba(223, 142, 29, 0.2); /* Yellow */
-  --warning-color-dark: #df8e1d; /* Yellow */
-  --warning-color-darker: var(--page-forward-color);
+tr[class^="memitem"] + tr[class^="memitem"] td.memItemLeft,
+tr[class^="memitem"] + tr[class^="memitem"] td.memItemRight,
+tr[class^="memitem"] + tr[class^="memitem"] td.memTeplParams {
+  border-top: none;
 }
 
-html.dark-mode {
-  --primary-color: hsl(217, 92%, 76%); /* Blue */
-  --primary-dark-color: hsl(217, 92%, 86%); /* Blue + 10% */
-  --primary-light-color: hsl(217, 92%, 66%); /* Blue - 10% */
-
-  --page-background-color: #1e1e2e; /* Base */
-  --page-foreground-color: #cdd6f4; /* Text */
-  --page-secondary-foreground-color: #a6adc8; /* Subtext0 */
-
-  --side-nav-background: #181825; /* Mantle */
-
-  --fragment-background: #181825; /* Mantle */
-  --fragment-foreground: #cdd6f4; /* Text */
-
-  --tablehead-background: #313244; /* Surface0 */
-  --code-background: #181825; /* Mantle */
-
-  --todo-color: rgba(203, 166, 247, 0.2); /* Mauve */
-  --todo-color-dark: #cba6f7; /* Mauve */
-  --todo-color-darker: var(--page-forward-color);
-
-  --note-color: rgba(137, 220, 235, 0.2); /* Sky */
-  --note-color-dark: #89dceb; /* Sky */
-  --note-color-darker: var(--page-forward-color);
-
-  --warning-color: rgba(249, 226, 175, 0.2); /* Yellow */
-  --warning-color-dark: #f9e2af; /* Yellow */
-  --warning-color-darker: var(--page-forward-color);
-}
-
-.github-corner svg {
-    fill: var(--primary-light-color);
-    color: var(--page-background-color);
-    width: 72px;
-    height: 72px;
-}
-
-@media screen and (max-width: 767px) {
-    .github-corner svg {
-        width: 55px;
-        height: 55px;
-    }
-
-    #projectnumber {
-        margin-right: 22px;
-    }
-}
-
-/* Custom fixes for support with Doxygen 1.14.0 */
-#nav-tree {
-    border-right: none;
-}
-#page-nav {
-    border-left: 1px solid var(--separator-color);
-}
-
-.search-icon::before {
-    background: transparent;
-}
-
-tr[class^="memdesc"] {
-    box-shadow: none;
-}
-
-tr.heading + tr[class^="memitem"] td.memItemLeft, tr.groupHeader + tr[class^="memitem"] td.memItemLeft, tr.inherit_header + tr[class^="memitem"] td.memItemLeft {
-    border-top: 1px solid var(--separator-color);
-}
-
-tr.heading + tr[class^="memitem"] td.memItemRight, tr.groupHeader + tr[class^="memitem"] td.memItemRight, tr.inherit_header + tr[class^="memitem"] td.memItemRight {
-    border-top: 1px solid var(--separator-color);
-}
-
-tr[class^="memitem"] + tr[class^="memitem"] td.memItemLeft, tr[class^="memitem"] + tr[class^="memitem"] td.memItemRight, tr[class^="memitem"] + tr[class^="memitem"] td.memTeplParams{
-    border-top: none;
-}
-
-tr[class^="memdesc"] + tr[class^="memitem"] td.memItemLeft, tr[class^="memdesc"] + tr[class^="memitem"] td.memItemRight {
-    border-top: none;
+tr[class^="memdesc"] + tr[class^="memitem"] td.memItemLeft,
+tr[class^="memdesc"] + tr[class^="memitem"] td.memItemRight {
+  border-top: none;
 }
 
 .mdescLeft {
-    border-left: 1px solid var(--separator-color);
-    border-bottom: 1px solid var(--separator-color);
+  border-left: 1px solid var(--separator-color) !important;
+  border-bottom: 1px solid var(--separator-color) !important;
 }
 .mdescRight {
-    border-right: 1px solid var(--separator-color);
-    border-bottom: 1px solid var(--separator-color);
+  border-right: 1px solid var(--separator-color) !important;
+  border-bottom: 1px solid var(--separator-color) !important;
 }
 
 table.memberdecls .memItemLeft {
-    border-radius: 0;
+  border-radius: 0;
 }
 
 table.memberdecls .memItemRight {
-    border-radius: 0;
+  border-radius: 0;
 }
 table.memberdecls .memTemplParams {
-    border-radius: 0;
-}
-
-td h2.groupheader {
-    box-shadow: none;
-    border-bottom: 1px solid var(--separator-color);
-}
-
-#page-nav {
-    background: var(--side-nav-background);
-}
-
-ul.page-outline li.vis {
-    background-color: var(--page-background-color);
+  border-radius: 0;
 }

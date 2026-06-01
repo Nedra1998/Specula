@@ -1,6 +1,6 @@
 /**
- * @file primes.hpp
- * @brief A table of 1000 precomputed prime numbers.
+ * @file
+ * @brief A table of 10,000 precomputed prime numbers.
  */
 
 #ifndef SPECULA_UTIL_PRIMES_HPP_
@@ -8,21 +8,17 @@
 
 #include <cstddef>
 
-#include <specula/specula.hpp>
-
 namespace specula {
-  /**
-   * @brief The size of the precomputed prime table.
-   */
+  /// The size of the prime table, which contains the first 10,000 prime numbers.
   static constexpr std::size_t PRIME_TABLE_SIZE = 10000;
 
   /**
-   * @brief A table of precomputed prime numbers.
+   * @brief A table of the first 10,000 prime numbers.
    *
-   * This is used for determining bases to use for the radical inverse base low-discrepancy points.
-   * And it is precomputed to avoid the overhead of computing prime numbers at runtime.
+   * A table of precomputed prime numbers, which can be used for various
+   * purposes within the renderer.
    */
-  extern SPECULA_CONST int PRIMES[PRIME_TABLE_SIZE];
+  extern const int PRIMES[PRIME_TABLE_SIZE];
 } // namespace specula
 
 #endif // SPECULA_UTIL_PRIMES_HPP_

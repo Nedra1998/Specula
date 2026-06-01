@@ -15,18 +15,19 @@ if(IWYU_EXECUTABLE)
   execute_process(
     COMMAND ${IWYU_EXECUTABLE} --version
     OUTPUT_VARIABLE IWYU_VERSION_OUTPUT
-    ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
 
   # Extract the version from the output (expected format: "include-what-you-use x.y.z" or "iwyu
   # x.y.z")
   string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" IWYU_VERSION "${IWYU_VERSION_OUTPUT}")
 endif()
 
+find_program(IWYU_TOOL_EXECUTABLE NAMES iwyu_tool iwyu-tool iwyu_tool.py)
+
 # Use find_package_handle_standard_args to handle the result
-find_package_handle_standard_args(
-  iwyu
-  REQUIRED_VARS IWYU_EXECUTABLE
-  VERSION_VAR IWYU_VERSION)
+find_package_handle_standard_args(iwyu REQUIRED_VARS IWYU_EXECUTABLE VERSION_VAR IWYU_VERSION)
 
 # Mark the INCLUDE_WHAT_YOU_USE variables as advanced so they don't clutter the cache
-mark_as_advanced(IWYU_EXECUTABLE IWYU_VERSION)
+mark_as_advanced(IWYU_EXECUTABLE IWYU_TOOL_EXECUTABLE IWYU_VERSION)

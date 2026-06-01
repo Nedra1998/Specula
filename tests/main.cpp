@@ -1,92 +1,14 @@
-#include <algorithm>
-#include <iostream>
-#include <memory>
+#include <cstdint>
 
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <spdlog/sinks/ostream_sink.h>
-#include <spdlog/sinks/ringbuffer_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/sinks/stdout_sinks.h>
-#include <specula/util/log.hpp>
-
-#include "globals.hpp"
-
-#if defined(_WIN32) || defined(_WIN64)
-#  include <io.h>
-#  include <windows.h>
-#elif defined(__APPLE__) || defined(__unix__) || defined(__unix)
-#  include <unistd.h>
-#endif
-
-std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt> log_ringbuffer = nullptr;
 
 int main(int argc, char *argv[]) {
-
   Catch::Session session;
-
   int returnCode = session.applyCommandLine(argc, argv);
-  if (returnCode != 0)
+  if (returnCode != 0) {
     return returnCode;
-
-  bool use_color = false;
-  switch (session.config().defaultColourMode()) {
-  case Catch::ColourMode::ANSI:
-    use_color = true;
-    break;
-  case Catch::ColourMode::PlatformDefault:
-#if defined(_WIN32) || defined(_WIN64)
-    use_color = _isatty(_fileno(stdout));
-#elif defined(__APPLE__) || defined(__unix__) || defined(__unix)
-    use_color = ::isatty(fileno(stdout)) != 0;
-#else
-    use_color = false;
-#endif
-    break;
-  default:
-    use_color = false;
-    break;
   }
-
-  for (auto &reporter : session.configData().reporterSpecifications) {
-    std::string name = reporter.name();
-    std::transform(name.begin(), name.end(), name.begin(), [](char c) { return std::tolower(c); });
-    if (name == "xml" || name == "sonarqube" || name == "junit") {
-      use_color = false;
-      break;
-    }
-  }
-
-  log_ringbuffer = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(256);
-  log_ringbuffer->set_level(spdlog::level::trace);
-  log_ringbuffer->set_pattern("%l %v");
-
-  std::shared_ptr<spdlog::sinks::sink> stdout_sink = nullptr;
-  if (use_color)
-    stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-  else
-    stdout_sink = std::make_shared<spdlog::sinks::ostream_sink_mt>(std::cout);
-
-  switch (session.config().verbosity()) {
-  case Catch::Verbosity::Quiet:
-    stdout_sink->set_level(spdlog::level::err);
-    break;
-  case Catch::Verbosity::Normal:
-    stdout_sink->set_level(spdlog::level::info);
-    break;
-  case Catch::Verbosity::High:
-    stdout_sink->set_level(spdlog::level::trace);
-    break;
-  }
-
-  if (use_color)
-    stdout_sink->set_pattern(
-        "\033[90m[%H:%M:%S.%e]\033[0m \033[1m%^%-8l%$\033[0m \033[36m(%s:%#)\033[0m %v");
-  else
-    stdout_sink->set_pattern("[%H:%M:%S.%e] %-8l (%s:%#) %v");
-
-  if (!specula::logging::initialize({stdout_sink, log_ringbuffer}, use_color))
-    return -1;
 
   return session.run();
 }

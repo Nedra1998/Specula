@@ -1,0 +1,36 @@
+---
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-macro-to-enum,
+  -cppcoreguidelines-macro-usage,
+  -cppcoreguidelines-pro-bounds-avoid-unchecked-container-access,
+  modernize-*,
+  -modernize-macro-to-enum,
+  -modernize-use-trailing-return-type,
+  performance-*,
+  portability-*,
+  readability-*,
+  -readability-convert-member-functions-to-static,
+  -readability-magic-numbers,
+WarningsAsErrors: ""
+HeaderFileExtensions:
+  - ""
+  - h
+  - hh
+  - hpp
+  - hxx
+ImplementationFileExtensions:
+  - c
+  - cc
+  - cpp
+  - cxx
+HeaderFilterRegex: ".*"
+ExcludeHeaderFilterRegex: ""
+FormatStyle: none
+CheckOptions: {}
+SystemHeaders: false

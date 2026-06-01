@@ -1,76 +1,19 @@
 /**
- * @file specula.hpp
- * @brief Main entrypoint for the renderer
+ * @file
+ * @brief Main entrypoing for the Specula rendering library.
  *
- * This file provides the main entrypoint for the renderer library, and includes some global
- * initialization and teardown logic that should be called first and last thing respectivly.
+ * This file provies the main entrypoint for the rendering library, it includes
+ * some of the global intitialization and cleanup logic, as well as including
+ * most of the library headers. Frequently this header should be the only
+ * header that needs to be included in applications using the library, as it
+ * includes all of the necessary headers for using the library. However, if you
+ * want to reduce compile times, you can include only the specific headers that
+ * you need.
  */
-#ifndef SPECULA_HPP
-#define SPECULA_HPP
 
-#include <cstdint>
-#include <vector>
+#ifndef SPECULA_SPECULA_HPP_
+#define SPECULA_SPECULA_HPP_
 
-#include <spdlog/spdlog.h>
+#include "specula/version.hpp"
 
-#if defined(__CUDA_ARCH__)
-#  define SPECULA_IS_GPU_CODE
-#endif
-
-#if defined(SPECULA_BUILD_GPU) && defined(__CUDACC__)
-#  ifndef SPECULA_NOINLINE
-#    define SPECULA_NOINLINE __attribute((noinline))
-#  endif
-#  define SPECULA_CPU_GPU __host__ __device__
-#  define SPECULA_GPU __device
-#  if defined(SPECULA_IS_GPU_CODE)
-#    define SPECULA_CONST __device__ const
-#  else
-#    define SPECULA_CONST const
-#  endif
-#else
-#  define SPECULA_CONST const
-#  define SPECULA_CPU_GPU
-#  define SPECULA_GPU
-#endif
-
-/**
- * @brief Primary namespace
- *
- * This is the primary namespace for the specula renderer. All components of the renderer will be
- * contained within this namespace, to avoid any naming conflicts with external packages.
- */
-namespace specula {
-  namespace pstd::pmr {
-    template <typename T> class polymorphic_allocator;
-  }
-
-#ifdef SPECULA_FLOAT_AS_DOUBLE
-  /// @brief Type alias for floating point numbers
-  using Float = double;
-  /// @brief Type alias for the bit representation of floating point numbers
-  using FloatBits = uint64_t;
-#else
-  /// @brief Type alias for floating point numbers
-  using Float = float;
-  /// @brief Type alias for the bit representation of floating point numbers
-  using FloatBits = uint32_t;
-#endif
-
-  static_assert(sizeof(Float) == sizeof(FloatBits), "Float and FloatBits must have the same size");
-
-  /// @brief Type alias for the default allocator used by the renderer
-  using Allocator = specula::pstd::pmr::polymorphic_allocator<std::byte>;
-
-  /**
-   * @brief Initializes the specula renderer
-   *
-   * @param log_sinks An optional list of sinks to attach to the default logger
-   * @return true if all initialization was successful
-   * @return false if there were any errors during initialization
-   * @see logging::initialize
-   */
-  bool initialize(std::vector<spdlog::sink_ptr> log_sinks = {}, bool use_color = false);
-} // namespace specula
-
-#endif // SPECULA_HPP
+#endif // INCLUDE_SPECULA_SPECULA_HPP_

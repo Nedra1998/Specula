@@ -1,0 +1,6 @@
+line_max_words = 120
+
+[format]
+# Format with an external formatter.
+program = "gersemi"
+args = ["-"]

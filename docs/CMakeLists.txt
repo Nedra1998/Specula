@@ -1,20 +1,18 @@
-# ===== Dependencies =====
+# ========== Options ==========
+# ========== Dependencies ==========
+
+CPMAddPackage("gh:jothepro/doxygen-awesome-css@2.4.2")
 
 find_package(Doxygen REQUIRED dot)
 
-CPMAddPackage(
-  NAME doxygen-awesome-css
-  GITHUB_REPOSITORY jothepro/doxygen-awesome-css
-  GIT_TAG v2.4.1)
+# ========== Sources ==========
 
-# ===== Sources =====
+file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.hpp")
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
-file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/specula/*")
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*")
-file(GLOB_RECURSE DOCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.md")
-list(APPEND DOCS "${PROJECT_SOURCE_DIR}/LICENSE.md" "${PROJECT_SOURCE_DIR}/CHANGELOG.md")
+file(GLOB_RECURSE docs CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.md")
 
-# ===== Doxygen Configuration =====
+# ========== Configuration ==========
 
 # General Configuration
 set(DOXYGEN_STRIP_FROM_PATH "${PROJECT_SOURCE_DIR}")
@@ -44,27 +42,24 @@ set(DOXYGEN_DOT_IMAGE_FORMAT "svg")
 set(DOXYGEN_DOT_TRANSPARENT YES)
 set(DOXYGEN_DOT_FONTNAME "Iosevka")
 
-# HTML Configuration
-set(DOXYGEN_LAYOUT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/assets/DoxygenLayout.xml")
+# # HTML Configuration
 set(DOXYGEN_HTML_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/assets/header.html")
-set(DOXYGEN_HTML_FOOTER "${CMAKE_CURRENT_SOURCE_DIR}/assets/footer.html")
 set(DOXYGEN_HTML_COLORSTYLE "LIGHT")
 
-set(DOXYGEN_HTML_EXTRA_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/logo.svg"
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/Iosevka-Regular.woff2"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-darkmode-toggle.js"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-fragment-copy-button.js"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-paragraph-link.js"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-interactive-toc.js")
-list(APPEND DOXYGEN_HTML_EXTRA_FILES ${DOC_ASSETS})
+set(
+  DOXYGEN_HTML_EXTRA_FILES
+  "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-darkmode-toggle.js"
+  "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-fragment-copy-button.js"
+)
 
-set(DOXYGEN_HTML_EXTRA_STYLESHEET
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome.css"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-sidebar-only.css"
-    "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-sidebar-only-darkmode-toggle.css"
-    "${CMAKE_CURRENT_SOURCE_DIR}/assets/override.css")
+set(
+  DOXYGEN_HTML_EXTRA_STYLESHEET
+  "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome.css"
+  "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-sidebar-only.css"
+  "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-sidebar-only-darkmode-toggle.css"
+  "${CMAKE_CURRENT_SOURCE_DIR}/assets/override.css"
+)
 
-# ===== Doxygen Target =====
+# ========== Documentation ==========
 
-doxygen_add_docs(docs ${HEADERS} ${SOURCES} ${DOCS})
+doxygen_add_docs(docs ${headers} ${sources} ${docs})

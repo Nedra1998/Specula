@@ -1,12 +1,20 @@
-#include "util/log.hpp"
+#include "specula/util/log.hpp"
 
 #include <iostream>
+#include <cstdint>
+#include <memory>
 #include <mutex>
+#include <string>
 #include <vector>
 
+#include <fmt/format.h>
+#include <spdlog/common.h>
+#include <spdlog/details/log_msg.h>
 #include <spdlog/details/null_mutex.h>
+#include <spdlog/logger.h>
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/sinks/dist_sink.h>
+#include <spdlog/sinks/sink.h>
 #include <spdlog/spdlog.h>
 #include <tracy/Tracy.hpp>
 
@@ -35,30 +43,21 @@ namespace specula::logging {
     void sink_it_(const spdlog::details::log_msg &msg) override {
       spdlog::memory_buf_t formatted;
       spdlog::sinks::base_sink<Mutex>::formatter_->format(msg, formatted);
-      std::string formatted_string = fmt::to_string(formatted);
-      switch (msg.level) {
-      case spdlog::level::critical:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0xf38ba8);
-        break;
-      case spdlog::level::err:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0xfab387);
-        break;
-      case spdlog::level::warn:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0xf9e2af);
-        break;
-      case spdlog::level::info:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0xa6e3a1);
-        break;
-      case spdlog::level::debug:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0x74c7ec);
-        break;
-      case spdlog::level::trace:
-        TracyMessageC(formatted_string.c_str(), formatted_string.size(), 0xcba6f7);
-        break;
 
-      default:
-        break;
+      // NOLINTNEXTLINE(bugprone-unused-local-non-trivial-variable)
+      std::string formatted_string = fmt::to_string(formatted);
+
+      uint32_t color = 0xffffff;
+      switch (msg.level) {
+      case spdlog::level::critical: color = 0xf38ba8; break;
+      case spdlog::level::err:      color = 0xfab387; break;
+      case spdlog::level::warn:     color = 0xf9e2af; break;
+      case spdlog::level::info:     color = 0xa6e3a1; break;
+      case spdlog::level::debug:    color = 0x74c7ec; break;
+      case spdlog::level::trace:    color = 0xcba6f7; break;
+      default:                                         break;
       }
+      TracyMessageC(formatted_string.c_str(), formatted_string.size(), color);
     }
 
     /**
@@ -75,10 +74,7 @@ namespace specula::logging {
 using tracy_sink_mt = specula::logging::TracySink<std::mutex>;
 using tracy_sink_st = specula::logging::TracySink<spdlog::details::null_mutex>;
 
-static bool colored_ = false;
-
-bool specula::logging::initialize(std::vector<spdlog::sink_ptr> sinks, bool color) {
-  colored_ = color;
+bool specula::logging::initialize(const std::vector<spdlog::sink_ptr> &sinks) {
   try {
     auto sink = std::make_shared<spdlog::sinks::dist_sink_mt>(sinks);
     sink->set_level(spdlog::level::trace);
@@ -95,9 +91,7 @@ bool specula::logging::initialize(std::vector<spdlog::sink_ptr> sinks, bool colo
     spdlog::set_default_logger(logger);
     return true;
   } catch (const spdlog::spdlog_ex &ex) {
-    std::cerr << "Log initialization failed: " << ex.what() << std::endl;
+    std::cerr << "Log initialization failed: " << ex.what() << '\n';
     return false;
   }
 }
-
-bool specula::logging::colored() { return colored_; }

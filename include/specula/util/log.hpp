@@ -12,7 +12,10 @@
 
 #include <vector>
 
+#include <spdlog/common.h>
 #include <spdlog/spdlog.h>
+
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
 /// @brief Log a trace message using the default logger
 #define LOG_TRACE(...) SPDLOG_TRACE(__VA_ARGS__)
@@ -50,6 +53,8 @@
 /// @brief Log a critical error message using the provided logger
 #define LOGGER_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(__VA_ARGS__)
 
+// NOLINTEND(cppcoreguidelines-macro-usage)
+
 /**
  * @brief Specula logging utilities
  *
@@ -71,20 +76,9 @@ namespace specula::logging {
    * to send log messages up to and including debug logs, but will not send trace log messages.
    *
    * @param sinks An optional list of additional sinks to add to the logger
-   * @return true if the logging sinks and logger were initializaed
-   * successfully
-   * @return false if there was an error initializaing logging
+   * @return `true` if the logger was successfully initialized, `false` otherwise
    */
-  bool initialize(std::vector<spdlog::sink_ptr> sinks = {}, bool color = false);
-
-  /**
-   * @brief Check if the default logger should be colored
-   *
-   * This method checks if the default logger should be colored or not. The default logger is
-   * colored if the renderer is running in a terminal, and the terminal supports color output. This
-   * method is used to determine if additional formatting can include colors.
-   */
-  bool colored();
+  bool initialize(const std::vector<spdlog::sink_ptr> &sinks = {});
 } // namespace specula::logging
 
 #endif // SPECULA_UTIL_LOG_HPP

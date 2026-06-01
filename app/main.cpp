@@ -1,11 +1,18 @@
+#include <cstdio>
+#include <cstdlib>
+#include <exception>
 #include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 #include <cxxopts.hpp>
+#include <spdlog/common.h>
+#include <spdlog/sinks/ansicolor_sink.h>
+#include <spdlog/sinks/sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/stdout_sinks.h>
-#include <spdlog/spdlog.h>
-#include <specula/specula.hpp>
-#include <specula/util/check.hpp>
+#include <specula/util/log.hpp>
 #include <specula/version.hpp>
 
 #include "help.hpp"
@@ -17,10 +24,11 @@
 #  include <unistd.h>
 #endif
 
-int main(int argc, char const *argv[]) {
+int main(int argc, const char *argv[]) {
   specula::app::RichFormatter formatter("C++20 Physically Based Renderer", {});
+
   try {
-    cxxopts::Options options("specula", formatter.description());
+    cxxopts::Options options("specula", formatter.description);
 
     // clang-format off
     options.add_options()
@@ -28,16 +36,16 @@ int main(int argc, char const *argv[]) {
       ("V,version", "Print the version information and exit")
     ;
 
-    options.parse_positional(formatter.positionals());
+    options.parse_positional(formatter.positionals);
     // clang-format on
 
     auto result = options.parse(argc, argv);
 
-    if (result.count("help")) {
-      std::cout << formatter(options) << std::endl;
+    if (result.contains("help")) {
+      std::cout << formatter(options) << '\n';
       exit(0);
-    } else if (result.count("version")) {
-      std::cout << SPECULA_VERSION << std::endl;
+    } else if (result.contains("version")) {
+      std::cout << SPECULA_VERSION << '\n';
       exit(0);
     }
 
@@ -49,26 +57,32 @@ int main(int argc, char const *argv[]) {
     const bool use_color = false;
 #endif
     std::shared_ptr<spdlog::sinks::sink> stdout_sink = nullptr;
-    if (use_color)
+    if (use_color) {
       stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    else
+    } else {
       stdout_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
+    }
 
     stdout_sink->set_level(spdlog::level::trace);
 
-    if (use_color)
+    if (use_color) {
       stdout_sink->set_pattern("\033[90m[%H:%M:%S.%e]\033[0m \033[1m%^%-8l%$\033[0m  %v");
-    else
+    } else {
       stdout_sink->set_pattern("%H:%M:%S.%e %l %v");
+    }
 
-    if (!specula::initialize({stdout_sink}, use_color))
+    if (!specula::logging::initialize({stdout_sink})) {
       return 1;
+    }
 
   } catch (const cxxopts::exceptions::specification &e) {
-    std::cerr << formatter(e) << std::endl;
+    std::cerr << formatter(e) << '\n';
     exit(1);
   } catch (const cxxopts::exceptions::parsing &e) {
-    std::cerr << formatter(e) << std::endl;
+    std::cerr << formatter(e) << '\n';
+    exit(1);
+  } catch (const std::exception &e) {
+    std::cerr << "Error: " << e.what() << '\n';
     exit(1);
   }
 
