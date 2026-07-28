@@ -150,8 +150,8 @@ namespace specula::app {
      * @return A string containing the formatted usage message, including the command name and any
      * positional arguments.
      */
-    [[nodiscard]] std::string format_usage(const cxxopts::Options &options,
-                                           const cxxopts::HelpGroupDetails &positionals) const;
+    [[nodiscard]] static std::string format_usage(const cxxopts::Options &options,
+                                                  const cxxopts::HelpGroupDetails &positionals);
 
     /**
      * @brief Generate the help message for a specific group of options.

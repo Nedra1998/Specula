@@ -6,6 +6,7 @@
 #ifndef SPECULA_UTIL_PRIMES_HPP_
 #define SPECULA_UTIL_PRIMES_HPP_
 
+#include <array>
 #include <cstddef>
 
 namespace specula {
@@ -18,7 +19,7 @@ namespace specula {
    * A table of precomputed prime numbers, which can be used for various
    * purposes within the renderer.
    */
-  extern const int PRIMES[PRIME_TABLE_SIZE];
+  extern const std::array<int, PRIME_TABLE_SIZE> PRIMES;
 } // namespace specula
 
 #endif // SPECULA_UTIL_PRIMES_HPP_

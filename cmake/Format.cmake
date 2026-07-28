@@ -29,7 +29,7 @@ if(clang-format_FOUND)
   # Define custom targets to check and fix C++ formatting using clang-format.
   add_custom_target(
     format-clang-format
-    COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run --Werror ${CXX_SOURCE_FILES}
+    COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run --Werror --color ${CXX_SOURCE_FILES}
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Checking C++ formatting with clang-format..."
     VERBATIM

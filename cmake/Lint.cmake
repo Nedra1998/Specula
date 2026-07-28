@@ -30,7 +30,7 @@ if(clang-tidy_FOUND)
     add_custom_target(
       check-clang-tidy
       COMMAND
-        ${RUN_CLANG_TIDY_EXECUTABLE} -j 4 -use-color -quiet -p=${CMAKE_BINARY_DIR}
+        ${RUN_CLANG_TIDY_EXECUTABLE} -hide-progress -j 4 -use-color -quiet -p=${CMAKE_BINARY_DIR}
         -config-file=${PROJECT_SOURCE_DIR}/.clang-tidy ${CXX_SOURCE_FILES}
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       COMMENT "Running clang-tidy static analysis..."
@@ -63,9 +63,10 @@ if(cppcheck_FOUND)
   add_custom_target(
     check-cppcheck
     COMMAND
-      ${CPPCHECK_EXECUTABLE} -j 4 --enable=all --std=c++20 --suppress=missingIncludeSystem
-      --suppress=knownConditionTrueFalse --suppress=functionStatic --cppcheck-build-dir=${CMAKE_BINARY_DIR}/cppcheck
-      --project=${CMAKE_BINARY_DIR}/compile_commands.json -i ${CMAKE_BINARY_DIR}/**
+      ${CMAKE_COMMAND} -E env CLICOLOR_FORCE=1 ${CPPCHECK_EXECUTABLE} --quiet -j 4 --enable=all --std=c++20
+      --suppress=missingIncludeSystem --suppress=knownConditionTrueFalse
+      --cppcheck-build-dir=${CMAKE_BINARY_DIR}/cppcheck --project=${CMAKE_BINARY_DIR}/compile_commands.json -i
+      ${CMAKE_BINARY_DIR}/**
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Running cppcheck static analysis..."
     VERBATIM
@@ -85,7 +86,10 @@ if(iwyu_FOUND)
   if(IWYU_TOOL_EXECUTABLE)
     add_custom_target(
       check-iwyu
-      COMMAND ${IWYU_TOOL_EXECUTABLE} -j 0 -p=${CMAKE_BINARY_DIR} --exclude "${CMAKE_BINARY_DIR}" --output-format=clang
+      COMMAND
+        ${IWYU_TOOL_EXECUTABLE} -j 0 -p=${CMAKE_BINARY_DIR} --exclude "${CMAKE_BINARY_DIR}" --output-format=clang | sed
+        "/^$/d" | awk
+        [[{ gsub(/^[^:]+:[0-9]+:[0-9]+:/, "\033[1m&\033[0m"); gsub(/error:/, "\033[1;31merror:\033[0m"); gsub(/warning:/, "\033[1;35mwarning:\033[0m"); gsub(/\047[^\047]+\047/, "\033[1;32m&\033[0m"); print }]]
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
       COMMENT "Running include-what-you-use static analysis..."
       VERBATIM

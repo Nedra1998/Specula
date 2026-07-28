@@ -1,7 +1,7 @@
 #include "specula/util/log.hpp"
 
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -49,13 +49,26 @@ namespace specula::logging {
 
       uint32_t color = 0xffffff;
       switch (msg.level) {
-      case spdlog::level::critical: color = 0xf38ba8; break;
-      case spdlog::level::err:      color = 0xfab387; break;
-      case spdlog::level::warn:     color = 0xf9e2af; break;
-      case spdlog::level::info:     color = 0xa6e3a1; break;
-      case spdlog::level::debug:    color = 0x74c7ec; break;
-      case spdlog::level::trace:    color = 0xcba6f7; break;
-      default:                                         break;
+      case spdlog::level::critical:
+        color = 0xf38ba8;
+        break;
+      case spdlog::level::err:
+        color = 0xfab387;
+        break;
+      case spdlog::level::warn:
+        color = 0xf9e2af;
+        break;
+      case spdlog::level::info:
+        color = 0xa6e3a1;
+        break;
+      case spdlog::level::debug:
+        color = 0x74c7ec;
+        break;
+      case spdlog::level::trace:
+        color = 0xcba6f7;
+        break;
+      default:
+        break;
       }
       TracyMessageC(formatted_string.c_str(), formatted_string.size(), color);
     }

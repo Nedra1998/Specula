@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <ranges>
 
 #include <cxxopts.hpp>
 #include <fmt/color.h>
@@ -83,7 +84,7 @@ std::string specula::app::RichFormatter::format_options(const cxxopts::Options &
 
 std::string
 specula::app::RichFormatter::format_usage(const cxxopts::Options &options,
-                                          const cxxopts::HelpGroupDetails &positionals) const {
+                                          const cxxopts::HelpGroupDetails &positionals) {
   std::string line;
 
   line += fmt::format("{} {} [{}] ",
