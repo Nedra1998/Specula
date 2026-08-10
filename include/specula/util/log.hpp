@@ -53,6 +53,14 @@
 /// @brief Log a critical error message using the provided logger
 #define LOGGER_CRITICAL(...) SPDLOG_LOGGER_CRITICAL(__VA_ARGS__)
 
+#define LOG_STACKTRACE()                                                                           \
+  do {                                                                                             \
+    const auto stack_trace = specula::logging::fmt_stack_trace();                                  \
+    if (!stack_trace.empty()) {                                                                    \
+      LOG_CRITICAL("{}\n", stack_trace);                                                           \
+    }                                                                                              \
+  } while (false)
+
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
 /**
@@ -78,7 +86,9 @@ namespace specula::logging {
    * @param sinks An optional list of additional sinks to add to the logger
    * @return `true` if the logger was successfully initialized, `false` otherwise
    */
-  bool initialize(const std::vector<spdlog::sink_ptr> &sinks = {});
+  bool initialize(const std::vector<spdlog::sink_ptr> &sinks = {}, bool color = false);
+
+  std::string fmt_stack_trace();
 } // namespace specula::logging
 
 #endif // SPECULA_UTIL_LOG_HPP

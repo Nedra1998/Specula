@@ -3,10 +3,9 @@
  * @brief A table of 10,000 precomputed prime numbers.
  */
 
-#ifndef SPECULA_UTIL_PRIMES_HPP_
-#define SPECULA_UTIL_PRIMES_HPP_
+#ifndef SPECULA_UTIL_PRIMES_HPP
+#define SPECULA_UTIL_PRIMES_HPP
 
-#include <array>
 #include <cstddef>
 
 namespace specula {
@@ -19,7 +18,7 @@ namespace specula {
    * A table of precomputed prime numbers, which can be used for various
    * purposes within the renderer.
    */
-  extern const std::array<int, PRIME_TABLE_SIZE> PRIMES;
+  extern const int PRIMES[PRIME_TABLE_SIZE];
 } // namespace specula
 
-#endif // SPECULA_UTIL_PRIMES_HPP_
+#endif // SPECULA_UTIL_PRIMES_HPP

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include <cpptrace/cpptrace.hpp>
 #include <fmt/format.h>
 #include <spdlog/common.h>
 #include <spdlog/details/log_msg.h>
@@ -87,7 +88,10 @@ namespace specula::logging {
 using tracy_sink_mt = specula::logging::TracySink<std::mutex>;
 using tracy_sink_st = specula::logging::TracySink<spdlog::details::null_mutex>;
 
-bool specula::logging::initialize(const std::vector<spdlog::sink_ptr> &sinks) {
+static bool use_colors = false;
+
+bool specula::logging::initialize(const std::vector<spdlog::sink_ptr> &sinks, bool color) {
+  use_colors = color;
   try {
     auto sink = std::make_shared<spdlog::sinks::dist_sink_mt>(sinks);
     sink->set_level(spdlog::level::trace);
@@ -107,4 +111,21 @@ bool specula::logging::initialize(const std::vector<spdlog::sink_ptr> &sinks) {
     std::cerr << "Log initialization failed: " << ex.what() << '\n';
     return false;
   }
+}
+
+std::string specula::logging::fmt_stack_trace() {
+  const char *env = std::getenv("SPECULA_BACKTRACE");
+  if (env != nullptr && std::string_view(env) == "0") {
+    return {};
+  }
+
+  const auto &cpptrace = cpptrace::generate_trace();
+  std::stringstream out;
+  if (env == nullptr || std::string_view(env) == "1") {
+    cpptrace.print(out, use_colors);
+  } else if (std::string_view(env) == "full") {
+    cpptrace.print_with_snippets(out, use_colors);
+  }
+
+  return out.str();
 }

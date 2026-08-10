@@ -64,9 +64,8 @@ if(cppcheck_FOUND)
     check-cppcheck
     COMMAND
       ${CMAKE_COMMAND} -E env CLICOLOR_FORCE=1 ${CPPCHECK_EXECUTABLE} --quiet -j 4 --enable=all --std=c++20
-      --suppress=missingIncludeSystem --suppress=knownConditionTrueFalse
-      --cppcheck-build-dir=${CMAKE_BINARY_DIR}/cppcheck --project=${CMAKE_BINARY_DIR}/compile_commands.json -i
-      ${CMAKE_BINARY_DIR}/**
+      --suppressions-list=${CMAKE_SOURCE_DIR}/.cppcheck --cppcheck-build-dir=${CMAKE_BINARY_DIR}/cppcheck
+      --project=${CMAKE_BINARY_DIR}/compile_commands.json -i ${CMAKE_BINARY_DIR}/**
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Running cppcheck static analysis..."
     VERBATIM

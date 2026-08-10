@@ -11,9 +11,9 @@
  * you need.
  */
 
-#ifndef SPECULA_SPECULA_HPP_
-#define SPECULA_SPECULA_HPP_
+#ifndef SPECULA_SPECULA_HPP
+#define SPECULA_SPECULA_HPP
 
 #include "specula/version.hpp"
 
-#endif // INCLUDE_SPECULA_SPECULA_HPP_
+#endif // SPECULA_SPECULA_HPP
