@@ -8,6 +8,7 @@
 #include <fmt/base.h>
 
 #include "specula/macros.hpp"
+#include "specula/util/check.hpp"
 
 namespace specula::pstd {
   /**
@@ -71,7 +72,14 @@ namespace specula::pstd {
 
     SPECULA_CPU_GPU [[nodiscard]] bool has_value() const { return set; }
 
-    SPECULA_CPU_GPU T &value() { return *ptr(); }
+    SPECULA_CPU_GPU T &value() {
+      ASSERT(set);
+      return *ptr();
+    }
+    SPECULA_CPU_GPU const T &value() const {
+      ASSERT(set);
+      return *ptr();
+    }
     SPECULA_CPU_GPU T value_or(const T &alt) const { return set ? value() : alt; }
 
     SPECULA_CPU_GPU void reset() {
