@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_INTERVAL_HPP
 #define SPECULA_UTIL_MATH_INTERVAL_HPP
 
+#include <fmt/base.h>
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/check.hpp"
@@ -148,6 +150,8 @@ namespace specula {
   private:
     // friend struct SOA<Interval>;
     Float low, high;
+
+    friend struct fmt::formatter<Interval>;
   };
 
   SPECULA_CPU_GPU inline bool in_range(Float v, Interval i) {
@@ -248,7 +252,7 @@ namespace specula {
     Float low = difference_of_products(a[ablow_index & 1], b[ablow_index >> 1], c[cdhigh_index & 1],
                                        d[cdhigh_index >> 1]);
     Float high = difference_of_products(a[abhigh_index & 1], b[abhigh_index >> 1],
-                                        c[cdhigh_index & 1], d[cdhigh_index >> 1]);
+                                        c[cdlow_index & 1], d[cdlow_index >> 1]);
     DASSERT_LE(low, high);
 
     return {next_float_down(next_float_down(low)), next_float_up(next_float_up(high))};
@@ -340,5 +344,13 @@ namespace specula {
     return {std::max<Float>(0, ss.lower_bound()), ss.upper_bound()};
   }
 } // namespace specula
+
+template <> struct fmt::formatter<specula::Interval> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  auto format(const specula::Interval &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "[ Interval [{}, {}] ]", v.low, v.high);
+  }
+};
 
 #endif // SPECULA_UTIL_MATH_INTERVAL_HPP
