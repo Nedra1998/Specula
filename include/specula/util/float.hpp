@@ -77,7 +77,7 @@ namespace specula {
   public:
     Half() = default;
 
-    SPECULA_CPU_GPU explicit Half(float ff) {
+    explicit Half(float ff) {
 #ifdef SPECULA_IS_GPU_CODE
       h = __half_as_ushort(__float2half(ff));
 #else
@@ -113,6 +113,11 @@ namespace specula {
 
     Half(const Half &) = default;
     Half &operator=(const Half &) = default;
+
+    SPECULA_CPU_GPU Half(Half &&) = default;
+    Half &operator=(Half &&) = default;
+
+    ~Half() = default;
 
     SPECULA_CPU_GPU [[nodiscard]] uint16_t bits() const { return h; }
     SPECULA_CPU_GPU static Half from_bits(uint16_t v) { return Half(v); }
@@ -297,8 +302,12 @@ namespace specula {
 #endif
   }
 
-  SPECULA_CPU_GPU inline int exponent(float v) { return (float_to_bits(v) >> 23) - 127; }
-  SPECULA_CPU_GPU inline int exponent(double v) { return (float_to_bits(v) >> 52) - 1023; }
+  SPECULA_CPU_GPU inline int exponent(float v) {
+    return static_cast<int>(float_to_bits(v) >> 23) - 127;
+  }
+  SPECULA_CPU_GPU inline int exponent(double v) {
+    return static_cast<int>(float_to_bits(v) >> 52) - 1023;
+  }
   SPECULA_CPU_GPU inline uint32_t significand(float v) {
     return float_to_bits(v) & ((1 << 23) - 1);
   }
@@ -385,7 +394,10 @@ namespace specula {
     return bits_to_float(ui);
   }
 
-  constexpr Float gamma(int n) { return (n * MACHINE_EPSILON) / (1 - n * MACHINE_EPSILON); }
+  constexpr Float gamma(int n) {
+    return (static_cast<Float>(n) * MACHINE_EPSILON) /
+           (1 - static_cast<Float>(n) * MACHINE_EPSILON);
+  }
 
   inline SPECULA_CPU_GPU Float add_round_up(Float a, Float b) {
 #ifdef SPECULA_IS_GPU_CODE

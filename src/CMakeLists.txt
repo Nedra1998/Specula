@@ -14,6 +14,21 @@ include(CheckIncludeFiles)
 
 check_cxx_source_compiles(
   "
+#include <intrin.h>
+int main() {
+    unsigned long lz = 0, v = 1234;
+    if (_BitScanReverse(&lz, v)) return lz;
+    return 0;
+} "
+  HAS_INTRIN_H
+)
+
+if(HAS_INTRIN_H)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_HAS_INTRIN_H")
+endif()
+
+check_cxx_source_compiles(
+  "
 #include <malloc.h>
 int main() { void * ptr = _aligned_malloc(1024, 32); }
 "

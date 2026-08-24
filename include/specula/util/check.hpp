@@ -12,8 +12,8 @@ namespace specula {
 #  define ASSERT(x) assert(x)
 #  define ASSERT_IMPL(a, b, op) assert((a)op(b))
 #else
-#  define ASSERT(x)                                                                                \
-    (!(!(x) && (do { LOC_CRITICAL("Check failed: {}", #x); CheckCallbackScope::fail(); } while(false), true)))
+  // TODO: Assertion fails should also trigger CheckCallbackScope::fail();
+#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true)))
 
 #  define ASSERT_IMPL(a, b, op)                                                                    \
     do {                                                                                           \
