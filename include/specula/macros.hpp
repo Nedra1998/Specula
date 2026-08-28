@@ -25,4 +25,10 @@
 #  define SPECULA_GPU
 #endif
 
+#ifdef SPECULA_BUILD_GPU
+#  define SPECULA_L1_CACHE_LINE_SIZE 128
+#else
+#  define SPECULA_L1_CACHE_LINE_SIZE 64
+#endif
+
 #endif // SPECULA_MACROS_HPP

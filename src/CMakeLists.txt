@@ -12,6 +12,16 @@ set(SPECULA_DEFINITIONS "")
 include(CheckCXXSourceCompiles)
 include(CheckIncludeFiles)
 
+if(CMAKE_SYSTEM_NAME STREQUAL Windows)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_IS_WINDOWS" "NOMINMAX")
+elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_IS_OSX")
+elseif(CMAKE_SYSTEM_NAME STREQUAL Linux)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_IS_LINUX")
+else()
+  message(SEND_ERROR "Unknown system name: " + CMAKE_SYSTEM_NAME)
+endif()
+
 check_cxx_source_compiles(
   "
 #include <intrin.h>
