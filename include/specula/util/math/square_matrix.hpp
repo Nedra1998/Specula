@@ -243,20 +243,20 @@ namespace specula {
 
   template <size_t N> SPECULA_CPU_GPU Float determinant(const SquareMatrix<N> &m);
 
-  template <> SPECULA_CPU_GPU Float determinant(const SquareMatrix<1> &m) { return m[0][0]; }
+  template <> SPECULA_CPU_GPU inline Float determinant(const SquareMatrix<1> &m) { return m[0][0]; }
 
-  template <> SPECULA_CPU_GPU Float determinant(const SquareMatrix<2> &m) {
+  template <> SPECULA_CPU_GPU inline Float determinant(const SquareMatrix<2> &m) {
     return difference_of_products(m[0][0], m[1][1], m[0][1], m[1][0]);
   }
 
-  template <> SPECULA_CPU_GPU Float determinant(const SquareMatrix<3> &m) {
+  template <> SPECULA_CPU_GPU inline Float determinant(const SquareMatrix<3> &m) {
     Float minor12 = difference_of_products(m[1][1], m[2][2], m[1][2], m[2][1]);
     Float minor02 = difference_of_products(m[1][0], m[2][2], m[1][2], m[2][0]);
     Float minor01 = difference_of_products(m[1][0], m[2][1], m[1][1], m[2][0]);
     return fma(m[0][2], minor01, difference_of_products(m[0][0], minor12, m[0][1], minor02));
   }
 
-  template <> SPECULA_CPU_GPU Float determinant(const SquareMatrix<4> &m) {
+  template <> SPECULA_CPU_GPU inline Float determinant(const SquareMatrix<4> &m) {
     Float s0 = difference_of_products(m[0][0], m[1][1], m[1][0], m[0][1]);
     Float s1 = difference_of_products(m[0][0], m[1][2], m[1][0], m[0][2]);
     Float s2 = difference_of_products(m[0][0], m[1][3], m[1][0], m[0][3]);
@@ -311,7 +311,8 @@ namespace specula {
   template <size_t N>
   SPECULA_CPU_GPU pstd::optional<SquareMatrix<N>> inverse(const SquareMatrix<N> &m);
 
-  template <> SPECULA_CPU_GPU pstd::optional<SquareMatrix<3>> inverse(const SquareMatrix<3> &m) {
+  template <>
+  SPECULA_CPU_GPU inline pstd::optional<SquareMatrix<3>> inverse(const SquareMatrix<3> &m) {
     Float det = determinant(m);
     if (det == 0) {
       return {};
@@ -333,7 +334,8 @@ namespace specula {
     return r;
   }
 
-  template <> SPECULA_CPU_GPU pstd::optional<SquareMatrix<4>> inverse(const SquareMatrix<4> &m) {
+  template <>
+  SPECULA_CPU_GPU inline pstd::optional<SquareMatrix<4>> inverse(const SquareMatrix<4> &m) {
     Float s0 = difference_of_products(m[0][0], m[1][1], m[1][0], m[0][1]);
     Float s1 = difference_of_products(m[0][0], m[1][2], m[1][0], m[0][2]);
     Float s2 = difference_of_products(m[0][0], m[1][3], m[1][0], m[0][3]);

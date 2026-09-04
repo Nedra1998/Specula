@@ -22,6 +22,10 @@ else()
   message(SEND_ERROR "Unknown system name: " + CMAKE_SYSTEM_NAME)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+  list(APPEND SPECULA_DEFINITIONS "SPECULA_DEBUG_BUILD")
+endif()
+
 check_cxx_source_compiles(
   "
 #include <intrin.h>

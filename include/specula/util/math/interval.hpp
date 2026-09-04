@@ -343,6 +343,8 @@ namespace specula {
     Interval ss = fma(i, i, sum_squares(args...));
     return {std::max<Float>(0, ss.lower_bound()), ss.upper_bound()};
   }
+
+  SPECULA_CPU_GPU inline bool isnan(Interval fi) { return isnan(Float(fi)); }
 } // namespace specula
 
 template <> struct fmt::formatter<specula::Interval> {

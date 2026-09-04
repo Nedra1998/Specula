@@ -12,8 +12,10 @@ namespace specula {
 #  define ASSERT(x) assert(x)
 #  define ASSERT_IMPL(a, b, op) assert((a)op(b))
 #else
+  // clang-format off
   // TODO: Assertion fails should also trigger CheckCallbackScope::fail();
-#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true)))
+#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true))) // NOLINT(readability-simplify-boolean-expr)
+  //clang-format on
 
 #  define ASSERT_IMPL(a, b, op)                                                                    \
     do {                                                                                           \
