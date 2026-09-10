@@ -10,6 +10,7 @@ Checks: >
   readability-*,
   -bugprone-easily-swappable-parameters,
   -bugprone-macro-parentheses,
+  -bugprone-inc-dec-in-conditions,
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-avoid-do-while,
   -cppcoreguidelines-avoid-magic-numbers,
@@ -38,6 +39,7 @@ Checks: >
   -readability-avoid-nested-conditional-operator,
   -readability-inconsistent-declaration-parameter-name,
   -readability-function-cognitive-complexity,
+  -readability-simplify-boolean-expr,
 WarningsAsErrors: ""
 HeaderFileExtensions:
   - ""
