@@ -2,6 +2,8 @@
 
 #include <mutex>
 
+#include <fmt/base.h>
+
 #include "specula/util/log.hpp"
 #include "specula/util/parallel/atomic.hpp"
 #include "specula/util/parallel/functions.hpp"
@@ -140,4 +142,28 @@ specula::ThreadPool::~ThreadPool() {
   for (std::thread &thread : threads) {
     thread.join();
   }
+}
+
+auto fmt::formatter<specula::ThreadPool>::format(const specula::ThreadPool &v,
+                                                 format_context &ctx) const {
+  format_to(ctx.out(),
+            "[ ThreadPool threads.size()={} shutdownThreads={} jobList=", v.threads.size(),
+            v.shutdown_threads);
+  if (v.mutex.try_lock()) {
+    format_to(ctx.out(), "[ ");
+    specula::ParallelJob *job = v.job_list;
+    while (job != nullptr) {
+      format_to(ctx.out(), "{}", job->format());
+      job = job->next;
+      if (job != nullptr) {
+        format_to(ctx.out(), ", ");
+      }
+    }
+    format_to(ctx.out(), " ]");
+    v.mutex.unlock();
+  } else {
+    format_to(ctx.out(), "<job list mutex locked>");
+  }
+
+  return format_to(ctx.out(), " ]");
 }

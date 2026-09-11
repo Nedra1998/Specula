@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_TUPLE3_HPP
 #define SPECULA_UTIL_VECMATH_TUPLE3_HPP
 
+#include <fmt/base.h>
+
 #include "specula/macros.hpp"
 #include "specula/util/check.hpp"
 #include "specula/util/float.hpp"
@@ -29,7 +31,7 @@ namespace specula {
 
     // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature)
     SPECULA_CPU_GPU Child<T> &operator=(Child<T> &c) {
-      DASSERRT(!c.has_nan());
+      DASSERT(!c.has_nan());
       x = c.x;
       y = c.y;
       z = c.z;
@@ -289,10 +291,6 @@ namespace specula {
     return t * s;
   }
 
-  template <template <typename> class Child, typename T> auto format_as(Tuple3<Child, T> t) {
-    return std::array<T, 3>{t.x, t.y, t.z};
-  }
-
   template <template <typename> class Child, typename T>
   SPECULA_CPU_GPU inline Child<T> abs(Tuple3<Child, T> t) {
     using std::abs;
@@ -541,5 +539,29 @@ namespace specula {
   }
 
 } // namespace specula
+
+template <typename T> struct fmt::formatter<specula::Point3<T>> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  auto format(const specula::Point3<T> &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "({}, {}, {})", v.x, v.y, v.z);
+  }
+};
+
+template <typename T> struct fmt::formatter<specula::Vector3<T>> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  auto format(const specula::Vector3<T> &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "({}, {}, {})", v.x, v.y, v.z);
+  }
+};
+
+template <typename T> struct fmt::formatter<specula::Normal3<T>> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  auto format(const specula::Normal3<T> &v, FormatContext &ctx) const {
+    return format_to(ctx.out(), "({}, {}, {})", v.x, v.y, v.z);
+  }
+};
 
 #endif // SPECULA_UTIL_VECMATH_TUPLE3_HPP

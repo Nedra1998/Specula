@@ -35,6 +35,7 @@ namespace specula {
     bool removed = false;
 
     friend struct fmt::formatter<ParallelJob>;
+    friend struct fmt::formatter<ThreadPool>;
   };
 
   template <typename T> class AsyncJob : public ParallelJob {
@@ -136,32 +137,6 @@ template <typename T> struct fmt::formatter<specula::AsyncJob<T>> {
   template <typename FormatContext>
   auto format(const specula::AsyncJob<T> &v, FormatContext &ctx) const {
     return format_to(ctx.out(), v.format());
-  }
-};
-
-template <> struct fmt::formatter<specula::ThreadPool> {
-  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
-  template <typename FormatContext>
-  auto format(const specula::ThreadPool &v, FormatContext &ctx) const {
-    format_to(ctx.out(),
-              "[ ThreadPool threads.size()={} shutdownThreads={} jobList=", v.threads.size(),
-              v.shutdown_threads);
-    if (v.mutex.try_lock()) {
-      format_to(ctx.out(), "[ ");
-      specula::ParallelJob *job = v.job_list;
-      while (job != nullptr) {
-        format_to(ctx.out(), job->format());
-        job = job->next;
-        if (job != nullptr) {
-          format_to(ctx.out(), ", ");
-        }
-      }
-      format_to(ctx.out(), " ]");
-    } else {
-      format_to(ctx.out(), "<job list mutex locked>");
-    }
-
-    return format_to(ctx.out(), " ]");
   }
 };
 

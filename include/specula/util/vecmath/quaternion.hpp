@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_QUATERNION_HPP
 #define SPECULA_UTIL_VECMATH_QUATERNION_HPP
 
+#include <fmt/base.h>
+
 #include "specula/macros.hpp"
 #include "specula/util/check.hpp"
 #include "specula/util/math.hpp"
@@ -49,8 +51,6 @@ namespace specula {
     Float w = 1;
   };
 
-  auto format_as(Quaternion q) { return std::array<Float, 4>{q.v.x, q.v.y, q.v.z, q.w}; }
-
   SPECULA_CPU_GPU inline Quaternion operator*(Float f, Quaternion q) { return q * f; }
 
   SPECULA_CPU_GPU inline Float dot(Quaternion q1, Quaternion q2) {
@@ -79,5 +79,13 @@ namespace specula {
   }
 
 } // namespace specula
+
+template <> struct fmt::formatter<specula::Quaternion> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  template <typename FormatContext>
+  auto format(const specula::Quaternion &q, FormatContext &ctx) const {
+    return format_to(ctx.out(), "({}, {}, {}, {})", q.v.x, q.v.y, q.v.z, q.w);
+  }
+};
 
 #endif // SPECULA_UTIL_VECMATH_QUATERNION_HPP

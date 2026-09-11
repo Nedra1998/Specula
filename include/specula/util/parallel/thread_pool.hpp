@@ -45,4 +45,9 @@ namespace specula {
   };
 } // namespace specula
 
+template <> struct fmt::formatter<specula::ThreadPool> {
+  constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+  auto format(const specula::ThreadPool &v, format_context &ctx) const;
+};
+
 #endif // SPECULA_UTIL_PARALLEL_THREAD_POOL_HPP
