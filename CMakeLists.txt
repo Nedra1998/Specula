@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.22)
 project(Specula VERSION 0.1.0 DESCRIPTION "A C++20 Physically Based Renderer" LANGUAGES CXX)
 
 # ========== Global Options ==========
+
 option(BUILD_SHARED_LIBS "Build shared libraries instead of static ones" ON)
 
 # General build system options
@@ -27,6 +28,7 @@ option(SPECULA_BUILD_APP "Build the application" ON)
 option(SPECULA_BUILD_DOCS "Build documentation" OFF)
 
 # ========== Global Configuration =========
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(
     CMAKE_BUILD_TYPE
@@ -94,6 +96,8 @@ include(Format)
 include(Lint)
 
 # ========== Build Targets ==========
+
+add_subdirectory(tools)
 add_subdirectory(src)
 
 if(SPECULA_BUILD_TESTS)
@@ -110,6 +114,7 @@ if(SPECULA_BUILD_DOCS)
 endif()
 
 # ========== Configuration Summary ==========
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   # cmake-format: off
   message(STATUS "====================[ ${PROJECT_NAME} v${PROJECT_VERSION} (${PROJECT_VERSION_COMMIT}) ]====================")

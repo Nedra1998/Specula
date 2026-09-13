@@ -74,6 +74,14 @@ file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/include/specula/version.hpp @ONLY)
 
+file(GLOB_RECURSE bluenoise_images CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/assets/bluenoise/*.png")
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/bluenoise.cpp"
+  DEPENDS tool-embed-image ${bluenoise_images}
+  COMMAND tool-embed-image ${bluenoise_images}
+)
+list(APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/bluenoise.cpp")
+
 # ========== Library ==========
 
 add_library(specula ${headers} ${sources})
