@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "specula/macros.hpp"
+#include "specula/util/check.hpp"
 
 namespace specula::pstd {
   namespace internal {
@@ -88,14 +89,12 @@ namespace specula::pstd {
     SPECULA_CPU_GPU [[nodiscard]] bool empty() const { return size_ == 0; }
 
     SPECULA_CPU_GPU reference operator[](size_type index) {
-      // TODO: Uncomment once check.hpp has been fully implemented
-      // DASSERT_LT(index, size_);
+      DASSERT_LT(index, size_);
       return data_[index];
     }
 
     SPECULA_CPU_GPU const_reference operator[](size_type index) const {
-      // TODO: Uncomment once check.hpp has been fully implemented
-      // DASSERT_LT(index, size_);
+      DASSERT_LT(index, size_);
       return data_[index];
     }
 

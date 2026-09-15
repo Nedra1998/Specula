@@ -178,7 +178,7 @@ namespace specula::pstd::pmr {
     }
 
     template <class U, class... Args> U *new_object(Args &&...args) {
-      U *p = allocate_object9<U>();
+      U *p = allocate_object<U>();
       construct(p, std::forward<Args>(args)...);
       return p;
     }

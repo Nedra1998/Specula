@@ -1,0 +1,68 @@
+#include <cassert>
+
+#include <cxxopts.hpp>
+#include <fmt/format.h>
+#include <spdlog/common.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/spdlog.h>
+
+#if defined(_WIN32)
+#  include <io.h>
+#  define IS_STDERR_TTY() (_isatty(_fileno(stderr)) != 0)
+#else
+#  include <unistd.h>
+#  define IS_STDERR_TTY() (isatty(fileno(stderr)) != 0)
+#endif
+
+int main(int argc, const char *argv[]) {
+  try {
+    cxxopts::Options options("<TOOL>", "<TOOL DESCRIPTION>");
+
+    // clang-format off
+    options.add_options("General")
+      ("h,help", "Print this help message and exit")
+      ("v,verbose", "Enable debug/verbose logging", cxxopts::value<bool>())
+      ("q,quiet", "Suppress non-error logging", cxxopts::value<bool>())
+    ;
+
+    options.positional_help("");
+    options.parse_positional({});
+    // clang-format on
+
+    auto result = options.parse(argc, argv);
+
+    if (result.contains("help")) {
+      fmt::print("{}\n", options.help());
+      return 0;
+    }
+
+    std::shared_ptr<spdlog::sinks::sink> sink = nullptr;
+    bool is_tty = IS_STDERR_TTY();
+    if (is_tty) {
+      sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+      sink->set_pattern("\033[90m[%H:%M:%S.%e]\033[0m \033[1m%^%-8l%$\033[0m  %v");
+    } else {
+      sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
+      sink->set_pattern("[%H:%M:%S.%e] [%-8l] %v");
+    }
+
+    auto logger = std::make_shared<spdlog::logger>("tool", sink);
+    if (result.contains("quiet")) {
+      logger->set_level(spdlog::level::err);
+    } else if (result.contains("verbose")) {
+      logger->set_level(spdlog::level::debug);
+    } else if (!is_tty) {
+      logger->set_level(spdlog::level::warn);
+    } else {
+      logger->set_level(spdlog::level::info);
+    }
+    spdlog::set_default_logger(logger);
+
+    // <PUT TOOL LOGIC HERE>
+
+  } catch (const std::exception &e) {
+    fmt::print(stderr, "CLI Parsing Error: {}\n", e.what());
+    exit(1);
+  }
+}

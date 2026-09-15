@@ -77,10 +77,38 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in ${CMAKE_CURRENT_BINARY
 file(GLOB_RECURSE bluenoise_images CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/assets/bluenoise/*.png")
 add_custom_command(
   OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/bluenoise.cpp"
-  DEPENDS tool-embed-image ${bluenoise_images}
-  COMMAND tool-embed-image ${bluenoise_images}
+  DEPENDS tool-bluenoise ${bluenoise_images}
+  COMMAND tool-bluenoise ${bluenoise_images}
 )
 list(APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/bluenoise.cpp")
+
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_aces.cpp"
+  DEPENDS tool-rgb2spec
+  COMMAND tool-rgb2spec -g ACES2065_1 64 "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_aces.cpp"
+)
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_dci_p3.cpp"
+  DEPENDS tool-rgb2spec
+  COMMAND tool-rgb2spec -g DCI_P3 64 "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_dci_p3.cpp"
+)
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_rec2020.cpp"
+  DEPENDS tool-rgb2spec
+  COMMAND tool-rgb2spec -g REC2020 64 "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_rec2020.cpp"
+)
+add_custom_command(
+  OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_srgb.cpp"
+  DEPENDS tool-rgb2spec
+  COMMAND tool-rgb2spec -g SRGB 64 "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_srgb.cpp"
+)
+list(
+  APPEND sources
+  "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_aces.cpp"
+  "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_dci_p3.cpp"
+  "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_rec2020.cpp"
+  "${CMAKE_CURRENT_BINARY_DIR}/rgbspectrum_srgb.cpp"
+)
 
 # ========== Library ==========
 
