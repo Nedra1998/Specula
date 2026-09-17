@@ -2,7 +2,9 @@
 # ========== Dependencies ==========
 
 CPMAddPackage("gh:fmtlib/fmt#12.1.0")
-CPMAddPackage("gh:jeremy-rifkin/cpptrace@1.0.4")
+CPMAddPackage(URI "gh:jeremy-rifkin/cpptrace@1.0.4" OPTIONS "BUILD_SHARED_LIBS OFF")
+CPMAddPackage("gh:nemtrif/utfcpp@4.2.0")
+CPMAddPackage(URI "gh:JuliaStrings/utf8proc@2.11.3" OPTIONS "BUILD_SHARED_LIBS OFF")
 CPMAddPackage(URI "gh:gabime/spdlog@1.17.0" OPTIONS "SPDLOG_FMT_EXTERNAL ON")
 CPMAddPackage(URI "gh:wolfpld/tracy@0.13.1" OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}")
 
@@ -123,7 +125,7 @@ target_include_directories(
     $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(specula PUBLIC spdlog::spdlog fmt::fmt PRIVATE TracyClient cpptrace::cpptrace)
+target_link_libraries(specula PUBLIC spdlog::spdlog fmt::fmt PRIVATE TracyClient cpptrace::cpptrace utf8cpp utf8proc)
 
 target_compile_features(specula PUBLIC cxx_std_20)
 
