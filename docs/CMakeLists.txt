@@ -1,7 +1,7 @@
 # ========== Options ==========
 # ========== Dependencies ==========
 
-CPMAddPackage("gh:jothepro/doxygen-awesome-css@2.4.2")
+CPMAddPackage("gh:jothepro/doxygen-awesome-css@2.5.0")
 
 find_package(Doxygen REQUIRED dot)
 
