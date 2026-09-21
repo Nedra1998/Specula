@@ -25,6 +25,7 @@ Checks: >
   -cppcoreguidelines-pro-bounds-constant-array-index,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-rvalue-reference-param-not-moved,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
   -modernize-avoid-c-arrays,
   -modernize-macro-to-enum,
   -modernize-use-trailing-return-type,
