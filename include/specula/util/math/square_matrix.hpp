@@ -381,6 +381,12 @@ namespace specula {
     return SquareMatrix<4>(inv);
   }
 
+  template <size_t N> SPECULA_CPU_GPU SquareMatrix<N> invert_or_exit(const SquareMatrix<N> &m) {
+    pstd::optional<SquareMatrix<N>> inv = inverse(m);
+    ASSERT(inv.has_value());
+    return *inv;
+  }
+
   template <size_t N>
   pstd::optional<SquareMatrix<N>> linear_least_squares(const Float A[][N], const Float B[][N],
                                                        int rows) {

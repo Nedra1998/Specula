@@ -122,7 +122,7 @@ namespace specula {
     };
   }
 
-  template <typename U, typename V> SPECULA_CPU_GPU inline Rgb clamp_zero(Rgb rgb) {
+  SPECULA_CPU_GPU inline Rgb clamp_zero(Rgb rgb) {
     return {
         std::max<Float>(0, rgb.r),
         std::max<Float>(0, rgb.g),

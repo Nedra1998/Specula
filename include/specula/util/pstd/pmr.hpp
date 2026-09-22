@@ -147,7 +147,7 @@ namespace specula::pstd::pmr {
     polymorphic_allocator(const polymorphic_allocator &other) = default;
     template <class U>
     polymorphic_allocator(const polymorphic_allocator<U> &other) noexcept
-        : memory_resource(other.memory_resource) {}
+        : memory_resource(other.resource()) {}
     polymorphic_allocator(polymorphic_allocator &&) = delete;
 
     polymorphic_allocator &operator=(const polymorphic_allocator &other) = delete;
@@ -173,7 +173,7 @@ namespace specula::pstd::pmr {
     template <class U> U *allocate_object(size_t n = 0) {
       return static_cast<U *>(allocate_bytes(n * sizeof(U), alignof(U)));
     }
-    template <class U> void deallocate_object(T *p, size_t n = 1) {
+    template <class U> void deallocate_object(U *p, size_t n = 1) {
       deallocate_bytes(p, n * sizeof(U), alignof(U));
     }
 
