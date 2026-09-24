@@ -1,13 +1,10 @@
-#include "specula/util/spectrum.hpp"
+#include "specula/util/spectrum/spectra.hpp"
 
 #include <map>
-#include <string>
 
-#include <fmt/color.h>
-
-#include "specula/macros.hpp"
-#include "specula/util/color.hpp"
-#include "specula/util/colorspace.hpp"
+#include "specula/util/spectrum/blackbody_spectrum.hpp"
+#include "specula/util/spectrum/densly_sampled_spectrum.hpp"
+#include "specula/util/spectrum/piecewise_linear_spectrum.hpp"
 
 namespace {
   constexpr size_t N_CIE_SAMPLES = 471;
@@ -2052,134 +2049,6 @@ specula::DenselySampledSpectrum specula::spectra::D(Float temperature, Allocator
   }
   PiecewiseLinearSpectrum dpls(CIE_S_LAMBDA, values);
   return {&dpls, alloc};
-}
-
-specula::pstd::optional<specula::Spectrum>
-specula::PiecewiseLinearSpectrum::read(const std::string &filename, Allocator alloc) {
-  // TODO: Implement this read method once the file.hpp header has been implemented
-  return {};
-}
-
-specula::PiecewiseLinearSpectrum *
-specula::PiecewiseLinearSpectrum::from_interleaved(pstd::span<const Float> samples, bool normalize,
-                                                   Allocator alloc) {
-  ASSERT_EQ(0, samples.size() % 2);
-  size_t n = samples.size() / 2;
-  pstd::vector<Float> lambda, values;
-
-  if (samples[0] > LAMBDA_MIN) {
-    lambda.push_back(LAMBDA_MIN - 1);
-    values.push_back(samples[1]);
-  }
-  for (size_t i = 0; i < n; ++i) {
-    lambda.push_back(samples[2 * i]);
-    values.push_back(samples[2 * i + 1]);
-    if (i > 0) {
-      ASSERT_GT(lambda.back(), lambda[lambda.size() - 2]);
-    }
-  }
-
-  if (lambda.back() < LAMBDA_MAX) {
-    lambda.push_back(LAMBDA_MAX + 1);
-    values.push_back(values.back());
-  }
-
-  auto *spec = alloc.new_object<PiecewiseLinearSpectrum>(lambda, values, alloc);
-
-  if (normalize) {
-    spec->scale(CIE_Y_INTEGRAL / inner_product(spec, &spectra::Y()));
-  }
-
-  return spec;
-}
-
-specula::PiecewiseLinearSpectrum::PiecewiseLinearSpectrum(pstd::span<const Float> lambda,
-                                                          pstd::span<const Float> values,
-                                                          Allocator alloc)
-    : lambdas(lambda.begin(), lambda.end(), alloc), values(values.begin(), values.end(), alloc) {
-  ASSERT_EQ(lambdas.size(), values.size());
-  for (size_t i = 0; i < lambdas.size() - 1; ++i) {
-    ASSERT_LT(lambda[i], lambdas[i + 1]);
-  }
-}
-
-SPECULA_CPU_GPU specula::Float specula::PiecewiseLinearSpectrum::operator()(Float lambda) const {
-  if (lambdas.empty() || lambda < lambdas.front() || lambda > lambdas.back()) {
-    return 0.0;
-  }
-
-  size_t o = find_interval(lambdas.size(), [&](int i) { return lambdas[i] <= lambda; });
-  DASSERT(lambda >= lambdas[o] && lambda <= lambdas[o + 1]);
-  Float t = (lambda - lambdas[o]) / (lambdas[o + 1] - lambdas[o]);
-  return lerp(t, values[o], values[o + 1]);
-}
-
-SPECULA_CPU_GPU [[nodiscard]] specula::Float specula::PiecewiseLinearSpectrum::max_value() const {
-  if (values.empty()) {
-    return 0.0;
-  }
-  return *std::ranges::max_element(values);
-}
-
-SPECULA_CPU_GPU [[nodiscard]] specula::Xyz
-specula::SampledSpectrum::to_xyz(const SampledWavelengths &lambda) const {
-  SampledSpectrum x = spectra::X().sample(lambda);
-  SampledSpectrum y = spectra::Y().sample(lambda);
-  SampledSpectrum z = spectra::Z().sample(lambda);
-
-  SampledSpectrum pdf = lambda.pdf();
-
-  return Xyz(safe_div(x * *this, pdf).average(), safe_div(y * *this, pdf).average(),
-             safe_div(z * *this, pdf).average()) /
-         CIE_Y_INTEGRAL;
-}
-
-SPECULA_CPU_GPU [[nodiscard]] specula::Rgb
-specula::SampledSpectrum::to_rgb(const SampledWavelengths &lambda, const RgbColorSpace &cs) const {
-  Xyz xyz = to_xyz(lambda);
-  return cs.to_rgb(xyz);
-}
-
-SPECULA_CPU_GPU [[nodiscard]] specula::Float
-specula::SampledSpectrum::y(const SampledWavelengths &lambda) const {
-  SampledSpectrum ys = spectra::Y().sample(lambda);
-  SampledSpectrum pdf = lambda.pdf();
-
-  return safe_div(ys * *this, pdf).average() / CIE_Y_INTEGRAL;
-}
-
-SPECULA_CPU_GPU specula::RgbAlbedoSpectrum::RgbAlbedoSpectrum(const RgbColorSpace &cs, Rgb rgb) {
-  DASSERT_LE(std::max({rgb.r, rgb.g, rgb.b}), 1);
-  DASSERT_GE(std::min({rgb.r, rgb.g, rgb.b}), 0);
-  rsp = cs.to_rgb_coeffs(rgb);
-}
-
-SPECULA_CPU_GPU specula::RgbUnboundedSpectrum::RgbUnboundedSpectrum(const RgbColorSpace &cs,
-                                                                    Rgb rgb) {
-  Float m = std::max({rgb.r, rgb.g, rgb.b});
-  scale = 2 * m;
-  rsp = cs.to_rgb_coeffs(scale ? rgb / scale : Rgb(0, 0, 0));
-}
-
-SPECULA_CPU_GPU specula::RgbIlluminantSpectrum::RgbIlluminantSpectrum(const RgbColorSpace &cs,
-                                                                      Rgb rgb)
-    : illuminant(&cs.illuminant) {
-  Float m = std::max({rgb.r, rgb.g, rgb.b});
-  scale = 2 * m;
-  rsp = cs.to_rgb_coeffs(scale ? rgb / scale : Rgb(0, 0, 0));
-}
-
-specula::Float specula::spectrum_to_photometric(Spectrum s) {
-  if (s.is<RgbIlluminantSpectrum>()) {
-    s = s.cast<RgbIlluminantSpectrum>()->illuminant;
-  }
-  return inner_product(&spectra::Y(), s);
-}
-
-specula::Xyz specula::spectrum_to_xyz(Spectrum s) {
-  return Xyz(inner_product(&spectra::X(), s), inner_product(&spectra::Y(), s),
-             inner_product(&spectra::Z(), s)) /
-         CIE_Y_INTEGRAL;
 }
 
 specula::Spectrum specula::get_named_spectrum(const std::string &name) {
