@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "specula/util/log.hpp"
+#include "specula/util/stats.hpp"
 
 namespace specula {
 #ifdef SPECULA_IS_GPU_CODE
@@ -73,16 +74,16 @@ namespace specula {
 #else
 
 #  define ASSERT_RARE(freq, condition)                                                             \
-    static_assert(std::is_floating_point<decltype(freq)>::value,                                   \
+    static_assert(std::is_floating_point_v<decltype(freq)>,                                        \
                   "Expected floating-point frequency as first argument to ASSERT_RARE");           \
-    static_assert(std::is_integral<decltype(condition)>::value,                                    \
+    static_assert(std::is_integral_v<decltype(condition)>,                                         \
                   "Expected boolean condition as second argument to ASSERT_RARE");                 \
     do {                                                                                           \
       static thread_local int64_t num_true, total;                                                 \
       static StatRegisterer reg([](StatsAccumulator &accum) {                                      \
         accum.report_rare_check(__FILE__ " " ASSERT_RARE_EXPAND_AND_TO_STRING(                     \
                                     __LINE__) ": ASSERT_RARE failed: " #condition,                 \
-                                frreq, num_true, total);                                           \
+                                freq, num_true, total);                                            \
         num_true = total = 0;                                                                      \
       });                                                                                          \
       ++total;                                                                                     \

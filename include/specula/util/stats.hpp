@@ -90,7 +90,8 @@ namespace specula {
         denom_var = 0;                                                                             \
       });
 
-  class Point2i;
+  template <typename T> class Point2;
+  using Point2i = Point2<int>;
 
   class PixelStatsAccumulator {
   public:
