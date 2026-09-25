@@ -3,11 +3,32 @@
 #include <algorithm>
 
 #include "specula/macros.hpp"
+#include "specula/util/file.hpp"
 
 specula::pstd::optional<specula::Spectrum>
 specula::PiecewiseLinearSpectrum::read(const std::string &filename, Allocator alloc) {
-  // TODO: Implement this read method once the file.hpp header has been implemented
-  return {};
+  std::vector<Float> values = read_float_file(filename);
+  if (values.empty()) {
+    LOG_WARN("Unabled to read spectrum file {}", filename);
+    return {};
+  }
+
+  if (values.size() % 2 != 0) {
+    LOG_WARN("Extra value found in spectrum file {}", filename);
+    return {};
+  }
+
+  pstd::vector<Float> lambda, v;
+  for (size_t i = 0; i < values.size() / 2; ++i) {
+    if (i > 0 && values[2 * i] <= lambda.back()) {
+      LOG_WARN("Spectrum file invalid {}: at {}'th entry, wavelengths aren't increasing {} >= {}",
+               filename, i, lambda.back(), values[2 * i]);
+      return {};
+    }
+    lambda.push_back(values[2 * i]);
+    v.push_back(values[2 * i + 1]);
+  }
+  return Spectrum(alloc.new_object<PiecewiseLinearSpectrum>(lambda, v, alloc));
 }
 
 specula::PiecewiseLinearSpectrum *

@@ -1874,7 +1874,7 @@ void specula::spectra::init(Allocator alloc) {
   z = alloc.new_object<DenselySampledSpectrum>(&zpls, alloc);
 
 #ifdef SPECULA_BUILD_GPU_RENDERER
-#  assert "TODO: Finish implementing the CPU renderer code paths"
+#  assert "TODO: Finish implementing the GPU renderer code paths"
 #endif
 
   NAMED_SPECTRA = {
