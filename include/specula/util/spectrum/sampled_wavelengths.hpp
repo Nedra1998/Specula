@@ -3,7 +3,7 @@
 
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
-#include "specula/util/spectrum/functions.hpp"
+#include "specula/util/sampling/functions.hpp"
 #include "specula/util/spectrum/sampled_spectrum.hpp"
 #include "specula/util/spectrum/spectrum.hpp"
 
