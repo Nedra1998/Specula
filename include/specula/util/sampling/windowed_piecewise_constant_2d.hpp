@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_WINDOWED_PIECEWISE_CONSTANT_2D_HPP
 #define SPECULA_UTIL_SAMPLING_WINDOWED_PIECEWISE_CONSTANT_2D_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/containers.hpp"

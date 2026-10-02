@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_PIECEWISE_LINEAR_2D_HPP
 #define SPECULA_UTIL_SAMPLING_PIECEWISE_LINEAR_2D_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include <cstddef>
 #include <type_traits>
 

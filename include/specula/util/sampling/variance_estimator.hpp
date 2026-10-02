@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_VARIANCE_ESTIMATOR_HPP
 #define SPECULA_UTIL_SAMPLING_VARIANCE_ESTIMATOR_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 

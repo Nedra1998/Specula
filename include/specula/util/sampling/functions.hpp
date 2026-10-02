@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_FUNCTIONS_HPP
 #define SPECULA_UTIL_SAMPLING_FUNCTIONS_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include <cmath>
 
 #include <fmt/base.h>
@@ -424,9 +426,9 @@ namespace specula {
   SPECULA_CPU_GPU Point2f invert_spherical_triangle_sample(const pstd::array<Point3f, 3> &v,
                                                            Point3f p, Vector3f w);
 
-  SPECULA_CPU_GPU Point3f sample_spherical_rectangle(Point3f p, Point3f v00, Vector3f eu,
-                                                     Vector3f ev, Point3f u, Float *pdr = nullptr);
-  SPECULA_CPU_GPU Point2f invert_spherical_rectangle_sample(Point3f pref, Point3f v00, Vector3f eu,
+  SPECULA_CPU_GPU Point3f sample_spherical_rectangle(Point3f pref, Point3f s, Vector3f ex,
+                                                     Vector3f ey, Point3f u, Float *pdf = nullptr);
+  SPECULA_CPU_GPU Point2f invert_spherical_rectangle_sample(Point3f pref, Point3f s, Vector3f ex,
                                                             Vector3f ev, Point3f prect);
 
   SPECULA_CPU_GPU Vector3f sample_henyey_greenstein(Vector3f wo, Float g, Point3f u,
@@ -442,11 +444,12 @@ namespace specula {
                                              pstd::span<const Float> cdf, Float alpha, Float sample,
                                              Float *fval = nullptr, Float *pdf = nullptr);
 
-  pstd::vector<Float> sample_1d_function(std::function<Float(Float)> func, int n_steps,
-                                         int n_samples, Float min = 0, Float max = 1,
+  pstd::vector<Float> sample_1d_function(const std::function<Float(Float)> &func, size_t n_steps,
+                                         size_t n_samples, Float min = 0, Float max = 1,
                                          Allocator alloc = {});
-  Array2D<Float> sample_2d_function(std::function<Float(Float, Float)> func, int nu, int nv,
-                                    int n_samples, Bounds2f domain = {Point2f(0, 0), Point2f(1, 1)},
+  Array2D<Float> sample_2d_function(const std::function<Float(Float, Float)> &func, int nu, int nv,
+                                    size_t n_samples,
+                                    Bounds2f domain = {Point2f(0, 0), Point2f(1, 1)},
                                     Allocator alloc = {});
 } // namespace specula
 

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_RNG_ITERATOR_HPP
 #define SPECULA_UTIL_SAMPLING_RNG_ITERATOR_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include <cstdint>
 
 #include "specula/macros.hpp"

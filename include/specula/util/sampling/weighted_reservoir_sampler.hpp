@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_WEIGHTED_RESERVOIR_SAMPLER_HPP
 #define SPECULA_UTIL_SAMPLING_WEIGHTED_RESERVOIR_SAMPLER_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/check.hpp"
 #include "specula/util/rng.hpp"

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SAMPLING_PIECEWISE_CONSTANT_1D_HPP
 #define SPECULA_UTIL_SAMPLING_PIECEWISE_CONSTANT_1D_HPP
 
+// IWYU pragma: private, include "specula/util/sampling.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/check.hpp"
