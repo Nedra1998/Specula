@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_FUNCTIONS_HPP
 #define SPECULA_UTIL_MATH_FUNCTIONS_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include <cmath>
 #include <cstdlib>
 #include <limits>

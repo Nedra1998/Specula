@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_TUPLE_LENGTH_HPP
 #define SPECULA_UTIL_VECMATH_TUPLE_LENGTH_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include "specula/types.hpp"
 #include "specula/util/math.hpp"
 

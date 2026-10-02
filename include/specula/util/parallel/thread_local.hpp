@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PARALLEL_THREAD_LOCAL_HPP
 #define SPECULA_UTIL_PARALLEL_THREAD_LOCAL_HPP
 
+// IWYU pragma: private, include "specula/util/parallel.hpp"
+
 #include <shared_mutex>
 
 #include <tracy/Tracy.hpp>

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_OCTAHEDRAL_VECTOR_HPP
 #define SPECULA_UTIL_VECMATH_OCTAHEDRAL_VECTOR_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include <cmath>
 #include <cstdint>
 

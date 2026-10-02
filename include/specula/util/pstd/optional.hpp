@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PSTD_OPTIONAL_HPP
 #define SPECULA_UTIL_PSTD_OPTIONAL_HPP
 
+// IWYU pragma: private, include "specula/util/pstd.hpp"
+
 #include <new>
 #include <type_traits>
 #include <utility>

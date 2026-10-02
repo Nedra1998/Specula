@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SCATTERING_FUNCTIONS_HPP
 #define SPECULA_UTIL_SCATTERING_FUNCTIONS_HPP
 
+// IWYU pragma: private, include "specula/util/scattering.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/pstd.hpp"
 #include "specula/util/spectrum.hpp"

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_INTERN_CACHE_HPP
 #define SPECULA_UTIL_CONTAINERS_INTERN_CACHE_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include <functional>
 #include <shared_mutex>
 

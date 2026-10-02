@@ -1,10 +1,13 @@
 #ifndef SPECULA_UTIL_VECMATH_BOUNDS2_HPP
 #define SPECULA_UTIL_VECMATH_BOUNDS2_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include <iterator>
 #include <limits>
 
 #include "specula/macros.hpp"
+#include "specula/util/math.hpp"
 #include "specula/util/vecmath/tuple2.hpp"
 
 namespace specula {
@@ -68,7 +71,9 @@ namespace specula {
     }
 
     SPECULA_CPU_GPU [[nodiscard]] Point2<T> lerp(Point2f t) const {
-      return Point2<T>(lerp(t.x, p_min.x, p_max.x), lerp(t.y, p_min.y, p_max.y));
+      // TODO: Not sure why I need to specify 'specula::' here it should fine the other lerp
+      // function?
+      return Point2<T>(specula::lerp(t.x, p_min.x, p_max.x), specula::lerp(t.y, p_min.y, p_max.y));
     }
 
     SPECULA_CPU_GPU [[nodiscard]] Vector2<T> offset(Point2<T> p) const {

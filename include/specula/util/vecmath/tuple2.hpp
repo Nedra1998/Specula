@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_TUPLE2_HPP
 #define SPECULA_UTIL_VECMATH_TUPLE2_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include <fmt/base.h>
 
 #include "specula/macros.hpp"

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SPECTRUM_SPECTRA_HPP
 #define SPECULA_UTIL_SPECTRUM_SPECTRA_HPP
 
+// IWYU pragma: private, include "specula/util/spectrum.hpp"
+
 #include "specula/types.hpp"
 #include "specula/util/spectrum/spectrum.hpp"
 

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_DIRECTION_CONE_HPP
 #define SPECULA_UTIL_VECMATH_DIRECTION_CONE_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/float.hpp"
 #include "specula/util/math.hpp"

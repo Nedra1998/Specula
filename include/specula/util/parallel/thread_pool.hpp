@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PARALLEL_THREAD_POOL_HPP
 #define SPECULA_UTIL_PARALLEL_THREAD_POOL_HPP
 
+// IWYU pragma: private, include "specula/util/parallel.hpp"
+
 #include <condition_variable>
 #include <functional>
 #include <mutex>

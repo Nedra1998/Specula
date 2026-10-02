@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_TYPE_PACK_HPP
 #define SPECULA_UTIL_CONTAINERS_TYPE_PACK_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include <cstddef>
 #include <type_traits>
 

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_COLOR_COLOR_ENCODING_HPP
 #define SPECULA_UTIL_COLOR_COLOR_ENCODING_HPP
 
+// IWYU pragma: private, include "specula/util/color.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/check.hpp"

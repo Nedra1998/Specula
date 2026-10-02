@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_CONSTANTS_HPP
 #define SPECULA_UTIL_MATH_CONSTANTS_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include <numbers>
 
 #include "specula/types.hpp"

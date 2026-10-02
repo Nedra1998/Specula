@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_BOUNDS3_HPP
 #define SPECULA_UTIL_VECMATH_BOUNDS3_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include <algorithm>
 #include <cmath>
 #include <limits>

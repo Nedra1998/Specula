@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_COMPENSATED_HPP
 #define SPECULA_UTIL_MATH_COMPENSATED_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include <type_traits>
 
 #include <fmt/base.h>

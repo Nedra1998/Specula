@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_HASH_MAP_HPP
 #define SPECULA_UTIL_CONTAINERS_HASH_MAP_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/check.hpp"
 #include "specula/util/pstd.hpp"

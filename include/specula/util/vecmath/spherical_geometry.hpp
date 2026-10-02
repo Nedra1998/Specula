@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_SPHERICAL_GEOMETRY_HPP
 #define SPECULA_UTIL_VECMATH_SPHERICAL_GEOMETRY_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/math.hpp"
 #include "specula/util/vecmath/tuple3.hpp"

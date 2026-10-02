@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PARALLEL_ATOMIC_HPP
 #define SPECULA_UTIL_PARALLEL_ATOMIC_HPP
 
+// IWYU pragma: private, include "specula/util/parallel.hpp"
+
 #include <atomic>
 #include <mutex>
 

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_COLOR_WHITE_BALANCE_HPP
 #define SPECULA_UTIL_COLOR_WHITE_BALANCE_HPP
 
+// IWYU pragma: private, include "specula/util/color.hpp"
+
 #include "specula/util/color/xyz.hpp"
 #include "specula/util/math.hpp"
 #include "specula/util/vecmath.hpp"

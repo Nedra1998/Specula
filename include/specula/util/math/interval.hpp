@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_INTERVAL_HPP
 #define SPECULA_UTIL_MATH_INTERVAL_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include <fmt/base.h>
 
 #include "specula/macros.hpp"

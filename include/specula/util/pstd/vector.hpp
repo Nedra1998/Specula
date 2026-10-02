@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PSTD_VECTOR_HPP
 #define SPECULA_UTIL_PSTD_VECTOR_HPP
 
+// IWYU pragma: private, include "specula/util/pstd.hpp"
+
 #include <initializer_list>
 #include <iterator>
 

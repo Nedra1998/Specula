@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PSTD_MATH_HPP
 #define SPECULA_UTIL_PSTD_MATH_HPP
 
+// IWYU pragma: private, include "specula/util/pstd.hpp"
+
 #include <cmath>
 
 #include "specula/macros.hpp"

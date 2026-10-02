@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_COLOR_RGB_TO_SPECTRUM_TABLE_HPP
 #define SPECULA_UTIL_COLOR_RGB_TO_SPECTRUM_TABLE_HPP
 
+// IWYU pragma: private, include "specula/util/color.hpp"
+
 #include <cstddef>
 
 #include "specula/macros.hpp"

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_PERMUTATION_HPP
 #define SPECULA_UTIL_MATH_PERMUTATION_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include <cstdint>
 
 #include "specula/macros.hpp"

@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_SPECTRUM_DENSLY_SAMPLED_SPECTRUM_HPP
 #define SPECULA_UTIL_SPECTRUM_DENSLY_SAMPLED_SPECTRUM_HPP
 
+// IWYU pragma: private, include "specula/util/spectrum.hpp"
+
 #include <fmt/ranges.h>
 
 #include "specula/util/hash.hpp"

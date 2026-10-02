@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_MATH_SPLINE_HPP
 #define SPECULA_UTIL_MATH_SPLINE_HPP
 
+// IWYU pragma: private, include "specula/util/math.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/pstd/span.hpp"

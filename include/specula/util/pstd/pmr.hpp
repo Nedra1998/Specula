@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PSTD_PMR_HPP
 #define SPECULA_UTIL_PSTD_PMR_HPP
 
+// IWYU pragma: private, include "specula/util/pstd.hpp"
+
 #include <cstddef>
 
 #ifndef NDEBUG

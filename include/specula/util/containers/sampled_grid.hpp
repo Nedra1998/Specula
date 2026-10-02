@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_SAMPLED_GRID_HPP
 #define SPECULA_UTIL_CONTAINERS_SAMPLED_GRID_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include <cstddef>
 
 #include "specula/macros.hpp"

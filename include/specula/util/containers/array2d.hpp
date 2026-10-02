@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_ARRAY2D_HPP
 #define SPECULA_UTIL_CONTAINERS_ARRAY2D_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include <iterator>
 #include <type_traits>
 

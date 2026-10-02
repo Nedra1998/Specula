@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PSTD_ARRAY_HPP
 #define SPECULA_UTIL_PSTD_ARRAY_HPP
 
+// IWYU pragma: private, include "specula/util/pstd.hpp"
+
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>

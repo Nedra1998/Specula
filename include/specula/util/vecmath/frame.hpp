@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_VECMATH_FRAME_HPP
 #define SPECULA_UTIL_VECMATH_FRAME_HPP
 
+// IWYU pragma: private, include "specula/util/vecmath.hpp"
+
 #include "specula/macros.hpp"
 #include "specula/util/vecmath/tuple3.hpp"
 

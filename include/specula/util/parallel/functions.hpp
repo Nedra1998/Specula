@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_PARALLEL_FUNCTIONS_HPP
 #define SPECULA_UTIL_PARALLEL_FUNCTIONS_HPP
 
+// IWYU pragma: private, include "specula/util/parallel.hpp"
+
 #include <cstdint>
 #include <functional>
 

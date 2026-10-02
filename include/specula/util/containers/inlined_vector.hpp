@@ -1,6 +1,8 @@
 #ifndef SPECULA_UTIL_CONTAINERS_INLINED_VECTOR_HPP
 #define SPECULA_UTIL_CONTAINERS_INLINED_VECTOR_HPP
 
+// IWYU pragma: private, include "specula/util/containers.hpp"
+
 #include <cstddef>
 #include <initializer_list>
 #include <iterator>

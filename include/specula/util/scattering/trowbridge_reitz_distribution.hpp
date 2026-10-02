@@ -1,11 +1,14 @@
 #ifndef SPECULA_UTIL_SCATTERING_TROWBRIDGE_REITZ_DISTRIBUTION_HPP
 #define SPECULA_UTIL_SCATTERING_TROWBRIDGE_REITZ_DISTRIBUTION_HPP
 
+// IWYU pragma: private, include "specula/util/scattering.hpp"
+
 #include <algorithm>
 
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
 #include "specula/util/math.hpp"
+#include "specula/util/sampling.hpp"
 #include "specula/util/vecmath.hpp"
 
 namespace specula {
@@ -66,9 +69,7 @@ namespace specula {
       Vector3f t1 = (wh.z < 0.99999f) ? normalize(cross(Vector3f(0, 0, 1), wh)) : Vector3f(1, 0, 0);
       Vector3f t2 = cross(wh, t1);
 
-      // TODO: Uncomment this line once the sampling.hpp header is implemented
-      // Point2f p = sample_uniform_disk_polar(u);
-      Point2f p;
+      Point2f p = sample_uniform_disk_polar(u);
 
       Float h = std::sqrt(1 - sqr(p.x));
       p.y = lerp((1 + wh.z) / 2, h, p.y);
