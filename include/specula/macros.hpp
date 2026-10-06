@@ -1,6 +1,8 @@
 #ifndef SPECULA_MACROS_HPP
 #define SPECULA_MACROS_HPP
 
+#include <cstdint>
+
 #if defined(__CUDA_ARCH__)
 #  define SPECULA_IS_GPU_CODE
 #endif
@@ -30,5 +32,10 @@
 #else
 #  define SPECULA_L1_CACHE_LINE_SIZE 64
 #endif
+
+#define SPECULA_ARRAYSIZE(array) (sizeof(::specula::detail::array_size_helper(array)))
+namespace specula::detail {
+  template <typename T, uint64_t N> auto array_size_helper(const T (&array)[N]) -> char (&)[N];
+}
 
 #endif // SPECULA_MACROS_HPP

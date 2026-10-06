@@ -77,7 +77,7 @@ namespace specula {
 
     SPECULA_CPU_GPU [[nodiscard]] Point3<T> corner(int corner) const {
       DASSERT(corner >= 0 && corner < 8);
-      return Point2<T>((*this)[(corner & 1)].x, (*this)[((corner & 2) != 0) ? 1 : 0].y,
+      return Point3<T>((*this)[(corner & 1)].x, (*this)[((corner & 2) != 0) ? 1 : 0].y,
                        (*this)[((corner & 4) != 0) ? 1 : 0].z);
     }
 
