@@ -181,6 +181,7 @@ int main(int argc, const char *argv[]) {
     }
 
     // Write the standard header information
+    fmt::println(fout, "#include \"specula/util/bluenoise.hpp\"");
     fmt::println(fout, "#include \"specula/macros.hpp\"");
     fmt::println(fout, "#include <cstdint>\n");
     fmt::println(fout, "namespace specula {{");

@@ -205,7 +205,7 @@ namespace specula {
 
     void clear() {
       for (size_t i = 0; i < n_stored; ++i) {
-        alloc.destory(begin() + i);
+        alloc.destroy(begin() + i);
       }
       n_stored = 0;
     }
@@ -264,7 +264,7 @@ namespace specula {
     void resize(size_type n) {
       if (n < size()) {
         for (size_t i = n; i < size(); ++i) {
-          alloc.destory(begin() + i);
+          alloc.destroy(begin() + i);
         }
       } else if (n > size()) {
         reserve(n);

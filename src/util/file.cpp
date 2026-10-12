@@ -10,7 +10,6 @@
 
 #include "specula/util/check.hpp"
 #include "specula/util/log.hpp"
-#include "specula/util/parallel/thread_local.hpp"
 #include "specula/util/string.hpp"
 
 std::vector<std::byte> specula::read_file_contents(const std::filesystem::path &filename) {
@@ -98,4 +97,24 @@ std::vector<specula::Float> specula::read_float_file(const std::filesystem::path
 
   fclose(f);
   return values;
+}
+
+bool specula::write_file_contents(const std::filesystem::path &filename, std::byte *ptr,
+                                  std::size_t size) {
+#ifdef SPECULA_IS_WINDOWS
+  std::ofstream ofs(wstring_from_utf8(filename.string()), std::ios::out | std::ios::binary);
+#else
+  std::ofstream ofs(filename, std::ios::out | std::ios::binary);
+#endif
+  if (!ofs) {
+    LOG_ERROR("{}: {}", filename, std::strerror(errno));
+    return false;
+  }
+
+  ofs.write(reinterpret_cast<const char *>(ptr), size);
+  if (!ofs.good()) {
+    LOG_ERROR("{}: {}", filename, std::strerror(errno));
+    return false;
+  }
+  return true;
 }

@@ -7,6 +7,15 @@ CPMAddPackage("gh:nemtrif/utfcpp@4.2.0")
 CPMAddPackage(URI "gh:JuliaStrings/utf8proc@2.11.3" OPTIONS "BUILD_SHARED_LIBS OFF")
 CPMAddPackage(URI "gh:gabime/spdlog@1.17.0" OPTIONS "SPDLOG_FMT_EXTERNAL ON")
 CPMAddPackage(URI "gh:wolfpld/tracy@0.13.1" OPTIONS "TRACY_ENABLE ${ENABLE_PROFILING}")
+CPMAddPackage("gh:Neargye/magic_enum@0.9.8")
+CPMAddPackage("gh:nothings/stb#master")
+CPMAddPackage("gh:lvandeve/lodepng#master")
+CPMAddPackage(
+  URI
+  "gh:academysoftwarefoundation/openexr@3.5.2"
+  OPTIONS "OPENEXR_BUILD_TOOLS OFF" "OPENEXR_BUILD_EXAMPLES OFF"
+)
+CPMAddPackage("gh:phoboslab/qoi#master")
 
 # ========== Compiler Features ==========
 
@@ -122,10 +131,15 @@ target_include_directories(
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include
+  PRIVATE "${stb_SOURCE_DIR}" "${lodepng_SOURCE_DIR}" "${qoi_SOURCE_DIR}" >
 )
 
-target_link_libraries(specula PUBLIC spdlog::spdlog fmt::fmt PRIVATE TracyClient cpptrace::cpptrace utf8cpp utf8proc)
+target_link_libraries(
+  specula
+  PUBLIC spdlog::spdlog fmt::fmt
+  PRIVATE TracyClient cpptrace::cpptrace utf8cpp utf8proc magic_enum::magic_enum OpenEXR::OpenEXR
+)
 
 target_compile_features(specula PUBLIC cxx_std_20)
 
