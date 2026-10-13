@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 #include "specula/util/check.hpp"
+#include "specula/util/hash.hpp"
 #include "specula/util/pstd.hpp"
 #include "specula/util/stats.hpp"
 #include "specula/util/vecmath.hpp"
@@ -55,7 +56,7 @@ namespace specula {
   private:
     struct Buffer {
       Buffer() = default;
-      Buffer(const T *ptr, size_t size) : ptr(ptr), size(size), hash(HashBuffer(ptr, size)) {}
+      Buffer(const T *ptr, size_t size) : ptr(ptr), size(size), hash(hash_buffer(ptr, size)) {}
 
       bool operator==(const Buffer &b) const {
         return size == b.size && hash == b.hash && std::memcmp(ptr, b.ptr, size * sizeof(T)) == 0;

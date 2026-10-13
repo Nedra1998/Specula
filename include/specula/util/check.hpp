@@ -24,7 +24,7 @@ namespace specula {
       auto vb = b;                                                                                 \
       if (!(va op vb)) {                                                                           \
         LOG_CRITICAL("Check failed: {} " #op " {} with {} = {}, {} = {}", #a, #b, #a, va, #b, vb); \
-        CheckCallbackScope::fail();                                                                \
+        specula::CheckCallbackScope::fail();                                                                \
       }                                                                                            \
     } while (false)
 #endif

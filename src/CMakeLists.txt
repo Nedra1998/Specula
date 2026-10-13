@@ -17,6 +17,12 @@ CPMAddPackage(
 )
 CPMAddPackage("gh:phoboslab/qoi#master")
 
+# TODO: Figure out what is needed to not need this patch file anymore
+CPMAddPackage(
+  URL "https://w3.impa.br/~diego/software/rply/rply-1.1.4.tar.gz" URL_HASH MD5=5ea32f048a21ccf6ed724263b4777997
+  PATCHES "${PROJECT_SOURCE_DIR}/assets/patches/rply.patch"
+)
+
 # ========== Compiler Features ==========
 
 set(SPECULA_DEFINITIONS "")
@@ -126,13 +132,15 @@ list(
 add_library(specula ${headers} ${sources})
 add_library(specula::specula ALIAS specula)
 
+# TODO: Convert inline / header-only libraries to be standalone libraries and
+# link them to specula instead of this direct inclusion
 target_include_directories(
   specula
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include
-  PRIVATE "${stb_SOURCE_DIR}" "${lodepng_SOURCE_DIR}" "${qoi_SOURCE_DIR}" >
+    $<INSTALL_INTERFACE:include>
+  PRIVATE "${stb_SOURCE_DIR}" "${lodepng_SOURCE_DIR}" "${qoi_SOURCE_DIR}" "${rply_SOURCE_DIR}"
 )
 
 target_link_libraries(
