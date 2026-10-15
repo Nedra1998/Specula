@@ -55,7 +55,7 @@ namespace specula::pstd::pmr {
     default_memory_resource = r;
     return orig;
   }
-  memory_resource *set_default_resource() noexcept { return default_memory_resource; }
+  memory_resource *get_default_resource() noexcept { return default_memory_resource; }
 
   void *monotonic_buffer_resource::do_allocate(size_t bytes, size_t align) {
     if (bytes > block_size) {
