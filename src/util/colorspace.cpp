@@ -11,10 +11,10 @@ SPECULA_CONST specula::RgbColorSpace *REC_2020;
 SPECULA_CONST specula::RgbColorSpace *ACES2065_1;
 #endif
 
-const specula::RgbColorSpace *specula::RgbColorSpace::SRGB;
-const specula::RgbColorSpace *specula::RgbColorSpace::DCI_P3;
-const specula::RgbColorSpace *specula::RgbColorSpace::REC_2020;
-const specula::RgbColorSpace *specula::RgbColorSpace::ACES2065_1;
+const specula::RgbColorSpace *specula::RgbColorSpace::SRGB = nullptr;
+const specula::RgbColorSpace *specula::RgbColorSpace::DCI_P3 = nullptr;
+const specula::RgbColorSpace *specula::RgbColorSpace::REC_2020 = nullptr;
+const specula::RgbColorSpace *specula::RgbColorSpace::ACES2065_1 = nullptr;
 
 specula::RgbColorSpace::RgbColorSpace(Point2f r, Point2f g, Point2f b, Spectrum illuminant,
                                       const RgbToSpectrumTable *rgb_to_spectrum_table,
@@ -48,7 +48,7 @@ void specula::RgbColorSpace::init(Allocator alloc) {
 
   ACES2065_1 = alloc.new_object<RgbColorSpace>(
       Point2f(.7347, .2653), Point2f(0., 1.), Point2f(.0001, -.077),
-      get_named_spectrum("illum-acesD60"), RgbToSpectrumTable::ACES2065_1, alloc);
+      get_named_spectrum("stdillum-acesD60"), RgbToSpectrumTable::ACES2065_1, alloc);
 
 #ifdef SPECULA_BUILD_GPU_RENDERER
   // TODO: If doing a GPU build copy spectrum to the GPU

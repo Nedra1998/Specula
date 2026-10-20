@@ -18,7 +18,8 @@ namespace specula {
         : hash_table(256, alloc), buffer_resource(alloc.resource()), item_alloc(&buffer_resource) {}
 
     template <typename F> const T *lookup(const T &item, F create) {
-      size_t offset = Hash()(item) & hash_table.size();
+      auto hashed_item = Hash()(item);
+      size_t offset = hashed_item % hash_table.size();
       int step = 1;
       mutex.lock_shared();
 
@@ -79,7 +80,7 @@ namespace specula {
 
   private:
     void insert(const T *ptr, pstd::vector<const T *> *table) {
-      size_t offset = Hash()(*ptr) & table->size();
+      size_t offset = Hash()(*ptr) % table->size();
       int step = 1;
       while ((*table)[offset]) {
         offset += step;

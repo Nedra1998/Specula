@@ -165,7 +165,7 @@ std::string specula::utf8_from_wstring(const std::wstring &str) {
 }
 #endif
 
-std::string normalize_utf8(const std::string &str) {
+std::string specula::normalize_utf8(const std::string &str) {
   utf8proc_option_t options = UTF8PROC_COMPOSE;
 
   utf8proc_uint8_t *result = nullptr;

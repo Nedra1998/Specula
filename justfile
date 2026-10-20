@@ -41,9 +41,10 @@ scrub:
 # --- Testing & Code Quality ---
 
 # Run the test suite. Pass extra args like `just test --suite my_suite`
-test *ARGS: _ensure_setup
+[arg('gdb', long, value='gdb')]
+test gdb="" *ARGS: _ensure_setup
     @cmake --build "{{ buildDir }}" --target unit-tests
-    @"{{ buildDir }}/tests/unit-tests" {{ ARGS }}
+    @{{ if gdb == "gdb" { "gdb --args " + buildDir + "/tests/unit-tests --break" } else { buildDir + "/tests/unit-tests" } }}  {{ ARGS }} 
 
 # Run formatter checks on the C++ and CMake codebase
 format: _ensure_setup

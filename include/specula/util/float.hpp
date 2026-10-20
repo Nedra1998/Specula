@@ -1,7 +1,6 @@
 #ifndef SPECULA_UTIL_FLOAT_HPP
 #define SPECULA_UTIL_FLOAT_HPP
 
-#include <cmath>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
@@ -385,7 +384,7 @@ namespace specula {
       v = -0.;
     }
 
-    uint32_t ui = float_to_bits(v);
+    uint64_t ui = float_to_bits(v);
     if (v > 0.) {
       --ui;
     } else {

@@ -1,11 +1,10 @@
-#include <cstdint>
-
 #include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <fmt/format.h>
 #include <fmt/std.h>
 
-#include "specula/util/pstd.hpp"
+#include "specula/options.hpp"
+#include "specula/specula.hpp"
 
 int main(int argc, char *argv[]) {
   Catch::Session session;
@@ -14,16 +13,9 @@ int main(int argc, char *argv[]) {
     return returnCode;
   }
 
-  return session.run();
-}
+  specula::initialize(specula::SpeculaOptions{});
+  int result = session.run();
+  specula::cleanup();
 
-uint32_t factorial(uint32_t number) {
-  return number <= 1 ? number : factorial(number - 1) * number;
-}
-
-TEST_CASE("Factorials are computed", "[factorial]") {
-  REQUIRE(factorial(1) == 1);
-  REQUIRE(factorial(2) == 2);
-  REQUIRE(factorial(3) == 6);
-  REQUIRE(factorial(10) == 3'628'800);
+  return result;
 }

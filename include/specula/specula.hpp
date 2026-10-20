@@ -14,6 +14,12 @@
 #ifndef SPECULA_SPECULA_HPP
 #define SPECULA_SPECULA_HPP
 
+#include "specula/options.hpp"
 #include "specula/version.hpp"
+
+namespace specula {
+  bool initialize(const SpeculaOptions &opts);
+  bool cleanup();
+} // namespace specula
 
 #endif // SPECULA_SPECULA_HPP

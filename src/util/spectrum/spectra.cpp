@@ -2056,6 +2056,7 @@ specula::Spectrum specula::get_named_spectrum(const std::string &name) {
   if (iter != NAMED_SPECTRA.end()) {
     return iter->second;
   }
+  LOG_ERROR("Failed to find named spectrum \"{}\"", name);
   return nullptr;
 }
 

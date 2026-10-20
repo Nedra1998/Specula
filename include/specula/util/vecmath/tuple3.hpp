@@ -332,12 +332,12 @@ namespace specula {
     return {min(t0.x, t1.x), min(t0.y, t1.y), min(t0.z, t1.z)};
   }
   template <template <typename> class Child, typename T>
-  SPECULA_CPU_GPU inline Child<T> min_component_value(Tuple3<Child, T> t) {
+  SPECULA_CPU_GPU inline T min_component_value(Tuple3<Child, T> t) {
     using std::min;
     return min({t.x, t.y, t.z});
   }
   template <template <typename> class Child, typename T>
-  SPECULA_CPU_GPU inline Child<T> min_component_index(Tuple3<Child, T> t) {
+  SPECULA_CPU_GPU inline int min_component_index(Tuple3<Child, T> t) {
     return (t.x < t.y) ? ((t.x < t.z) ? 0 : 2) : ((t.y < t.z) ? 1 : 2);
   }
 
@@ -347,12 +347,12 @@ namespace specula {
     return {max(t0.x, t1.x), max(t0.y, t1.y), max(t0.z, t1.z)};
   }
   template <template <typename> class Child, typename T>
-  SPECULA_CPU_GPU inline Child<T> max_component_value(Tuple3<Child, T> t) {
+  SPECULA_CPU_GPU inline T max_component_value(Tuple3<Child, T> t) {
     using std::max;
     return max({t.x, t.y, t.z});
   }
   template <template <typename> class Child, typename T>
-  SPECULA_CPU_GPU inline Child<T> max_component_index(Tuple3<Child, T> t) {
+  SPECULA_CPU_GPU inline int max_component_index(Tuple3<Child, T> t) {
     return (t.x > t.y) ? ((t.x > t.z) ? 0 : 2) : ((t.y > t.z) ? 1 : 2);
   }
 
@@ -449,7 +449,7 @@ namespace specula {
     Float a = -1 / (sign + v1.z);
     Float b = v1.x * v1.y * a;
     *v2 = Vector3<T>(1 + sign * sqr(v1.x) * a, sign * b, -sign * v1.x);
-    *v2 = Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
+    *v3 = Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
   }
 
   template <typename T>
@@ -458,7 +458,7 @@ namespace specula {
     Float a = -1 / (sign + v1.z);
     Float b = v1.x * v1.y * a;
     *v2 = Vector3<T>(1 + sign * sqr(v1.x) * a, sign * b, -sign * v1.x);
-    *v2 = Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
+    *v3 = Vector3<T>(b, sign + sqr(v1.y) * a, -v1.y);
   }
 
   template <typename T>

@@ -145,8 +145,8 @@ target_include_directories(
 
 target_link_libraries(
   specula
-  PUBLIC spdlog::spdlog fmt::fmt
-  PRIVATE TracyClient cpptrace::cpptrace utf8cpp utf8proc magic_enum::magic_enum OpenEXR::OpenEXR
+  PUBLIC spdlog::spdlog fmt::fmt TracyClient
+  PRIVATE cpptrace::cpptrace utf8cpp utf8proc magic_enum::magic_enum OpenEXR::OpenEXR
 )
 
 target_compile_features(specula PUBLIC cxx_std_20)
