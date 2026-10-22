@@ -151,3 +151,22 @@ TEST_CASE("Vector3", "[util][vecmath]") {
     }
   }
 }
+
+TEST_CASE("Point3", "[util][vecmath]") {
+  SECTION("Interval") {
+    // This test is primarilly to confirm the Tuple3 Interval variants compile
+    // successfully, it does not actually test any of the behavior currently.
+    Point3fi p(1, 2, 3), q(6, 9, 1);
+    Vector3fi v(4, 5, 6);
+
+    p += v;
+    p = (p - v);
+    Vector3<Interval> scaled = Interval(4) * v;
+    p = static_cast<Point3<Interval>>(p) + scaled;
+    Interval d = dot(v, v);
+    d = distance_squared(p, q);
+    d = distance(p, q);
+
+    Vector3fi vv = cross(v, v);
+  }
+}

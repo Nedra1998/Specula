@@ -1,10 +1,11 @@
 #include "specula/util/vecmath/direction_cone.hpp"
 
 #include "specula/macros.hpp"
+#include "specula/util/transform/transform.hpp"
 #include "specula/util/vecmath/tuple3.hpp"
 
-SPECULA_CPU_GPU specula::DirectionCode specula::bunion(const DirectionCode &a,
-                                                       const DirectionCode &b) {
+SPECULA_CPU_GPU specula::DirectionCone specula::bunion(const DirectionCone &a,
+                                                       const DirectionCone &b) {
   if (a.is_empty()) {
     return b;
   }
@@ -24,16 +25,14 @@ SPECULA_CPU_GPU specula::DirectionCode specula::bunion(const DirectionCode &a,
 
   Float theta_o = (theta_a + theta_b + theta_d) / 2;
   if (theta_o >= PI) {
-    return DirectionCode::entire_sphere();
+    return DirectionCone::entire_sphere();
   }
 
   Float theta_r = theta_o - theta_a;
   Vector3f wr = cross(a.w, b.w);
   if (length_squared(wr) == 0) {
-    return DirectionCode::entire_sphere();
+    return DirectionCone::entire_sphere();
   }
-  // TODO: Implement the transform.hpp header for 'rotate'
-  // Vector3f w = rotate(degrees(theta_r), wr)(a.w);
-  Vector3f w = a.w;
+  Vector3f w = rotate(degrees(theta_r), wr)(a.w);
   return {w, std::cos(theta_o)};
 }

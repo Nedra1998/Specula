@@ -347,4 +347,16 @@ template <typename T> struct fmt::formatter<specula::Vector2<T>> {
   }
 };
 
+// TODO: I don't like having these in the main library, since they are only
+// used for the Catch2 tests, would be ideal if we could separate them.
+template <typename T>
+inline std::ostream &operator<<(std::ostream &out, const specula::Point2<T> &val) {
+  return out << fmt::format("{}", val);
+}
+
+template <typename T>
+inline std::ostream &operator<<(std::ostream &out, const specula::Vector2<T> &val) {
+  return out << fmt::format("{}", val);
+}
+
 #endif // SPECULA_UTIL_VECMATH_TUPLE2_HPP

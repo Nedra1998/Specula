@@ -26,6 +26,7 @@ namespace specula::pstd {
    * @tparam T The element type
    */
   template <typename T> class array<T, 0> {
+  public:
     using value_type = T;
     using iterator = value_type *;
     using const_iterator = const value_type *;

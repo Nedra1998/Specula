@@ -22,7 +22,7 @@ namespace specula {
       template <typename Generator>
       SPECULA_CPU_GPU IndexingIterator(int i, int n, const Generator *) : i(i), n(n) {}
 
-      SPECULA_CPU_GPU bool operator==(const Iterator &it) const { return i = it.i; }
+      SPECULA_CPU_GPU bool operator==(const Iterator &it) const { return i == it.i; }
       SPECULA_CPU_GPU bool operator!=(const Iterator &it) const { return !(*this == it); }
 
       SPECULA_CPU_GPU Iterator &operator++() {
@@ -94,13 +94,15 @@ namespace specula {
       }
     };
 
-    class Hammersly2DIter : public IndexingIterator<Hammersly2DIter> {
-      using IndexingIterator<Hammersly2DIter>::IndexingIterator;
+    class Hammersley2DIter : public IndexingIterator<Hammersley2DIter> {
+    public:
+      using IndexingIterator<Hammersley2DIter>::IndexingIterator;
       SPECULA_CPU_GPU Point2f operator*() { return {Float(i) / Float(n), radical_inverse(0, i)}; }
     };
 
-    class Hammersly3DIter : public IndexingIterator<Hammersly3DIter> {
-      using IndexingIterator<Hammersly3DIter>::IndexingIterator;
+    class Hammersley3DIter : public IndexingIterator<Hammersley3DIter> {
+    public:
+      using IndexingIterator<Hammersley3DIter>::IndexingIterator;
       SPECULA_CPU_GPU Point3f operator*() {
         return {Float(i) / Float(n), radical_inverse(0, i), radical_inverse(1, i)};
       }
@@ -122,14 +124,14 @@ namespace specula {
     using detail::RngGenerator<Uniform3D, detail::Uniform3DIter>::RngGenerator;
   };
 
-  class Hammersley2D : public detail::IndexingGenerator<Hammersley2D, detail::Hammersly2DIter> {
+  class Hammersley2D : public detail::IndexingGenerator<Hammersley2D, detail::Hammersley2DIter> {
   public:
-    using detail::IndexingGenerator<Hammersley2D, detail::Hammersly2DIter>::IndexingGenerator;
+    using detail::IndexingGenerator<Hammersley2D, detail::Hammersley2DIter>::IndexingGenerator;
   };
 
-  class Hammersley3D : public detail::IndexingGenerator<Hammersley3D, detail::Hammersly3DIter> {
+  class Hammersley3D : public detail::IndexingGenerator<Hammersley3D, detail::Hammersley3DIter> {
   public:
-    using detail::IndexingGenerator<Hammersley3D, detail::Hammersly3DIter>::IndexingGenerator;
+    using detail::IndexingGenerator<Hammersley3D, detail::Hammersley3DIter>::IndexingGenerator;
   };
 
   class Stratified1D : public detail::RngGenerator<Stratified1D, detail::Stratified1DIter> {
