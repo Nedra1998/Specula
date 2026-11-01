@@ -100,6 +100,11 @@ namespace specula {
     PiecewiseConstant1D pmarginal;
 
     friend struct fmt::formatter<PiecewiseConstant2D>;
+
+#if __has_include(<catch2/catch_test_macros.hpp>)
+    friend void compare_distributions(const PiecewiseConstant2D &da, const PiecewiseConstant2D &db,
+                                      Float eps);
+#endif
   };
 } // namespace specula
 

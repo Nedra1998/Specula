@@ -5,8 +5,8 @@
 #include "specula/util/check.hpp"
 #include "specula/util/math/functions.hpp"
 
-SPECULA_CPU_GPU specula::Float specula::catmul_rom(pstd::span<const Float> nodes,
-                                                   pstd::span<const Float> values, Float x) {
+SPECULA_CPU_GPU specula::Float specula::catmull_rom(pstd::span<const Float> nodes,
+                                                    pstd::span<const Float> values, Float x) {
   ASSERT_EQ(nodes.size(), values.size());
   if (x < nodes.front() || x > nodes.back()) {
     return 0;
@@ -33,8 +33,8 @@ SPECULA_CPU_GPU specula::Float specula::catmul_rom(pstd::span<const Float> nodes
          (t3 - t2) * d1;
 }
 
-SPECULA_CPU_GPU bool specula::catmul_rom_weights(pstd::span<const Float> nodes, Float x,
-                                                 int *offset, pstd::span<Float> weights) {
+SPECULA_CPU_GPU bool specula::catmull_rom_weights(pstd::span<const Float> nodes, Float x,
+                                                  int *offset, pstd::span<Float> weights) {
   ASSERT_GE(weights.size(), 4);
   if (x < nodes.front() || x > nodes.back()) {
     return false;
@@ -74,9 +74,9 @@ SPECULA_CPU_GPU bool specula::catmul_rom_weights(pstd::span<const Float> nodes, 
   return true;
 }
 
-SPECULA_CPU_GPU specula::Float specula::integrate_catmul_rom(pstd::span<const Float> nodes,
-                                                             pstd::span<const Float> values,
-                                                             pstd::span<Float> cdf) {
+SPECULA_CPU_GPU specula::Float specula::integrate_catmull_rom(pstd::span<const Float> nodes,
+                                                              pstd::span<const Float> values,
+                                                              pstd::span<Float> cdf) {
   ASSERT_EQ(nodes.size(), values.size());
   Float sum = 0;
 
@@ -96,8 +96,9 @@ SPECULA_CPU_GPU specula::Float specula::integrate_catmul_rom(pstd::span<const Fl
   return sum;
 }
 
-SPECULA_CPU_GPU specula::Float specula::invert_catmul_rom(pstd::span<const Float> nodes,
-                                                          pstd::span<const Float> values, Float u) {
+SPECULA_CPU_GPU specula::Float specula::invert_catmull_rom(pstd::span<const Float> nodes,
+                                                           pstd::span<const Float> values,
+                                                           Float u) {
   if (!(u > values.front())) {
     return nodes.front();
   } else if (!(u < values.back())) {

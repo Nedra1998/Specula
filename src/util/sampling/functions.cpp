@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-#include <math.h>
-
 #include "specula/util/check.hpp"
 #include "specula/util/float.hpp"
 #include "specula/util/low_discrepancy.hpp"
@@ -14,7 +12,7 @@
 #include "specula/util/vecmath.hpp"
 
 SPECULA_CPU_GPU specula::pstd::array<specula::Float, 3>
-specula::sample_spherical_triangle(const pstd::array<Point3f, 3> &v, Point3f p, Point3f u,
+specula::sample_spherical_triangle(const pstd::array<Point3f, 3> &v, Point3f p, Point2f u,
                                    Float *pdf) {
   if (pdf != nullptr) {
     *pdf = 0;
@@ -137,7 +135,7 @@ specula::invert_spherical_triangle_sample(const pstd::array<Point3f, 3> &v, Poin
 
 SPECULA_CPU_GPU specula::Point3f specula::sample_spherical_rectangle(Point3f pref, Point3f s,
                                                                      Vector3f ex, Vector3f ey,
-                                                                     Point3f u, Float *pdf) {
+                                                                     Point2f u, Float *pdf) {
   Float exl = length(ex), eyl = length(ey);
   Frame r = Frame::from_xy(ex / exl, ey / eyl);
   Vector3f dlocal = r.to_local(s - pref);
@@ -341,7 +339,7 @@ specula::sample_catmull_rom2d(pstd::span<const Float> nodes1, pstd::span<const F
                               Float alpha, Float sample, Float *fval, Float *pdf) {
   int offset = 0;
   Float weights[4];
-  if (!catmul_rom_weights(nodes1, alpha, &offset, weights)) {
+  if (!catmull_rom_weights(nodes1, alpha, &offset, weights)) {
     return 0;
   }
 

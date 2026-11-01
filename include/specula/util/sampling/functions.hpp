@@ -30,8 +30,8 @@ namespace specula {
     return sqr(f) / (sqr(f) + sqr(g));
   }
 
-  SPECULA_CPU_GPU inline int sample_discrete(pstd::span<const Float> weights, Float u, Float *pmf,
-                                             Float *uremapped) {
+  SPECULA_CPU_GPU inline int sample_discrete(pstd::span<const Float> weights, Float u,
+                                             Float *pmf = nullptr, Float *uremapped = nullptr) {
     if (weights.empty()) {
       if (pmf != nullptr) {
         *pmf = 0;
@@ -126,7 +126,7 @@ namespace specula {
     return 538 - 138.888889f * std::atanh(0.85691062f - 1.82750197f * u);
   }
 
-  SPECULA_CPU_GPU inline pstd::array<Float, 3> sample_uniform_triangle3(Point2f u) {
+  SPECULA_CPU_GPU inline pstd::array<Float, 3> sample_uniform_triangle(Point2f u) {
     Float b0 = NAN, b1 = NAN;
     if (u[0] < u[1]) {
       b0 = u[0] / 2;
@@ -142,7 +142,7 @@ namespace specula {
     if (b[0] > b[1]) {
       return {b[0] + b[1], 2 * b[1]};
     } else {
-      return {2 * b[0], b[1] + b[2]};
+      return {2 * b[0], b[1] + b[0]};
     }
   }
 
@@ -421,13 +421,13 @@ namespace specula {
   }
 
   SPECULA_CPU_GPU pstd::array<Float, 3> sample_spherical_triangle(const pstd::array<Point3f, 3> &v,
-                                                                  Point3f p, Point3f u,
+                                                                  Point3f p, Point2f u,
                                                                   Float *pdf = nullptr);
   SPECULA_CPU_GPU Point2f invert_spherical_triangle_sample(const pstd::array<Point3f, 3> &v,
                                                            Point3f p, Vector3f w);
 
   SPECULA_CPU_GPU Point3f sample_spherical_rectangle(Point3f pref, Point3f s, Vector3f ex,
-                                                     Vector3f ey, Point3f u, Float *pdf = nullptr);
+                                                     Vector3f ey, Point2f u, Float *pdf = nullptr);
   SPECULA_CPU_GPU Point2f invert_spherical_rectangle_sample(Point3f pref, Point3f s, Vector3f ex,
                                                             Vector3f ev, Point3f prect);
 

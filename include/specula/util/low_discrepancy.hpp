@@ -118,7 +118,7 @@ namespace specula {
 
     for (int c = 0; b != 0u; b >>= 1, ++c) {
       if ((b & 1) != 0u) {
-        index ^= VDC_SOBOL_MATRICES[m - 1][c];
+        index ^= VDC_SOBOL_MATRICES_INV[m - 1][c];
       }
     }
 

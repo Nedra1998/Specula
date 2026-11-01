@@ -167,11 +167,13 @@ namespace specula {
 
   namespace detail {
     class Stratified1DIter : public RngIterator<Stratified1DIter> {
+    public:
       using RngIterator<Stratified1DIter>::RngIterator;
       SPECULA_CPU_GPU Float operator*() { return (i + rng.uniform<Float>()) / n; }
     };
 
     class Stratified2DIter : public RngIterator<Stratified2DIter> {
+    public:
       SPECULA_CPU_GPU Stratified2DIter(int i, int n, const Stratified2D *generator)
           : RngIterator<Stratified2DIter>(i, n, generator), nx(generator->nx), ny(generator->ny) {}
 
@@ -185,6 +187,7 @@ namespace specula {
     };
 
     class Stratified3DIter : public RngIterator<Stratified3DIter> {
+    public:
       SPECULA_CPU_GPU Stratified3DIter(int i, int n, const Stratified3D *generator)
           : RngIterator<Stratified3DIter>(i, n, generator), nx(generator->nx), ny(generator->ny),
             nz(generator->nz) {}

@@ -3,6 +3,8 @@
 #include <fmt/format.h>
 #include <fmt/std.h>
 
+#include "catch2_fmt_compat.hpp"
+
 #include "specula/options.hpp"
 #include "specula/specula.hpp"
 

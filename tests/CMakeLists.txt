@@ -21,6 +21,8 @@ target_link_libraries(unit-tests PRIVATE specula::specula Catch2::Catch2)
 
 target_compile_features(unit-tests PRIVATE cxx_std_20)
 
+target_compile_options(unit-tests PRIVATE "-include" "${CMAKE_CURRENT_SOURCE_DIR}/catch2_fmt_compat.hpp")
+
 # ========== Testing ==========
 
 catch_discover_tests(unit-tests)

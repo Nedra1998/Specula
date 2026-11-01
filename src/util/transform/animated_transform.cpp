@@ -19,7 +19,7 @@ specula::AnimatedTransform::AnimatedTransform(const Transform &start, Float tsta
   end_transform.decompose(&t[1], &rm, &s[1]);
   r[1] = Quaternion(Transform(rm));
 
-  if (dot(r[0], r[1]) < 1) {
+  if (dot(r[0], r[1]) < 0) {
     r[1] = -r[1];
   }
 

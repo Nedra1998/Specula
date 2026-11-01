@@ -130,7 +130,7 @@ void specula::Transform::decompose(Vector3f *t, SquareMatrix<4> *r, SquareMatrix
     norm = 0;
     for (int i = 0; i < 3; ++i) {
       Float n = std::abs((*r)[i][0] - rnext[i][0]) + std::abs((*r)[i][1] - rnext[i][1]) +
-                std::abs((*r)[i][1] - rnext[i][1]);
+                std::abs((*r)[i][2] - rnext[i][2]);
       norm = std::max(norm, n);
     }
 

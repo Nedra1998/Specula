@@ -1,5 +1,8 @@
 #include "specula/util/pstd/pmr.hpp"
 
+#include <algorithm>
+#include <cstdint>
+
 #include "specula/util/check.hpp"
 
 namespace specula::pstd::pmr {
@@ -61,18 +64,28 @@ namespace specula::pstd::pmr {
     if (bytes > block_size) {
       return upstream->allocate(bytes, align);
     }
-    if ((current_pos % align) != 0) {
-      current_pos += align - (current_pos % align);
-    }
-    DASSERT_EQ(0, current_pos % align);
 
-    if (current == nullptr || current_pos + bytes > current->size) {
-      current = allocate_block(block_size);
-      current_pos = 0;
-    }
+    // Align the absolute address, not just the offset: the block's data
+    // pointer itself is only guaranteed to be aligned to alignof(block).
+    auto aligned_offset = [align](const block *b, size_t pos) -> size_t {
+      const auto base = reinterpret_cast<uintptr_t>(b->ptr);
+      const uintptr_t addr = (base + pos + align - 1) & ~(uintptr_t(align) - 1);
+      return addr - base;
+    };
 
-    void *ptr = (char *)current->ptr + current_pos;
-    current_pos += bytes;
+    size_t offset = 0;
+    if (current != nullptr) {
+      offset = aligned_offset(current, current_pos);
+    }
+    if (current == nullptr || offset + bytes > current->size) {
+      // Reserve enough room for worst-case alignment padding in the new block.
+      current = allocate_block(std::max(block_size, bytes + align - 1));
+      offset = aligned_offset(current, 0);
+    }
+    DASSERT_EQ(0, (reinterpret_cast<uintptr_t>(current->ptr) + offset) % align);
+
+    void *ptr = static_cast<char *>(current->ptr) + offset;
+    current_pos = offset + bytes;
     return ptr;
   }
 } // namespace specula::pstd::pmr

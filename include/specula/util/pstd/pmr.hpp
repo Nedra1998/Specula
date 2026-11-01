@@ -96,6 +96,7 @@ namespace specula::pstd::pmr {
       }
       block_list = nullptr;
       current = nullptr;
+      current_pos = 0;
     }
 
   protected:
@@ -112,7 +113,7 @@ namespace specula::pstd::pmr {
     }
 
   private:
-    struct block {
+    struct alignas(std::max_align_t) block {
       void *ptr;
       size_t size;
       block *next;

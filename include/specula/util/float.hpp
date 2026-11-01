@@ -210,7 +210,6 @@ namespace specula {
   };
 
   inline auto format_as(Half h) { return (float)h; }
-  inline std::ostream &operator<<(std::ostream &os, Half h) { return os << fmt::format("{}", h); }
 
   template <typename T>
   inline SPECULA_CPU_GPU bool isnan(T v)

@@ -40,7 +40,7 @@ namespace specula {
 
   SPECULA_CPU_GPU inline Float spherical_theta(Vector3f v) { return safe_acos(v.z); }
   SPECULA_CPU_GPU inline Float spherical_phi(Vector3f v) {
-    Float p = std::atan2(v.y, v.z);
+    Float p = std::atan2(v.y, v.x);
     return (p < 0) ? (p + 2 * PI) : p;
   }
 
