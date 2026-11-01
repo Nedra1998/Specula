@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Out-of-line parts of pstd::pmr: the new/delete resource, the default-resource global
+ *        and monotonic_buffer_resource::do_allocate().
+ */
 #include "specula/util/pstd/pmr.hpp"
 
 #include <algorithm>
@@ -6,43 +11,61 @@
 #include "specula/util/check.hpp"
 
 namespace specula::pstd::pmr {
-  memory_resource::~memory_resource() = default;
-
-  class NewDeleteResource : public memory_resource {
-    void *do_allocate(size_t bytes, size_t alignment) override {
+  namespace {
+    /**
+     * @brief Concrete resource behind new_delete_resource().
+     *
+     * Despite the name it uses the platform aligned allocator rather than `operator new`:
+     * `_aligned_malloc` on Windows, `posix_memalign` where available (plain `malloc` for
+     * alignments below `sizeof(void *)`, which `posix_memalign` rejects), `memalign` otherwise.
+     */
+    class NewDeleteResource : public memory_resource {
+      void *do_allocate(size_t bytes, size_t alignment) override {
 #if defined(SPECULA_HAVE__ALIGNED_MALLOC)
-      return _aligned_malloc(size, alignment);
+        return _aligned_malloc(size, alignment);
 #elif defined(SPECULA_HAVE_POSIX_MEMALIGN)
-      void *ptr = nullptr;
-      if (alignment < sizeof(void *)) {
-        return malloc(bytes);
-      }
-      if (posix_memalign(&ptr, alignment, bytes) != 0) {
-        ptr = nullptr;
-      }
-      return ptr;
+        void *ptr = nullptr;
+        if (alignment < sizeof(void *)) {
+          return malloc(bytes);
+        }
+        if (posix_memalign(&ptr, alignment, bytes) != 0) {
+          ptr = nullptr;
+        }
+        return ptr;
 #else
-      return memalign(alignemnt, bytes);
+        return memalign(alignemnt, bytes);
 #endif
-    }
-
-    void do_deallocate(void *ptr, size_t bytes, size_t alignment) override {
-      if (ptr == nullptr) {
-        return;
       }
+
+      void do_deallocate(void *ptr, size_t bytes, size_t alignment) override {
+        if (ptr == nullptr) {
+          return;
+        }
 #if defined(SPECULA_HAVE__ALIGNED_MALLOC)
-      _aligned_free(ptr);
+        _aligned_free(ptr);
 #else
-      free(ptr);
+        free(ptr);
 #endif
-    }
+      }
 
-    [[nodiscard]] bool do_is_equal(const memory_resource &other) const noexcept override {
-      return this == &other;
-    }
-  };
+      [[nodiscard]] bool do_is_equal(const memory_resource &other) const noexcept override {
+        return this == &other;
+      }
+    };
 
-  static NewDeleteResource *ndr;
+    /** @brief Lazily created singleton returned by new_delete_resource(); intentionally leaked. */
+    NewDeleteResource *ndr;
+
+    /**
+     * @brief Backing store for get/set_default_resource().
+     *
+     * Dynamically initialised, so another TU's static initialiser calling get_default_resource()
+     * may observe `nullptr`. `ndr` is zero-initialised before this runs, so the call is safe.
+     */
+    memory_resource *default_memory_resource = new_delete_resource();
+  } // namespace
+
+  memory_resource::~memory_resource() = default;
 
   memory_resource *new_delete_resource() noexcept {
     if (ndr == nullptr) {
@@ -50,8 +73,6 @@ namespace specula::pstd::pmr {
     }
     return ndr;
   }
-
-  static memory_resource *default_memory_resource = new_delete_resource();
 
   memory_resource *set_default_resource(memory_resource *r) noexcept {
     memory_resource *orig = default_memory_resource;
