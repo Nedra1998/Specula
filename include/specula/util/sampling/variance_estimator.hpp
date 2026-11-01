@@ -5,6 +5,7 @@
 
 #include "specula/macros.hpp"
 #include "specula/types.hpp"
+#include "specula/util/math.hpp"
 
 namespace specula {
   template <typename Float = Float> class VarianceEstimator {
