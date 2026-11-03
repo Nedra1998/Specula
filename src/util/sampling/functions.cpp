@@ -273,7 +273,7 @@ SPECULA_CPU_GPU specula::Point2f specula::invert_spherical_rectangle_sample(Poin
   return u;
 }
 
-SPECULA_CPU_GPU specula::Vector3f specula::sample_henyey_greenstein(Vector3f wo, Float g, Point3f u,
+SPECULA_CPU_GPU specula::Vector3f specula::sample_henyey_greenstein(Vector3f wo, Float g, Point2f u,
                                                                     Float *pdf) {
   g = clamp(g, -0.99, 0.99);
 

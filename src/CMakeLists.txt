@@ -151,6 +151,6 @@ target_link_libraries(
 
 target_compile_features(specula PUBLIC cxx_std_20)
 
-target_compile_definitions(specula PRIVATE ${SPECULA_DEFINITIONS})
+target_compile_definitions(specula PUBLIC ${SPECULA_DEFINITIONS})
 
 set_target_properties(specula PROPERTIES OUTPUT_NAME "specula")

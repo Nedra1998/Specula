@@ -258,8 +258,7 @@ namespace specula {
 
   SPECULA_CPU_GPU inline Float invert_smooth_step_sample(Float x, Float a, Float b) {
     Float t = (x - a) / (b - a);
-    auto func = [&](Float x) { return 2 * pow<3>(t) - pow<4>(t); };
-    return (func(x) - func(a)) / (func(b) - func(a));
+    return 2 * pow<3>(t) - pow<4>(t);
   }
 
   SPECULA_CPU_GPU inline Point2f sample_uniform_disk_polar(Point2f u) {
@@ -385,7 +384,7 @@ namespace specula {
   }
 
   SPECULA_CPU_GPU inline Float sample_trimmed_exponential(Float u, Float c, Float xmax) {
-    return std::log(1 - u * (1 - std::exp(-c * xmax))) / c;
+    return std::log(1 - u * (1 - std::exp(-c * xmax))) / -c;
   }
 
   SPECULA_CPU_GPU inline Float trimmed_exponential_pdf(Float x, Float c, Float xmax) {
@@ -431,7 +430,7 @@ namespace specula {
   SPECULA_CPU_GPU Point2f invert_spherical_rectangle_sample(Point3f pref, Point3f s, Vector3f ex,
                                                             Vector3f ev, Point3f prect);
 
-  SPECULA_CPU_GPU Vector3f sample_henyey_greenstein(Vector3f wo, Float g, Point3f u,
+  SPECULA_CPU_GPU Vector3f sample_henyey_greenstein(Vector3f wo, Float g, Point2f u,
                                                     Float *pdf = nullptr);
 
   SPECULA_CPU_GPU Float sample_catmull_rom(pstd::span<const Float> nodes, pstd::span<const Float> f,

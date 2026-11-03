@@ -41,7 +41,7 @@ namespace specula {
       y *= sum.ysize();
       int x0 = (int)x, y0 = (int)y;
 
-      double v00 = lookup_int(x0, y0), v10 = lookup_int(x0 + 1, y0 + 1);
+      double v00 = lookup_int(x0, y0), v10 = lookup_int(x0 + 1, y0);
       double v01 = lookup_int(x0, y0 + 1), v11 = lookup_int(x0 + 1, y0 + 1);
 
       Float dx = x - x0, dy = y - y0;

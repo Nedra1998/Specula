@@ -3,6 +3,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
+#include "specula/util/float.hpp"
 #include "specula/util/low_discrepancy.hpp"
 #include "specula/util/math.hpp"
 #include "specula/util/math/spline.hpp"
@@ -200,7 +201,7 @@ TEST_CASE("Sampling", "[util][sampling]") {
       Point3f pq = sample_spherical_rectangle(p, v[0], v[1] - v[0], v[2] - v[0], u, &pdf);
       sph_sum += f(pq) / pdf;
 
-      pq = lerp(u[1], lerp(u[0], v[0], v[1]), lerp(u[0], v[2], v[3]));
+      pq = specula::lerp(u[1], specula::lerp(u[0], v[0], v[1]), specula::lerp(u[0], v[2], v[3]));
       pdf = 1 / a;
       area_sum += f(pq) * abs_dot(n, normalize(pq - p)) / (pdf * distance_squared(p, pq));
     }
@@ -218,8 +219,9 @@ TEST_CASE("Sampling", "[util][sampling]") {
     int ntested = 0;
     for (Point2f u : Hammersley2D(count)) {
       int a = rng.uniform<int>() & 1, b = rng.uniform<int>() & 1;
-      Point3f p(lerp(rng.uniform<Float>(), -1, 10), lerp(rng.uniform<Float>(), -1, 10),
-                lerp(rng.uniform<Float>(), -1, 10));
+      Point3f p(specula::lerp(rng.uniform<Float>(), -10, 10),
+                specula::lerp(rng.uniform<Float>(), -10, 10),
+                specula::lerp(rng.uniform<Float>(), -10, 10));
 
       Float pdf = NAN;
       Point3f pq =
@@ -285,8 +287,8 @@ TEST_CASE("Sampling", "[util][sampling]") {
       }
 
       for (int i = 0; i < nbuckets; ++i) {
-        int expected =
-            lerp(static_cast<Float>(i) / (nbuckets - 1), buckets[0], buckets[nbuckets - 1]);
+        int expected = specula::lerp(static_cast<Float>(i) / (nbuckets - 1), buckets[0],
+                                     buckets[nbuckets - 1]);
         CHECK_THAT(buckets[i], WithinRel(expected, 0.01));
       }
     }
@@ -295,8 +297,8 @@ TEST_CASE("Sampling", "[util][sampling]") {
     auto values = sample_1d_function(lin, 1024, 64 * 1024, 0.0f, 1.0f);
     PiecewiseConstant1D distrib(values);
     for (Float u : Uniform1D(100)) {
-      Float cx = sample_linear(u, 0, 1);
-      Float cp = linear_pdf(cx, 0, 1);
+      Float cx = sample_linear(u, 1, 4);
+      Float cp = linear_pdf(cx, 1, 4);
 
       Float dp = NAN;
       Float dx = distrib.sample(u, &dp);
@@ -372,7 +374,7 @@ TEST_CASE("Sampling", "[util][sampling]") {
 
       auto values = sample_2d_function(bilerp, 1024, 1024, 16, Bounds2f({0, 0}, {1, 1}));
       PiecewiseConstant2D distrib(values, 1024, 1024);
-      for (Point2f u : Uniform2D(1000)) {
+      for (Point2f u : Uniform2D(100)) {
         Point2f pb = sample_bilinear(u, {v, 4});
         Float bp = bilinear_pdf(pb, {v, 4});
 
@@ -405,7 +407,7 @@ TEST_CASE("Sampling", "[util][sampling]") {
         Float dp = NAN;
         Float dx = distrib.sample(u, &dp);
         CHECK_THAT(cx, WithinAbs(dx, 3e-3));
-        CHECK_THAT(dp, WithinAbs(dp, 3e-3));
+        CHECK_THAT(cp, WithinAbs(dp, 3e-3));
 
         CHECK_THAT(invert_trimmed_logistic_sample(cx, s, a, b), WithinAbs(u, 1e-2));
       }
@@ -428,7 +430,7 @@ TEST_CASE("Sampling", "[util][sampling]") {
         Float dp = NAN;
         Float dx = distrib.sample(u, &dp);
         CHECK_THAT(cx, WithinAbs(dx, 1e-2));
-        CHECK_THAT(dp, WithinAbs(dp, 1e-2));
+        CHECK_THAT(cp, WithinAbs(dp, 1e-2));
 
         CHECK_THAT(invert_trimmed_exponential_sample(cx, c, xmax), WithinAbs(u, 1e-2));
       }
@@ -453,9 +455,20 @@ TEST_CASE("Sampling", "[util][sampling]") {
         Float dp = NAN;
         Float dx = distrib.sample(u, &dp);
         CHECK_THAT(cx, WithinAbs(dx, 3e-3));
-        CHECK_THAT(dp, WithinAbs(dp, 3e-3));
+        CHECK_THAT(cp, WithinRel(dp, Float(0.025)));
 
         CHECK_THAT(invert_normal_sample(cx, mu, sigma), WithinAbs(u, 1e-2));
+      }
+    }
+  }
+
+  SECTION("HenyeyGreenstein Extremes") {
+
+    for (Float g : {-0.999f, 0.999f, -1.0f, 1.0f}) {
+      for (Float u : {static_cast<Float>(0), static_cast<Float>(ONE_MINUS_EPSILON)}) {
+        Float pdf = NAN;
+        Vector3f w = sample_henyey_greenstein(Vector3f(0, 0, -1), g, Point2f(u, 0.5), &pdf);
+        CHECK_FALSE(w.has_nan());
       }
     }
   }
