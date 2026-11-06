@@ -1,7 +1,7 @@
 #include "specula/util/spectrum/sampled_spectrum.hpp"
 
 #include "specula/util/colorspace.hpp"
-#include "specula/util/spectrum/densly_sampled_spectrum.hpp"
+#include "specula/util/spectrum/densely_sampled_spectrum.hpp"
 #include "specula/util/spectrum/spectra.hpp"
 
 SPECULA_CPU_GPU [[nodiscard]] specula::Xyz

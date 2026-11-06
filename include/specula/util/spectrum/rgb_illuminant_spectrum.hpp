@@ -3,7 +3,7 @@
 
 // IWYU pragma: private, include "specula/util/spectrum.hpp"
 
-#include "specula/util/spectrum/densly_sampled_spectrum.hpp"
+#include "specula/util/spectrum/densely_sampled_spectrum.hpp"
 #include "specula/util/spectrum/sampled_spectrum.hpp"
 #include "specula/util/spectrum/sampled_wavelengths.hpp"
 #include "specula/util/spectrum/spectrum.hpp"

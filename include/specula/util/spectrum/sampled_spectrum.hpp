@@ -193,10 +193,29 @@ namespace specula {
     return r;
   }
 
+  template <typename U, typename V>
+  SPECULA_CPU_GPU inline SampledSpectrum clamp(const SampledSpectrum &s, U low, V high) {
+    SampledSpectrum ret;
+    for (int i = 0; i < N_SPECTRUM_SAMPLES; ++i) {
+      ret[i] = specula::clamp(s[i], low, high);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
   SPECULA_CPU_GPU inline SampledSpectrum clamp_zero(const SampledSpectrum &s) {
     SampledSpectrum ret;
     for (int i = 0; i < N_SPECTRUM_SAMPLES; ++i) {
       ret[i] = std::max<Float>(0, s[i]);
+    }
+    DASSERT(!ret.has_nans());
+    return ret;
+  }
+
+  SPECULA_CPU_GPU inline SampledSpectrum sqrt(const SampledSpectrum &s) {
+    SampledSpectrum ret;
+    for (int i = 0; i < N_SPECTRUM_SAMPLES; ++i) {
+      ret[i] = std::sqrt(s[i]);
     }
     DASSERT(!ret.has_nans());
     return ret;

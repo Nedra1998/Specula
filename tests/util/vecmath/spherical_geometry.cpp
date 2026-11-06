@@ -81,7 +81,7 @@ TEST_CASE("SphericalTriangleArea", "[util][vecmath]") {
         // }
       }
 
-      Float pdf = sample_sphere ? uniform_sphere_pdf() : uniform_code_pdf(cos_theta);
+      Float pdf = sample_sphere ? uniform_sphere_pdf() : uniform_cone_pdf(cos_theta);
       Float esta = static_cast<Float>(count) / (sqrt_n * sqrt_n * pdf);
 
       // CAPTURE(area, esta, a, b, c);

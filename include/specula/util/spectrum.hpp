@@ -4,7 +4,7 @@
 // IWYU pragma: begin_exports
 #include "specula/util/spectrum/blackbody_spectrum.hpp"
 #include "specula/util/spectrum/constant_spectrum.hpp"
-#include "specula/util/spectrum/densly_sampled_spectrum.hpp"
+#include "specula/util/spectrum/densely_sampled_spectrum.hpp"
 #include "specula/util/spectrum/functions.hpp"
 #include "specula/util/spectrum/piecewise_linear_spectrum.hpp"
 #include "specula/util/spectrum/rgb_albedo_spectrum.hpp"

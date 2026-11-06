@@ -13,7 +13,7 @@ specula::BilinearPatchMesh::BilinearPatchMesh(
     std::vector<Point3f> p, std::vector<Normal3f> n, std::vector<Point2f> uv,
     std::vector<int> face_indices, PiecewiseConstant2D *image_dist, Allocator alloc)
     : reverse_orientation(reverse_orientation),
-      transform_swaps_handedness(render_from_object.swap_handedness()),
+      transform_swaps_handedness(render_from_object.swaps_handedness()),
       n_patches(vertex_indices.size() / 4), n_vertices(p.size()), image_distribution(image_dist) {
   ASSERT_EQ((vertex_indices.size() % 4), 0);
   ++N_BILINEAR_MESHES;

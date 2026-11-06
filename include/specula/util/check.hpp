@@ -14,8 +14,7 @@ namespace specula {
 #  define ASSERT_IMPL(a, b, op) assert((a)op(b))
 #else
   // clang-format off
-  // TODO: Assertion fails should also trigger CheckCallbackScope::fail();
-#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), true))) // NOLINT(readability-simplify-boolean-expr)
+#  define ASSERT(x) (!(!(x) && (LOG_CRITICAL("Check failed: {}", #x), specula::CheckCallbackScope::fail(), true))) // NOLINT(readability-simplify-boolean-expr)
   //clang-format on
 
 #  define ASSERT_IMPL(a, b, op)                                                                    \
@@ -115,8 +114,6 @@ namespace specula {
   private:
     static std::vector<std::function<std::string(void)>> callbacks;
   };
-
-  void log_stack_trace();
 
 } // namespace specula
 

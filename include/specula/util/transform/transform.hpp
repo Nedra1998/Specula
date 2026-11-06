@@ -78,7 +78,7 @@ namespace specula {
     }
 
     SPECULA_CPU_GPU Transform operator*(const Transform &t2) const;
-    SPECULA_CPU_GPU [[nodiscard]] bool swap_handedness() const;
+    SPECULA_CPU_GPU [[nodiscard]] bool swaps_handedness() const;
 
     SPECULA_CPU_GPU explicit operator Quaternion() const;
 

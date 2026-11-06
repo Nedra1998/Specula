@@ -17,7 +17,7 @@ namespace specula {
     TrowbridgeReitzDistribution() = default;
 
     SPECULA_CPU_GPU TrowbridgeReitzDistribution(Float ax, Float ay) : alpha_x(ax), alpha_y(ay) {
-      if (!effectivly_smooth()) {
+      if (!effectively_smooth()) {
         alpha_x = std::max<Float>(alpha_x, 1e-4f);
         alpha_y = std::max<Float>(alpha_y, 1e-4f);
       }
@@ -36,7 +36,7 @@ namespace specula {
       return 1 / (PI * alpha_x * alpha_y * cos4_theta_val * sqr(1 + e));
     }
 
-    SPECULA_CPU_GPU [[nodiscard]] bool effectivly_smooth() const {
+    SPECULA_CPU_GPU [[nodiscard]] bool effectively_smooth() const {
       return std::max(alpha_x, alpha_y) < 1e-3f;
     }
 

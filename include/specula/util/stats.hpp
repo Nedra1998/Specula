@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <limits>
+#include <string>
 
 #include "specula/types.hpp"
 
@@ -93,6 +94,9 @@ namespace specula {
   template <typename T> class Point2;
   using Point2i = Point2<int>;
 
+  template <typename T> class Bounds2;
+  using Bounds2i = Bounds2<int>;
+
   class PixelStatsAccumulator {
   public:
     PixelStatsAccumulator();
@@ -125,6 +129,8 @@ namespace specula {
     void accumulate_pixel_stats(const PixelStatsAccumulator &accum);
     void write_pixel_images() const;
 
+    void print(std::ostream &dest);
+    bool print_check_rare(std::ostream &dest);
     void clear();
 
   private:
@@ -157,6 +163,16 @@ namespace specula {
       max = (value > max) ? value : max;
     }
   };
+
+  void stats_enable_pixel_stats(const Bounds2i &b, const std::string &base_name);
+  void stats_report_pixel_start(const Point2i &p);
+  void stats_report_pixel_end(const Point2i &p);
+
+  void print_stats(std::ostream &dest);
+  void stats_write_pixel_images();
+  bool print_check_rare(std::ostream &dest);
+  void clear_stats();
+  void report_thread_stats();
 
 } // namespace specula
 

@@ -1,7 +1,5 @@
 #include "specula/util/transform/transform.hpp"
 
-#include <math.h>
-
 #include "specula/macros.hpp"
 #include "specula/util/log.hpp"
 #include "specula/util/math.hpp"
@@ -60,7 +58,7 @@ SPECULA_CPU_GPU specula::Transform specula::Transform::operator*(const Transform
   return {m * t2.m, t2.minv * minv};
 }
 
-SPECULA_CPU_GPU bool specula::Transform::swap_handedness() const {
+SPECULA_CPU_GPU bool specula::Transform::swaps_handedness() const {
   SquareMatrix<3> s(m[0][0], m[0][1], m[0][2], m[1][0], m[1][1], m[1][2], m[2][0], m[2][1],
                     m[2][2]);
   return determinant(s) < 0;

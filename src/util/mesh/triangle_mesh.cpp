@@ -36,7 +36,7 @@ specula::TriangleMesh::TriangleMesh(const Transform &render_from_object, bool re
   this->p = POINT3_BUFFER_CACHE->lookup_or_add(p, alloc);
 
   this->reverse_orientation = reverse_orientation;
-  this->transform_swaps_handedness = render_from_object.swap_handedness();
+  this->transform_swaps_handedness = render_from_object.swaps_handedness();
 
   if (!uv.empty()) {
     ASSERT_EQ(n_vertices, uv.size());

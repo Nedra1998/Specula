@@ -3,7 +3,7 @@
 #include <map>
 
 #include "specula/util/spectrum/blackbody_spectrum.hpp"
-#include "specula/util/spectrum/densly_sampled_spectrum.hpp"
+#include "specula/util/spectrum/densely_sampled_spectrum.hpp"
 #include "specula/util/spectrum/piecewise_linear_spectrum.hpp"
 
 namespace {

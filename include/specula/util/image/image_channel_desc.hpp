@@ -8,7 +8,7 @@ namespace specula {
     operator bool() const { return size() > 0; }
 
     [[nodiscard]] size_t size() const { return offset.size(); }
-    [[nodiscard]] bool is_identify() const {
+    [[nodiscard]] bool is_identity() const {
       for (size_t i = 0; i < offset.size(); ++i) {
         if (offset[i] != i) {
           return false;

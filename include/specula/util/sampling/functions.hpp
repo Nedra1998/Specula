@@ -292,7 +292,7 @@ namespace specula {
     return r * Point2f(std::cos(theta), std::sin(theta));
   }
 
-  SPECULA_CPU_GPU inline Point2f invert_uniform_disk_concenctric_sample(Point2f p) {
+  SPECULA_CPU_GPU inline Point2f invert_uniform_disk_concentric_sample(Point2f p) {
     Float theta = std::atan2(p.y, p.x);
     Float r = std::sqrt(sqr(p.x) + sqr(p.y));
 
@@ -363,10 +363,10 @@ namespace specula {
   SPECULA_CPU_GPU inline Float cosine_hemisphere_pdf(Float cos_theta) { return cos_theta * INV_PI; }
 
   SPECULA_CPU_GPU inline Point2f invert_cosine_hemisphere_sample(Vector3f w) {
-    return invert_uniform_disk_concenctric_sample({w.x, w.y});
+    return invert_uniform_disk_concentric_sample({w.x, w.y});
   }
 
-  SPECULA_CPU_GPU inline Float uniform_code_pdf(Float cos_theta_max) {
+  SPECULA_CPU_GPU inline Float uniform_cone_pdf(Float cos_theta_max) {
     return 1 / (2 * PI * (1 - cos_theta_max));
   }
 

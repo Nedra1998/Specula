@@ -121,7 +121,7 @@ TEST_CASE("Sampling", "[util][sampling]") {
     Rng rng;
     for (Point2f u : Uniform2D(1000)) {
       Point2f p = sample_uniform_disk_concentric(u);
-      Point2f up = invert_uniform_disk_concenctric_sample(p);
+      Point2f up = invert_uniform_disk_concentric_sample(p);
       CHECK_THAT(u.x, WithinAbs(up.x, 1e-3));
       CHECK_THAT(u.y, WithinAbs(up.y, 1e-3));
     }

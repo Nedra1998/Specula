@@ -24,7 +24,7 @@ namespace specula {
 
     SPECULA_CPU_GPU [[nodiscard]] RgbSigmoidPolynomial to_rgb_coeffs(Rgb rgb) const;
 
-    SPECULA_CPU_GPU [[nodiscard]] Rgb luminanace_vector() const {
+    SPECULA_CPU_GPU [[nodiscard]] Rgb luminance_vector() const {
       return {xyz_from_rgb[1][0], xyz_from_rgb[1][1], xyz_from_rgb[1][2]};
     }
 
