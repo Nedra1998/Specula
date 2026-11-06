@@ -27,10 +27,8 @@ std::vector<std::byte> specula::read_file_contents(const std::filesystem::path &
   std::streamsize length = ifs.tellg();
   ifs.seekg(0, std::ios::beg);
 
-  std::vector<std::byte> data;
-
-  std::vector<uint8_t> buf(length);
-  ifs.read(reinterpret_cast<char *>(buf.data()), length);
+  std::vector<std::byte> data(length);
+  ifs.read(reinterpret_cast<char *>(data.data()), length);
   ifs.close();
 
   return data;

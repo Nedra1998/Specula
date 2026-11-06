@@ -152,17 +152,19 @@ static Imf::FrameBuffer image_to_frame_buffer(const specula::Image &image,
   switch (image.format()) {
   case specula::PixelFormat::U256:
     LOG_CRITICAL("Unexpected image format: {}", image.format());
+    std::quick_exit(1);
   case specula::PixelFormat::HALF:
     for (int channel_index : desc.offset) {
-      fb.insert(channel_names[channel_index], Imf::Slice(Imf::FLOAT, origin_ptr + channel_index,
-                                                         sizeof(float), x_stride, y_stride));
+      fb.insert(channel_names[channel_index],
+                Imf::Slice(Imf::HALF, origin_ptr + channel_index * sizeof(specula::Half), x_stride,
+                           y_stride));
     }
     break;
   case specula::PixelFormat::FLOAT:
     for (int channel_index : desc.offset) {
-      fb.insert(channel_names[channel_index],
-                Imf::Slice(Imf::HALF, origin_ptr + channel_index, sizeof(specula::Half), x_stride,
-                           y_stride));
+      fb.insert(
+          channel_names[channel_index],
+          Imf::Slice(Imf::FLOAT, origin_ptr + channel_index * sizeof(float), x_stride, y_stride));
     }
     break;
   }
@@ -403,7 +405,7 @@ static int read_word(FILE *fp, char *buffer, int buffer_length) {
     return -1;
   }
   int n = 0, c = fgetc(fp);
-  while (c != EOF && is_whitespace(c) && n < buffer_length) {
+  while (c != EOF && !is_whitespace(c) && n < buffer_length) {
     buffer[n] = c;
     ++n;
     c = fgetc(fp);

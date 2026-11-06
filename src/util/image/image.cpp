@@ -121,21 +121,21 @@ specula::Image::Image(pstd::vector<uint8_t> p8, Point2i resolution,
                       pstd::span<const std::string> channels, ColorEncoding encoding)
     : format_(PixelFormat::U256), resolution_(resolution),
       channel_names_(channels.begin(), channels.end()), encoding_(encoding), p8(std::move(p8)) {
-  ASSERT_EQ(p8.size(), n_channels() * resolution_.x * resolution_.y);
+  ASSERT_EQ(this->p8.size(), n_channels() * resolution_.x * resolution_.y);
 }
 
 specula::Image::Image(pstd::vector<Half> p16, Point2i resolution,
                       pstd::span<const std::string> channels)
     : format_(PixelFormat::HALF), resolution_(resolution),
       channel_names_(channels.begin(), channels.end()), p16(std::move(p16)) {
-  ASSERT_EQ(p16.size(), n_channels() * resolution_.x * resolution_.y);
+  ASSERT_EQ(this->p16.size(), n_channels() * resolution_.x * resolution_.y);
 }
 
 specula::Image::Image(pstd::vector<float> p32, Point2i resolution,
                       pstd::span<const std::string> channels)
     : format_(PixelFormat::FLOAT), resolution_(resolution),
       channel_names_(channels.begin(), channels.end()), p32(std::move(p32)) {
-  ASSERT_EQ(p32.size(), n_channels() * resolution_.x * resolution_.y);
+  ASSERT_EQ(this->p32.size(), n_channels() * resolution_.x * resolution_.y);
 }
 
 specula::Image::Image(PixelFormat format, Point2i resolution,
@@ -373,7 +373,7 @@ void specula::Image::copy_rect_out(const Bounds2i &extent, pstd::span<float> buf
       for_extent(extent, wrap_mode, *this, [&iter, this](int offset) {
 #ifdef SPECULA_FLOAT_AS_DOUBLE
         Float v;
-        encoding.to_linear({&p8[offset], 1}, {&v, 1});
+        encoding_.to_linear({&p8[offset], 1}, {&v, 1});
         *iter = v;
 #else
           encoding_.to_linear({&p8[offset], 1}, {&*iter, 1});
@@ -385,6 +385,7 @@ void specula::Image::copy_rect_out(const Bounds2i &extent, pstd::span<float> buf
   case PixelFormat::HALF:
     for_extent(extent, wrap_mode, *this,
                [&iter, this](int offset) { *iter++ = Float(p16[offset]); });
+    break;
   case PixelFormat::FLOAT:
     for_extent(extent, wrap_mode, *this,
                [&iter, this](int offset) { *iter++ = Float(p32[offset]); });

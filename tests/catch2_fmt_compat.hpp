@@ -32,8 +32,8 @@ namespace Catch {
   /// Generic StringMaker for any type that has a fmt::formatter<T> but does
   /// NOT have an operator<< (to avoid ambiguity with Catch2's default path).
   template <typename T>
-  struct StringMaker<
-      T, std::enable_if_t<fmt::is_formattable<T>::value && !Detail::IsStreamInsertable_v<T>>> {
+  struct StringMaker<T, std::enable_if_t<fmt::is_formattable<T>::value &&
+                                         !Detail::IsStreamInsertable_v<T> && !is_range<T>::value>> {
     static std::string convert(T const &value) { return fmt::format("{}", value); }
   };
 
