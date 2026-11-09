@@ -23,57 +23,10 @@ namespace specula {
     SPECULA_CPU_GPU Rng(uint64_t seq_index, uint64_t offset) { set_sequence(seq_index, offset); }
     SPECULA_CPU_GPU Rng(uint64_t seq_index) { set_sequence(seq_index); }
 
-    SPECULA_CPU_GPU void set_sequence(uint64_t sequence_index, uint64_t offset) {
-      state = 0u;
-      inc = (sequence_index << 1u) | 1u;
-      uniform<uint32_t>();
-      state += offset;
-      uniform<uint32_t>();
-    }
+    SPECULA_CPU_GPU inline void set_sequence(uint64_t sequence_index, uint64_t offset);
+    SPECULA_CPU_GPU inline void set_sequence(uint64_t sequence_index);
 
-    SPECULA_CPU_GPU void set_sequence(uint64_t sequence_index) {
-      set_sequence(sequence_index, mix_bits(sequence_index));
-    }
-
-    template <typename T> SPECULA_CPU_GPU T uniform() { return T::unimplemented; }
-
-    template <> SPECULA_CPU_GPU inline uint32_t uniform<uint32_t>() {
-      uint64_t oldstate = state;
-      state = oldstate * PCG32_MULT + inc;
-      auto xorshifted = (uint32_t)(((oldstate >> 18u) ^ oldstate) >> 27u);
-      auto rot = (uint32_t)(oldstate >> 59u);
-      return (xorshifted >> rot) | (xorshifted << ((~rot + 1) & 31));
-    }
-
-    template <> SPECULA_CPU_GPU inline uint64_t uniform<uint64_t>() {
-      uint64_t v0 = uniform<uint32_t>(), v1 = uniform<uint32_t>();
-      return (v0 << 32) | v1;
-    }
-
-    template <> SPECULA_CPU_GPU inline int32_t uniform<int32_t>() {
-      uint32_t v = uniform<uint32_t>();
-      if (v <= (uint32_t)std::numeric_limits<int32_t>::max()) {
-        return int32_t(v);
-      }
-      DASSERT_GE(v, (uint32_t)std::numeric_limits<int32_t>::min());
-      return int32_t(v - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
-    }
-
-    template <> SPECULA_CPU_GPU inline int64_t uniform<int64_t>() {
-      uint64_t v = uniform<uint64_t>();
-      if (v <= (uint64_t)std::numeric_limits<int64_t>::max()) {
-        return int64_t(v);
-      }
-      DASSERT_GE(v, (uint64_t)std::numeric_limits<int64_t>::min());
-      return int64_t(v - std::numeric_limits<int64_t>::min()) + std::numeric_limits<int64_t>::min();
-    }
-
-    template <> SPECULA_CPU_GPU inline float uniform<float>() {
-      return std::min<float>(ONE_MINUS_EPSILON, uniform<uint32_t>() * 0x1p-32f);
-    }
-    template <> SPECULA_CPU_GPU inline double uniform<double>() {
-      return std::min<double>(ONE_MINUS_EPSILON, uniform<uint64_t>() * 0x1p-64);
-    }
+    template <typename T> SPECULA_CPU_GPU T uniform();
 
     template <typename T>
     SPECULA_CPU_GPU T uniform(T b)
@@ -125,6 +78,58 @@ namespace specula {
 
     friend struct fmt::formatter<Rng>;
   };
+
+  template <typename T> SPECULA_CPU_GPU T Rng::uniform() { return T::unimplemented; }
+
+  template <> SPECULA_CPU_GPU inline uint32_t Rng::uniform<uint32_t>() {
+    uint64_t oldstate = state;
+    state = oldstate * PCG32_MULT + inc;
+    auto xorshifted = (uint32_t)(((oldstate >> 18u) ^ oldstate) >> 27u);
+    auto rot = (uint32_t)(oldstate >> 59u);
+    return (xorshifted >> rot) | (xorshifted << ((~rot + 1) & 31));
+  }
+
+  template <> SPECULA_CPU_GPU inline uint64_t Rng::uniform<uint64_t>() {
+    uint64_t v0 = uniform<uint32_t>(), v1 = uniform<uint32_t>();
+    return (v0 << 32) | v1;
+  }
+
+  template <> SPECULA_CPU_GPU inline int32_t Rng::uniform<int32_t>() {
+    uint32_t v = uniform<uint32_t>();
+    if (v <= (uint32_t)std::numeric_limits<int32_t>::max()) {
+      return int32_t(v);
+    }
+    DASSERT_GE(v, (uint32_t)std::numeric_limits<int32_t>::min());
+    return int32_t(v - std::numeric_limits<int32_t>::min()) + std::numeric_limits<int32_t>::min();
+  }
+
+  template <> SPECULA_CPU_GPU inline int64_t Rng::uniform<int64_t>() {
+    uint64_t v = uniform<uint64_t>();
+    if (v <= (uint64_t)std::numeric_limits<int64_t>::max()) {
+      return int64_t(v);
+    }
+    DASSERT_GE(v, (uint64_t)std::numeric_limits<int64_t>::min());
+    return int64_t(v - std::numeric_limits<int64_t>::min()) + std::numeric_limits<int64_t>::min();
+  }
+
+  template <> SPECULA_CPU_GPU inline float Rng::uniform<float>() {
+    return std::min<float>(ONE_MINUS_EPSILON, uniform<uint32_t>() * 0x1p-32f);
+  }
+  template <> SPECULA_CPU_GPU inline double Rng::uniform<double>() {
+    return std::min<double>(ONE_MINUS_EPSILON, uniform<uint64_t>() * 0x1p-64);
+  }
+
+  SPECULA_CPU_GPU inline void Rng::set_sequence(uint64_t sequence_index, uint64_t offset) {
+    state = 0u;
+    inc = (sequence_index << 1u) | 1u;
+    uniform<uint32_t>();
+    state += offset;
+    uniform<uint32_t>();
+  }
+
+  SPECULA_CPU_GPU inline void Rng::set_sequence(uint64_t sequence_index) {
+    set_sequence(sequence_index, mix_bits(sequence_index));
+  }
 
 } // namespace specula
 

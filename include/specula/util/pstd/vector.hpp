@@ -14,6 +14,7 @@
 
 // IWYU pragma: private, include "specula/util/pstd.hpp"
 
+#include <cstdlib>
 #include <initializer_list>
 #include <iterator>
 
@@ -302,6 +303,7 @@ namespace specula::pstd {
         return begin() + first_offset;
       }
       LOG_CRITICAL("Unimplemented");
+      std::quick_exit(1);
     }
 
     /** @brief Constructs an element in place at the end. Returns `void`, unlike C++17 `std`. */

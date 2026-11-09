@@ -286,16 +286,16 @@ namespace specula::pstd::pmr {
     using value_type = T;
 
     /** @brief Uses new_delete_resource(). */
-    polymorphic_allocator() noexcept : memory_resource(new_delete_resource()) {}
+    polymorphic_allocator() noexcept : memory_resource_(new_delete_resource()) {}
     /** @brief Uses `r`; implicit so a resource pointer can be passed wherever an allocator is
      * expected. */
-    polymorphic_allocator(memory_resource *r) : memory_resource(r) {}
+    polymorphic_allocator(memory_resource *r) : memory_resource_(r) {}
     /** @brief Copy constructor (shares the resource). */
     polymorphic_allocator(const polymorphic_allocator &other) = default;
     /** @brief Rebinding copy constructor (shares the resource). */
     template <class U>
     polymorphic_allocator(const polymorphic_allocator<U> &other) noexcept
-        : memory_resource(other.resource()) {}
+        : memory_resource_(other.resource()) {}
     /** @brief Deleted move constructor. */
     polymorphic_allocator(polymorphic_allocator &&) = delete;
 
@@ -308,39 +308,39 @@ namespace specula::pstd::pmr {
     polymorphic_allocator &operator=(polymorphic_allocator &&) = delete;
 
     /** @brief Underlying memory resource. */
-    [[nodiscard]] memory_resource *resource() const { return memory_resource; }
+    [[nodiscard]] memory_resource *resource() const { return memory_resource_; }
 
     /** @brief True if both use the same resource pointer (not `memory_resource::is_equal`). */
     template <class U> bool operator==(const polymorphic_allocator<U> &rhs) noexcept {
-      return memory_resource == rhs.memory_resource;
+      return memory_resource_ == rhs.memory_resource_;
     }
     /** @brief Negation of operator==(). */
     template <class U> bool operator!=(const polymorphic_allocator<U> &rhs) noexcept {
-      return memory_resource != rhs.memory_resource;
+      return memory_resource_ != rhs.memory_resource_;
     }
 
     // Typed allocation
     /** @brief Uninitialised storage for `n` objects of type `T`. */
     [[nodiscard]] value_type *allocate(size_t n) {
       return static_cast<value_type *>(
-          memory_resource->allocate(n * sizeof(value_type), alignof(value_type)));
+          memory_resource_->allocate(n * sizeof(value_type), alignof(value_type)));
     }
     /**
      * @brief Frees storage from allocate().
      * @note Passes the default alignment, not `alignof(T)`, to the resource (as pbrt does).
      */
     void deallocate(value_type *p, size_t n) {
-      memory_resource->deallocate(p, n * sizeof(value_type));
+      memory_resource_->deallocate(p, n * sizeof(value_type));
     }
 
     // Raw and per-object allocation (C++20 additions)
     /** @brief Raw storage, independent of `T`. */
     void *allocate_bytes(size_t nbytes, size_t alignment = alignof(max_align_t)) {
-      return memory_resource->allocate(nbytes, alignment);
+      return memory_resource_->allocate(nbytes, alignment);
     }
     /** @brief Frees storage from allocate_bytes(). */
     void deallocate_bytes(void *p, size_t nbytes, size_t alignment = alignof(max_align_t)) {
-      memory_resource->deallocate(p, nbytes, alignment);
+      memory_resource_->deallocate(p, nbytes, alignment);
     }
 
     /** @brief Uninitialised storage for `n` objects of type `U`. */
@@ -376,7 +376,7 @@ namespace specula::pstd::pmr {
 
   private:
     /** @brief Backing resource; never owned. */
-    memory_resource *memory_resource;
+    memory_resource *memory_resource_;
   };
 } // namespace specula::pstd::pmr
 

@@ -6,6 +6,8 @@
 #include <iterator>
 #include <limits>
 
+#include <fmt/ranges.h>
+
 #include "specula/macros.hpp"
 #include "specula/util/math.hpp"
 #include "specula/util/vecmath/tuple2.hpp"
@@ -197,6 +199,8 @@ namespace specula {
   }
 
 } // namespace specula
+
+template <> struct fmt::is_range<specula::Bounds2i, char> : std::false_type {};
 
 template <typename T> struct fmt::formatter<specula::Bounds2<T>> {
   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }

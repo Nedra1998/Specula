@@ -71,4 +71,20 @@ TEST_CASE("CompensatedFloat", "[util][math]") {
       CHECK((double)tp == (double)a + (double)b);
     }
   }
+
+#ifndef SPECULA_FLOAT_AS_DOUBLE
+  SECTION("inner_product") {
+    for (int i = 0; i < 100000; ++i) {
+      Rng rng(i);
+
+      Float a[4] = {get_float(rng), get_float(rng), get_float(rng), get_float(rng)};
+      Float b[4] = {get_float(rng), get_float(rng), get_float(rng), get_float(rng)};
+      Float ab = inner_product(a[0], b[0], a[1], b[1], a[2], b[2], a[3], b[3]);
+      Float dab = double(a[0]) * double(b[0]) + double(a[1]) * double(b[1]) +
+                  double(a[2]) * double(b[2]) + double(a[3]) * double(b[3]);
+      CHECK(ab == dab);
+    }
+  }
+
+#endif
 }

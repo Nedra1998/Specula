@@ -358,7 +358,7 @@ namespace specula {
   }
 
   template <typename Func>
-  SPECULA_CPU_GPU inline Float newton_bisection(Float x0, Float x1, Func f, Float xeps = 1e-4f,
+  SPECULA_CPU_GPU inline Float newton_bisection(Float x0, Float x1, Func f, Float xeps = 1e-6f,
                                                 Float feps = 1e-6f) {
     DASSERT_LT(x0, x1);
     Float fx0 = f(x0).first, fx1 = f(x1).first;
